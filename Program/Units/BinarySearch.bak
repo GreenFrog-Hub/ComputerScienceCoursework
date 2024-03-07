@@ -1,0 +1,42 @@
+UNIT BinarySearch;
+  INTERFACE
+
+  USES CRT, SYSUTILS;
+
+
+  FUNCTION BinarySearchFunction(UserArray : ARRAY OF INTEGER; low, high, searchValue: INTEGER) : LONGINT;
+    VAR
+      i, mid : LONGINT;
+      shouldEnd : BOOLEAN;
+
+    IMPLEMENTATION
+
+  FUNCTION BinarySearchFunction(UserArray : ARRAY OF INTEGER; low, high, searchValue: INTEGER) : LONGINT;
+    BEGIN
+      REPEAT
+        mid := (low+high)DIV 2;
+        IF UserArray[mid] <> searchValue THEN
+          BEGIN
+                IF UserArray[mid] > searchValue THEN
+                  BEGIN
+                    low := mid +1;
+                  END
+                ELSE
+                  BEGIN
+                    high := mid -1;
+                  END;
+              END
+        ELSE
+          BEGIN
+            BinarySearchFunction := mid;
+            shouldEnd := true;
+          END;
+      UNTIL (shouldEnd = true) OR (low > high);
+      IF NOT shouldEnd THEN
+        BinarySearchFunction := -1;
+
+    END;
+
+
+  END.
+

@@ -1,0 +1,33 @@
+PROGRAM loadingTest;
+  uses loading, vputils, sysutils, crt;
+
+  type intArray = ARRAY[0..1000] OF LONGINT;
+    rPtr = ^real;
+
+  var fibanachiSequence : intArray;
+  n : LONGINT;
+  percentDone : real;
+
+  procedure fibanachi;
+    var a, i : longint;
+    begin
+      a := 1000;
+      for i := 0 to a DO
+        begin
+          if i < 2 THEN
+            fibanachiSequence[i] := 1
+          else
+            fibanachiSequence[i] := fibanachiSequence[i-1] + fibanachiSequence[i-2];
+          percentDone := i/a;
+          Delay(100);
+        end;
+      end;
+
+  begin
+    loading.StartLoading('P',percentDone);
+    fibanachi;
+    loading.EndLoading;
+    //for n := 0 TO 1000 DO
+      //write(fibanachiSequence[n],' ');
+    readln;
+  end.

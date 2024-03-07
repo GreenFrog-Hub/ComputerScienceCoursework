@@ -1,0 +1,10 @@
+PROGRAM randTest;
+  VAR bob : ARRAY[0..10] OF LONGINT;
+    i : LONGINT;
+
+  begin
+    bob[0] := 0;
+    bob[1] := 2;
+    for i := 0 TO 10 DO
+        writeln(bob[i]);
+  end.

@@ -1,0 +1,93 @@
+unit loading;
+interface
+
+uses sysutils, vputils, crt, math;
+
+type rPtr = ^real;
+
+var loadingDone : BOOLEAN;
+  percentDone : real;
+  percentPtr : rptr;
+  startRunTime, endRunTime : TDateTime;
+
+function loadingText(p : pointer) : LONGINT;
+  var a : LONGINT;
+function loadingBar(p : pointer) : LONGINT;
+  var percentComplete : REAL;
+    b,c,completeBars,uncompleteBars : LONGINT;
+procedure StartLoading(loadingType : CHAR; var percentIn : real);
+procedure EndLoading;
+
+implementation
+const LoadingSymbols : ARRAY[1..4] OF CHAR = ('/',#196,'\','|');
+
+function loadingText(p : pointer) : LONGINT;
+  var a : LONGINT;
+  begin
+    HideCursor;
+    a := 1;
+    ClrScr;
+    while (not loadingDone) DO
+      Begin
+        WRITELN('Loading... ' + LoadingSymbols[a]);
+        a := a+1;
+        if a > 4 THEN
+          a := 1;
+        Delay(100);
+        GoToXY(1,1);
+        DelLine;
+      end;
+
+    end;
+
+function loadingBar(p : pointer) : LONGINT;
+  var percentComplete : REAL;
+    b,c,d,completeBars,uncompleteBars : LONGINT;
+  begin
+    HideCursor;
+    ClrScr;
+    Write('Progress ',#185);
+    percentDone := 0.0*100;
+    for c:= 0 TO 20 DO
+      write(#176);
+    write(#204);
+    completeBars := 0;
+    while percentDone < 100.0 DO
+      begin
+        gotoxy(33,1);
+        Write(percentDone:4:0,'%');
+        percentDone := (percentPtr^)*100;
+        completeBars := floor((percentPtr^)*20);
+        gotoxy(11,1);
+        for d := 0 to completeBars DO
+          begin
+            write(#219);
+          end;
+    end;
+    clrscr;
+    endLoading;
+ end;
+
+procedure StartLoading(loadingType : CHAR; var percentIn : real);
+  begin
+    startRunTime := Time;
+    loadingDone := false;
+    percentPtr := @percentIn;
+    if loadingType = 'L' THEN
+      VPBeginThread(loadingText,1,nil)
+    else if loadingType = 'P' THEN
+      VPBeginThread(loadingBar,1,nil);
+  End;
+
+procedure EndLoading;
+  begin
+    KillThread(1);
+    loadingDone := true;
+    WRITELN('Done!');
+    endRunTime := Time;
+    Delay(500);
+    ClrScr;
+    writeln('Time elapsed: ',TimeToStr(endRunTime - startRunTime));
+    ShowCursor;
+    end;
+end.

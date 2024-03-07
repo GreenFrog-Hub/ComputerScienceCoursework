@@ -1,0 +1,8 @@
+PROGRAM MousePositionOutPut;
+  uses opcrt, sysutils, vputils, windows, classes;
+
+  var x : LONGINT;
+
+  begin
+    OpMouse.MouseWhereX;
+  end.

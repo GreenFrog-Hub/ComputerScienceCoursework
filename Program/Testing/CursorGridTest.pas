@@ -1,0 +1,10 @@
+PROGRAM CursorGridTest;
+  uses sysutils, crt, CursorGrid;
+  var a : longint;
+    name : string[20];
+  begin
+    name := 'bob';
+    write(name ,' ' ,name);
+    cursorGrid.start(2,2,1,1);
+    readln;
+  end.

@@ -1,0 +1,6 @@
+Program RelativePathing;
+  uses sysutils, windos;
+  begin
+    writeLN(ExtractRelativePath(ParamStr(0),'C:\'));
+    readln;
+  end.

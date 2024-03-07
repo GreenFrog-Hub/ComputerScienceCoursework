@@ -1,0 +1,35 @@
+UNIT BubbleSort;
+  INTERFACE
+
+  USES CRT, SYSUTILS;
+
+
+  PROCEDURE BubbleSortFunction(VAR UserArray : ARRAY OF LONGINT; low, upper: LONGINT);
+
+    VAR
+      i, Temp : LONGINT;
+      Swaps : BOOLEAN;
+
+    IMPLEMENTATION
+
+  PROCEDURE BubbleSortFunction(VAR UserArray : ARRAY OF LONGINT; low, upper: LONGINT);
+    BEGIN
+      upper := upper-1;
+      REPEAT
+        Swaps:= false;
+        FOR i := 0 TO upper DO
+          BEGIN
+            IF UserArray[i] > UserArray[i+1] THEN
+              BEGIN
+                Temp := UserArray[i];
+                UserArray[i] := UserArray[i+1];
+                UserArray[i+1] := Temp;
+                Swaps := true;
+              END;
+          END;
+        upper := upper -1;
+      UNTIL (NOT Swaps) OR (upper < 0);
+    END;
+
+  END.
+
