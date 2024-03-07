@@ -45,7 +45,7 @@ PROGRAM CraeteFiles;
                           LessonNo : LONGINT;
                           Date : TDateTime;
                           ClassID : STRING[6];
-                          RegisterMark : ARRAY[0..50,0..2] OF STRING[20];
+                          RegisterMark : ARRAY[0..50,0..1] OF STRING[20];
                           isOfstedRegister : BOOLEAN;
                         end;
 
@@ -112,7 +112,7 @@ PROGRAM CraeteFiles;
       total := total + 20;
 
       ASSIGN(RegisterFile,'C:\ComputerScienceCoursework\Program\files\Registers.dta');
-      //total := total + 50;
+      total := total + 1500;
 
       ASSIGN(StudentFNameFile,'C:\ComputerScienceCoursework\Program\files\Names.txt');
       ASSIGN(StudentFile,'C:\ComputerScienceCoursework\Program\files\Students.dta');
@@ -148,7 +148,7 @@ PROGRAM CraeteFiles;
         begin
           numberDone := numberDone + 1;
           percentDone := numberDone / total;
-          delay(1);
+          //Delay(1);
           READLN(FileFormFromFile,formLn);
           form.form := formLn;
           WRITE(FormFile,form);
@@ -161,13 +161,15 @@ PROGRAM CraeteFiles;
       dateArray : ARRAY[0..9] OF TDateTime;
       classArray : ARRAY[0..30] OF classRecord;
       classIdArray : ARRAY[0..30] OF STRING;
+      returnArray : ARRAY[0..2700] OF LONGINT;
       studentClassIdArray : ARRAY[0..2700] OF STRING;
       formArray : ARRAY[0..20] OF formRecord;
-      d,r : longint;
+      d,r,randomNumber,randomMark : longint;
     begin
       reset(classFile);
       reset(formFile);
       reset(studentClassResolverFile);
+      REWRITE(registerFile);
       for a := 0 to 30 DO
         begin
           read(classFile, classArray[a]);
@@ -181,8 +183,8 @@ PROGRAM CraeteFiles;
         begin
           read(studentClassResolverFile, studentClassResolver);
           studentClassIdArray[a] := studentClassResolver.classId;
+          returnArray[a] := -1;
         end;
-
 
       days := 0;
       startDate := StrToDateTime('13/09/2024');
@@ -201,10 +203,34 @@ PROGRAM CraeteFiles;
             begin
               for r := 1 TO 5 DO
                 begin
+                  numberDone := numberDone + 1;
+                  percentDone := numberDone / total;
+                  for a := 0 to 2700 DO
+                    returnArray[a] := -1;
+                  i := 0;
                   register.lessonNo := r;
                   register.date := dateArray[d];
                   register.classId := classIdArray[c];
-                  //Search.SearchFunctions('L',0,30,classIdArray[c],studentClassIdArray)
+                  Search.SearchFunctions('L',0,2700,classIdArray[c],studentClassIdArray,returnArray,empty);
+
+                  while returnArray[i] <> -1 Do
+                    begin
+                      SEEK(studentClassResolverFile,returnArray[i]);
+                      read(studentClassResolverFile, studentClassResolver);
+                      register.RegisterMark[i,0] := IntToStr(studentClassResolver.studentID);
+                      randomNumber := RANDOM(10);
+                      if randomNumber = 10 THEN
+                        randomMark := 0
+                      else
+                        randomMark := 1;
+                      register.RegisterMark[i,1] := IntToStr(randomMark);
+                      i := i + 1;
+                    end;
+                  if r = 4 THEN
+                    register.isOfstedRegister := true
+                  else
+                    register.isOfstedRegister := false;
+                  WRITE(RegisterFile, register);
                 end;
             end;
         end;
@@ -223,7 +249,7 @@ PROGRAM CraeteFiles;
           i := i +1;
           numberDone := numberDone + 1;
           percentDone := numberDone / total;
-          delay(1);
+          //Delay(1);
           READLN(StudentFNameFile,ffname);
           READLN(StudentFnameFile, fsname);
           READLN(StudentFnameFile, fyear);
@@ -254,7 +280,7 @@ PROGRAM CraeteFiles;
         begin
           numberDone := numberDone + 1;
           percentDone := numberDone / total;
-          delay(1);
+          //Delay(1);
           READLN(TeacherFileFromFile, ffname);
           READLN(TeacherFileFromFile, fsname);
           READLN(TeacherFileFromFile, fform);
@@ -287,7 +313,7 @@ PROGRAM CraeteFiles;
           begin
             numberDone := numberDone +1;
             percentDone := numberDone / total;
-            delay(1);
+            //Delay(1);
             with subject do
               begin
                 subjectID := subjID[i];
@@ -306,7 +332,7 @@ PROGRAM CraeteFiles;
           begin
           numberDone := numberDone + 1;
           percentDone := numberDone / total;
-          delay(1);
+          //Delay(1);
           randNum := Random(7) + 7;
           randChar:= Chr(Random(4) + 65);
           Seek(SubjectFile,Random(5));
@@ -350,7 +376,7 @@ PROGRAM CraeteFiles;
               studentClassResolver.studentID := student.StudentID;
               numberDone := numberDone +1;
               percentDone := numberDone / total;
-              delay(1);
+              //Delay(1);
               noOfClassInYear := 0;
               for a := 0 TO 30 DO
                   str(yearArray[a],stringArray[a]);
@@ -395,7 +421,7 @@ PROGRAM CraeteFiles;
         begin
           numberDone := numberDone+ 1;
           percentDone := numberDone / total;
-          delay(1);
+          //Delay(1);
           read(teacherfile,teacher);
           with teacherSubjectResolver DO
             begin
@@ -445,7 +471,7 @@ PROGRAM CraeteFiles;
         begin
           numberDone := numberDone + 1;
           percentDone := numberDone / total;
-          delay(1);
+          //Delay(1);
           Read(teacherFile,teacher);
           teacherClassResolver.teacherId := teacher.teacherID;
           Search.SearchFunctions('L',0,99,teacher.teacherID,teachersIDArray,returnArray,empty);
@@ -496,6 +522,7 @@ PROGRAM CraeteFiles;
     createClassStudentResolver;
     assignTeacherToSubject;
     assignTeacherToClass;
+    createRegisters;
     readln;
 
   end.
