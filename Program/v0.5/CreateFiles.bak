@@ -145,7 +145,7 @@ PROGRAM CraeteFiles;
     end;
 
   procedure addForms;
-    var formLn : STRING;
+    var formLn : STRING[5];
       i : LONGINT;
     begin
       RESET(FileFormFromFile);
@@ -185,7 +185,7 @@ PROGRAM CraeteFiles;
         end;
 
       for a := 0 TO 20 DO
-        READ(formFile, formArray[a]);
+        READ(FormFile, formArray[a]);
 
       for a := 0 to 2700 DO
         begin
@@ -254,8 +254,6 @@ PROGRAM CraeteFiles;
                 end;
             end;
         end;
-        for a := 0 to 50 DO
-          writeln(register.registerMarks[a].studentID,' ', register.registerMarks[a].registerMark);
     end;
 
 
@@ -347,18 +345,30 @@ PROGRAM CraeteFiles;
 
     PROCEDURE createClasses;
       VAR i, randNum : LONGINT;
+      classIdVar : STRING;
       randChar : CHAR;
+      classIdArray : ARRAY[0..30] OF String;
+      returnArray : ARRAY[0..30] OF LONGINT;
       begin
         REWRITE(classFile);
         for i := 0 to 30 DO
           begin
           numberDone := numberDone + 1;
           percentDone := numberDone / total;
+          for a := 0 to 30 DO
+            returnArray[a] := -1;
           //Delay(1);
-          randNum := Random(7) + 7;
-          randChar:= Chr(Random(4) + 65);
-          Seek(SubjectFile,Random(5));
-          READ(SubjectFile, subject);
+          returnArray[0] := 1;
+          while returnArray[0] <> -1 DO
+            begin
+              returnArray[0] := -1;
+              Search.SearchFunctions('L',0,30,classIdVar,classIdArray,returnArray,empty);
+              randNum := Random(7) + 7;
+              randChar:= Chr(Random(4) + 65);
+              Seek(SubjectFile,Random(10));
+              READ(SubjectFile, subject);
+              classIdVar := IntToStr(randNum) + randChar +'/'+subject.subjectID;
+            end;
           with sClass do
               begin
                 ClassID :=  IntToStr(randNum) + randChar +'/'+subject.subjectID;
@@ -535,7 +545,7 @@ PROGRAM CraeteFiles;
   begin
     randomize;
     initialiseFiles;
-    //loading.startLoading('P',percentDone);
+    loading.startLoading('P',percentDone);
     addForms;
     addStudents;
     addTeachers;
