@@ -40,12 +40,17 @@ PROGRAM CraeteFiles;
                           SubjectName : STRING[20];
                         end;
 
+    studentRegisterMarkRecord = RECORD
+                          studentID : LONGINT;
+                          registerMark : BOOLEAN;
+                        end;
+
     registerRecord = RECORD
-                          RegisterID : STRING[13];
+                          RegisterID : STRING[17];
                           LessonNo : LONGINT;
                           Date : TDateTime;
                           ClassID : STRING[6];
-                          RegisterMark : ARRAY[0..50,0..1] OF STRING[20];
+                          RegisterMarks : ARRAY[0..50] OF studentRegisterMarkRecord;
                           isOfstedRegister : BOOLEAN;
                         end;
 
@@ -71,6 +76,7 @@ PROGRAM CraeteFiles;
     FormFile : FILE OF FormRecord;
 
     Register : registerRecord;
+    studentRegisterMark : studentRegisterMarkRecord;
     RegisterFile : File OF registerRecord;
 
     StudentFName : STRING;
@@ -165,11 +171,13 @@ PROGRAM CraeteFiles;
       studentClassIdArray : ARRAY[0..2700] OF STRING;
       formArray : ARRAY[0..20] OF formRecord;
       d,r,randomNumber,randomMark : longint;
+      dayName : LONGINT;
     begin
       reset(classFile);
       reset(formFile);
       reset(studentClassResolverFile);
-      REWRITE(registerFile);
+      REWRITE(RegisterFile);
+      reset(RegisterFile);
       for a := 0 to 30 DO
         begin
           read(classFile, classArray[a]);
@@ -188,25 +196,34 @@ PROGRAM CraeteFiles;
 
       days := 0;
       startDate := StrToDateTime('13/09/2024');
+      date := startDate;
       while days <= 10 DO
         begin
-        if (LongDayNames[DayOfWeek(startDate)] <> 'Saturday') OR (LongDayNames[DayOfWeek(startDate)] <> 'Sunday') then
+        if (DayOfWeek(Date) = 7) OR (DayOfWeek(Date) = 1) THEN
           begin
-            date := startDate + 1;
-            dateArray[days] := date;
-            days := days + 1;
-          end;
+            date := date + 1;
+          end
+          else
+            begin
+              dateArray[days]:=date;
+              date := date + 1;
+              days := days + 1;
+            end;
       end;
-      for d := 0 TO 10 DO
+      for d := 0 TO 9 DO
         begin
           for c := 0 TO 30 DO
             begin
               for r := 1 TO 5 DO
                 begin
+                  studentRegisterMark.studentId := -1;
+                  studentRegisterMark.registerMark := true;
+
+                  for a := 0 to 50 DO
+                    register.registerMarks[a] := studentRegisterMark;
+
                   numberDone := numberDone + 1;
                   percentDone := numberDone / total;
-                  for a := 0 to 2700 DO
-                    returnArray[a] := -1;
                   i := 0;
                   register.lessonNo := r;
                   register.date := dateArray[d];
@@ -217,23 +234,28 @@ PROGRAM CraeteFiles;
                     begin
                       SEEK(studentClassResolverFile,returnArray[i]);
                       read(studentClassResolverFile, studentClassResolver);
-                      register.RegisterMark[i,0] := IntToStr(studentClassResolver.studentID);
+                      studentRegisterMark.studentID := studentClassResolver.studentID;
                       randomNumber := RANDOM(10);
-                      if randomNumber = 10 THEN
-                        randomMark := 0
+                      if randomNumber = 9 THEN
+                        studentRegisterMark.registerMark := false
                       else
-                        randomMark := 1;
-                      register.RegisterMark[i,1] := IntToStr(randomMark);
+                        studentRegisterMark.registerMark := true;
+                      returnArray[i] := -1;
+                      register.registerMarks[i] := studentRegisterMark;
                       i := i + 1;
                     end;
                   if r = 4 THEN
                     register.isOfstedRegister := true
                   else
                     register.isOfstedRegister := false;
+                  register.registerID := IntToStr(r) + DateToStr(dateArray[d]) + classIdArray[c];
                   WRITE(RegisterFile, register);
+
                 end;
             end;
         end;
+        for a := 0 to 50 DO
+          writeln(register.registerMarks[a].studentID,' ', register.registerMarks[a].registerMark);
     end;
 
 
@@ -513,7 +535,7 @@ PROGRAM CraeteFiles;
   begin
     randomize;
     initialiseFiles;
-    loading.startLoading('P',percentDone);
+    //loading.startLoading('P',percentDone);
     addForms;
     addStudents;
     addTeachers;
