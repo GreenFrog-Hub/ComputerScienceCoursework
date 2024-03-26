@@ -2,6 +2,11 @@ PROGRAM CraeteFiles;
   uses crt, sysutils, search,sorting, loading;
 
   type
+    TimeTableRecord = RECORD
+                          Day : LONGINT;
+                          LessonNo : LONGINT;
+                          ClassID : STRING[6];
+                        end;
     FormRecord = RECORD
                           Form : STRING[5];
                         end;
@@ -71,6 +76,11 @@ PROGRAM CraeteFiles;
   VAR
     numberDone, total : LONGINT;
 
+    TimeTable : TimeTableRecord;
+    TimeTableTextFile : TextFile;
+    TimeTableFile : FILE OF TimeTableRecord;
+    TimeTableInfoFromFile : STRING;
+
     FileFormFromFile : TextFile;
     Form : FormRecord;
     FormFile : FILE OF FormRecord;
@@ -113,7 +123,10 @@ PROGRAM CraeteFiles;
     begin
       percentDone := 0.0;
       total := 0;
-      ASSIGN(FileFormFromFile,'C:\ComputerScienceCoursework\Program\files\TForms.txt');
+      ASSIGN(TimeTableTextFile,'C:\ComputerScienceCoursework\Program\files\TimeTableText.txt');
+      ASSIGN(TimeTableFile,'C:\ComputerScienceCoursework\Program\files\TimeTable.dta');
+
+      {ASSIGN(FileFormFromFile,'C:\ComputerScienceCoursework\Program\files\TForms.txt');
       ASSIGN(FormFile,'C:\ComputerScienceCoursework\Program\files\Forms.dta');
       total := total + 20;
 
@@ -141,7 +154,32 @@ PROGRAM CraeteFiles;
       total:= total + 100;
 
       ASSIGN(teacherClassResolverFile,'C:\ComputerScienceCoursework\Program\files\teacherClassResolver.dta');
-      total := total + 100;
+      total := total + 100;}
+    end;
+
+  procedure CreateTimeTable;
+    begin
+      reset(TimeTableTextFile);
+      rewrite(TimeTableFile);
+      while not EOF(TimeTableTextFile) do
+        begin
+          readln(TimeTableTextFile,TimeTableInfoFromFile);
+          TimeTable.ClassId := TimeTableInfoFromFile;
+          repeat
+            readln(TimeTableTextFile,TimeTableInfoFromFile);
+            TimeTable.LessonNo := StrToInt(TimeTableInfoFromFile);
+            readln(TimeTableTextFile,TimeTableInfoFromFile);
+            TimeTable.Day := StrToInt(TimeTableInfoFromFile);
+            writeln;
+            writeln(TimeTable.ClassId);
+            writeln(TimeTable.Day);
+            writeln(TimeTable.LessonNo);
+            readln(TimeTableTextFile,TimeTableInfoFromFile);
+            write(TimeTableFile,TimeTable);
+          until TimeTableInfoFromFile = 'Q';
+          readln;
+          writeln;
+        end;
     end;
 
   procedure addForms;
@@ -150,7 +188,7 @@ PROGRAM CraeteFiles;
     begin
       RESET(FileFormFromFile);
       REWRITE(FormFile);
-      for i := 0 to 20 DO
+      for i := 0 to 19 DO
         begin
           numberDone := numberDone + 1;
           percentDone := numberDone / total;
@@ -169,7 +207,7 @@ PROGRAM CraeteFiles;
       classIdArray : ARRAY[0..30] OF STRING;
       returnArray : ARRAY[0..2700] OF LONGINT;
       studentClassIdArray : ARRAY[0..2700] OF STRING;
-      formArray : ARRAY[0..20] OF formRecord;
+      formArray : ARRAY[0..19] OF formRecord;
       d,r,randomNumber,randomMark : longint;
       dayName : LONGINT;
     begin
@@ -184,7 +222,7 @@ PROGRAM CraeteFiles;
           classIdArray[a] := classArray[a].classId;
         end;
 
-      for a := 0 TO 20 DO
+      for a := 0 TO 19 DO
         READ(FormFile, formArray[a]);
 
       for a := 0 to 2700 DO
@@ -348,7 +386,7 @@ PROGRAM CraeteFiles;
       classIdVar : STRING;
       randChar : CHAR;
       classIdArray : ARRAY[0..30] OF String;
-      returnArray : ARRAY[0..30] OF LONGINT;
+      classesInYear ,returnArray : ARRAY[0..30] OF LONGINT;
       begin
         REWRITE(classFile);
         for i := 0 to 30 DO
@@ -369,6 +407,7 @@ PROGRAM CraeteFiles;
               READ(SubjectFile, subject);
               classIdVar := IntToStr(randNum) + randChar +'/'+subject.subjectID;
             end;
+          classIdArray[i] := classIdVar;
           with sClass do
               begin
                 ClassID :=  IntToStr(randNum) + randChar +'/'+subject.subjectID;
@@ -378,6 +417,7 @@ PROGRAM CraeteFiles;
               end;
           WRITE(classFile,sClass);
       end;
+      delay(1);
     end;
 
   procedure createClassStudentResolver;
@@ -385,7 +425,7 @@ PROGRAM CraeteFiles;
         returnArray : ARRAY[0..30] OF LONGINT;
         yearArray : ARRAY[0..30] OF LONGINT;
         stringArray : ARRAY[0..30] OF STRING;
-        studentYear, i, noOfClassInYear, randClassNo : LONGINT;
+        studentYear, i, noOfClassInYear, randClassNo,d : LONGINT;
         oldClass, newClass : STRING;
     begin
       RESET(StudentFile);
@@ -396,9 +436,10 @@ PROGRAM CraeteFiles;
           READ(classFile, classArray[i]);
           yearArray[i] := classArray[i].year;
           returnArray[i] := -1;
-        oldClass:= '-1';
-
         end;
+      oldClass:= '-1';
+      newClass:= '-1';
+
           While NOT EOF(StudentFile) DO
             begin
               for a := 0 to 30 DO
@@ -409,7 +450,7 @@ PROGRAM CraeteFiles;
               numberDone := numberDone +1;
               percentDone := numberDone / total;
               //Delay(1);
-              noOfClassInYear := 0;
+              noOfClassInYear := -1;
               for a := 0 TO 30 DO
                   str(yearArray[a],stringArray[a]);
               Search.SearchFunctions('L',0,30,IntToStr(studentYear),stringArray,returnArray,empty);
@@ -421,10 +462,10 @@ PROGRAM CraeteFiles;
                 end;
               for b := 0 to noOfClassInYear DO
                 begin
-                  while (newClass = oldClass) AND (noOfClassInYear<>1) DO
-                    begin
+                d := 0;
+                  repeat
                       newClass := classArray[returnArray[b]].ClassID;
-                    end;
+                  until (newClass <> oldClass) OR (noOfClassInYear = 0);
                   studentClassResolver.classID := newClass;
                   for a := 0 to 30 DO
                     stringArray[a] := classArray[a].classId;
@@ -436,7 +477,6 @@ PROGRAM CraeteFiles;
                   WRITE(classFile, sClass);
                   WRITE(StudentClassResolverFile,studentClassResolver);
                   oldClass := newClass;
-                  newClass := '1';
                 end;
             end;
     end;
@@ -545,8 +585,9 @@ PROGRAM CraeteFiles;
   begin
     randomize;
     initialiseFiles;
-    loading.startLoading('P',percentDone);
-    addForms;
+    CreateTimeTable;
+    //loading.startLoading('P',percentDone);
+    {addForms;
     addStudents;
     addTeachers;
     createSubjects;
@@ -554,7 +595,7 @@ PROGRAM CraeteFiles;
     createClassStudentResolver;
     assignTeacherToSubject;
     assignTeacherToClass;
-    createRegisters;
+    createRegisters;}
     readln;
 
   end.

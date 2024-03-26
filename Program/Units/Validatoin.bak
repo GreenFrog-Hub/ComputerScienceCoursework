@@ -1,0 +1,51 @@
+UNIT Validation;
+
+  interface
+
+  uses sysutils, crt, vputils;
+
+  function validateInput(question : STRING; responseType : CHAR ;minChar,maxChar : LONGINT) : STRING;
+  procedure checkType(responseType : CHAR; var userInput : STRING);
+  implementation
+
+  function StrToBool(var userInput : STRING) : BOOLEAN; overload;
+    begin
+      if lowercase(userInput) = 'true' then
+        userInput := true;
+      else if lowercae(userInput) = 'false' then
+        StrToBool := false;
+      else
+    end;
+
+  procedure checkType(responseType : CHAR; var userInput : STRING);
+    var sucsessfulConversion : BOOLEAN;
+    begin
+      repeat
+      READLN(userinput);
+
+      Try
+        CASE responseType OF
+          'I' : StrToInt(userinput);
+          'R' : StrToFloat(userInput);
+          'S' : userInput := userInput;
+          'B' : StrToBool(userInput);
+          'D' : StrToDate(userInput);
+          'T' : StrToTime(userInput);
+          else
+              writeln('No valid option selected');
+          end;
+        sucsessfulConversion := true;
+      Except
+        ON E : EConvertError do writeln('Not a valid ', responseType);
+        ON E : EConvertError do sucsessfulConversion := false;
+        end;
+
+      until sucsessfulConversion = true;
+    end;
+
+  function validateInput(question : STRING; responseType : CHAR; minChar, maxChar : LONGINT) : STRING;
+    begin
+      write(question);
+    end;
+
+  end.
