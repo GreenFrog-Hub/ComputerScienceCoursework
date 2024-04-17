@@ -5,7 +5,7 @@ PROGRAM CraeteFiles;
     TimeTableRecord = RECORD
                           Day : LONGINT;
                           LessonNo : LONGINT;
-                          ClassID : STRING[6];
+                          ClassID : STRING[8];
                         end;
     FormRecord = RECORD
                           Form : STRING[5];
@@ -167,17 +167,23 @@ PROGRAM CraeteFiles;
           TimeTable.ClassId := TimeTableInfoFromFile;
           repeat
             readln(TimeTableTextFile,TimeTableInfoFromFile);
+            //writeln(TimeTableInfoFromFile);
             TimeTable.LessonNo := StrToInt(TimeTableInfoFromFile);
             readln(TimeTableTextFile,TimeTableInfoFromFile);
             TimeTable.Day := StrToInt(TimeTableInfoFromFile);
             writeln;
             writeln(TimeTable.ClassId);
-            writeln(TimeTable.Day);
             writeln(TimeTable.LessonNo);
+            writeln(TimeTable.Day);
             readln(TimeTableTextFile,TimeTableInfoFromFile);
-            write(TimeTableFile,TimeTable);
+            //writeln(TimeTableInfoFromFile);
+            try
+              write(TimeTableFile,TimeTable);
+            finally
+            end;
+
           until TimeTableInfoFromFile = 'Q';
-          readln;
+          //readln;
           writeln;
         end;
     end;
@@ -596,6 +602,7 @@ PROGRAM CraeteFiles;
     assignTeacherToSubject;
     assignTeacherToClass;
     createRegisters;}
+    writeln('END!');
     readln;
 
   end.
