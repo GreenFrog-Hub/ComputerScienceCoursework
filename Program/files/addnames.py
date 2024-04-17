@@ -19,6 +19,8 @@ data = pandas.DataFrame({
 Tnames = open("Names.txt","w")
 
 for i in range(0,900):
+
+        
     fname, sname =names.get_full_name().split()
     print(fname,sname)
     randNum = random.randint(7,13)
