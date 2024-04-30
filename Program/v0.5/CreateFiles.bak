@@ -1,5 +1,5 @@
 PROGRAM CraeteFiles;
-  uses crt, sysutils, search,sorting, loading;
+  uses crt, sysutils, search,sorting, loading, DisplayErrorScrn;
 
   type
     TimeTableRecord = RECORD
@@ -34,9 +34,9 @@ PROGRAM CraeteFiles;
                         end;
 
     classRecord = RECORD
-                          ClassID : STRING[6];
+                          ClassID : STRING[8];
                           Year : LONGINT;
-                          subjectID : STRING[2];
+                          subjectID : STRING[3];
                           NoOfStudents : LONGINT;
                         end;
 
@@ -61,7 +61,7 @@ PROGRAM CraeteFiles;
 
     studentClassResolverRecord = RECORD
                           StudentID : LONGINT;
-                          ClassID : STRING[6];
+                          ClassID : STRING[8];
                         end;
     teacherSubjectResolverRecord = RECORD
                           TeacherID : STRING[3];
@@ -132,15 +132,15 @@ PROGRAM CraeteFiles;
 
       ASSIGN(RegisterFile,'C:\ComputerScienceCoursework\Program\files\Registers.dta');
       total := total + 1500;
-
+      }
       ASSIGN(StudentFNameFile,'C:\ComputerScienceCoursework\Program\files\Names.txt');
       ASSIGN(StudentFile,'C:\ComputerScienceCoursework\Program\files\Students.dta');
       total := total + 900;
-
+       {
       ASSIGN(TeacherFileFromFile,'C:\ComputerScienceCoursework\Program\files\Tnames.txt');
       ASSIGN(TeacherFile,'C:\ComputerScienceCoursework\Program\files\Teachers.dta');
       total := total + 100;
-
+      }
       ASSIGN(classFile,'C:\ComputerScienceCoursework\Program\files\classes.dta');
       total := total + 30;
 
@@ -149,7 +149,7 @@ PROGRAM CraeteFiles;
 
       ASSIGN(studentClassResolverFile,'C:\ComputerScienceCoursework\Program\files\studentClassResolver.dta');
       total := total + 900;
-
+      {
       ASSIGN(teacherSubjectResolverFile,'C:\ComputerScienceCoursework\Program\files\teacherSubjectResolver.dta');
       total:= total + 100;
 
@@ -171,10 +171,6 @@ PROGRAM CraeteFiles;
             TimeTable.LessonNo := StrToInt(TimeTableInfoFromFile);
             readln(TimeTableTextFile,TimeTableInfoFromFile);
             TimeTable.Day := StrToInt(TimeTableInfoFromFile);
-            writeln;
-            writeln(TimeTable.ClassId);
-            writeln(TimeTable.LessonNo);
-            writeln(TimeTable.Day);
             readln(TimeTableTextFile,TimeTableInfoFromFile);
             //writeln(TimeTableInfoFromFile);
             try
@@ -183,8 +179,7 @@ PROGRAM CraeteFiles;
             end;
 
           until TimeTableInfoFromFile = 'Q';
-          readln;
-          writeln;
+          //readln;
         end;
     end;
 
@@ -305,33 +300,33 @@ PROGRAM CraeteFiles;
     var i : LONGINT;
       ffname, fsname, fyear, fform, fattendance : STRING;
     begin
-    i := 0;
+      i := 0;
       RESET(StudentFNameFile);
       REWRITE(StudentFile);
-      while not EOF(StudentFNameFile) DO
+      writeln('a');
+      for i := 0 to 119 DO
         begin
-          i := i +1;
-          numberDone := numberDone + 1;
-          percentDone := numberDone / total;
-          //Delay(1);
-          READLN(StudentFNameFile,ffname);
-          READLN(StudentFnameFile, fsname);
-          READLN(StudentFnameFile, fyear);
-          READLN(StudentFnameFile, fform);
-          READLN(StudentFnameFile, fattendance);
-          with student DO
-            begin
-              StudentID := i;
-              Fname := ffname;
-              sname := fsname;
-              year := StrToInt(fyear);
-              form := fform;
-              uname := fsname[1]+ffname;
-              Pword := 'ABC123';
-              attendance := StrToFloat(fattendance);
-            end;
-          WRITE(StudentFile, student);
+          Student.StudentID := i;
+          READLN(StudentFNameFile, student.fname);
+          READLN(StudentFnameFile, student.sname);
+          student.year := 9;
+          student.uname := student.fname+student.sname;
+          student.pword := 'ABC123';
+          student.Attendance := 100;
+          write(StudentFile,student);
         end;
+      for i := 120 to 172 DO
+        begin
+          Student.StudentID := i;
+          READLN(StudentFNameFile, student.fname);
+          READLN(StudentFnameFile, student.sname);
+          student.year := 12;
+          student.uname := student.fname+student.sname;
+          student.pword := 'ABC123';
+          student.Attendance := 100;
+          write(StudentFile,student);
+        end;
+        writeln('end student');
     end;
 
   procedure addTeachers;
@@ -367,8 +362,10 @@ PROGRAM CraeteFiles;
         end;
 
     PROCEDURE createSubjects;
-      const subjID : ARRAY[0..9] OF STRING[2] = ('Cs','Ma','Mu','En','Gg','Ch','Ph','Bi','DT','Dr');
-            subjNm : ARRAY[0..9] OF STRING[20] = ('Computer Science','Maths','Music','English','Geography','Chemistry','Physics','Biology','Design Technology','Drama');
+      const subjID : ARRAY[0..18] OF STRING[3] = ('Cs','Ma','Mu','Enl','Gg','Ch','Ph','Bi','DT','Dr',
+                                                  'Lf','Rpe','Fr','Hi','Gm','Bs','Ar','Py','Pe');
+            subjNm : ARRAY[0..18] OF STRING[20] = ('Computer Science','Maths','Music','English','Geography','Chemistry','Physics','Biology','Design Technology','Drama',
+                                                  'Life Skills','Religion, Philosophy & Ethics','French','History','German','Business Studies','Art','Physcology','Physical Education');
       var i : LONGINT;
       begin
         reset(SubjectFile);
@@ -388,103 +385,248 @@ PROGRAM CraeteFiles;
         end;
 
     PROCEDURE createClasses;
-      VAR i, randNum : LONGINT;
-      classIdVar : STRING;
-      randChar : CHAR;
-      classIdArray : ARRAY[0..30] OF String;
-      classesInYear ,returnArray : ARRAY[0..30] OF LONGINT;
+    const yNineClassArray : ARRAY[0..43] OF STRING = ('9AT1/Ch', '9AT2/Ch', '9AT1/Bi', '9AT2/Bi', '9AT1/Ph', '9AT2/Ph', '9AAX/Ma', '9AAX/Enl', '9AAX/Lf', '9AAX/RPE', '9AAY/Ma',
+          '9AAY/Enl', '9AAY/Lf', '9AAY/RPE', '9AP1/Pe', '9AP2/Pe', '9BT1/Ch', '9BT2/Ch', '9BT1/Bi', '9BT2/Cp', '9BT1/Ph', '9BT2/Ph',
+          '9BAX/Ma', '9BAX/Enl', '9BAX/Lf', '9BAX/RPE', '9BAY/Ma', '9BAY/Enl', '9BAY/Lf', '9BAY/RPE', '9BP1/Pe', '9BP2/Pe', '9B/Fr1', '9B/Dt1', '9B/Gg1', '9B/Hi1', '9C/Dr1', '9C/Ar1', '9C/Py1',
+          '9C/Dt1', '9D/Cp1', '9D/Bs1', '9D/Mu1', '9D/Gm1');
+          yTwelveClassArray : ARRAY[0..7] OF STRING = ('12C/Gg1','12D/Mu1','12C/Cp1','12D/Cp1','12A/Py1','12C/Py1','12A/Ph1','12B/Ph1');
+      VAR i : LONGINT;
       begin
-        REWRITE(classFile);
-        for i := 0 to 30 DO
+        rewrite(classFile);
+
+        for i := 0 TO 44 DO
           begin
-          numberDone := numberDone + 1;
-          percentDone := numberDone / total;
-          for a := 0 to 30 DO
-            returnArray[a] := -1;
-          //Delay(1);
-          returnArray[0] := 1;
-          while returnArray[0] <> -1 DO
-            begin
-              returnArray[0] := -1;
-              Search.SearchFunctions('L',0,30,classIdVar,classIdArray,returnArray,empty);
-              randNum := Random(7) + 7;
-              randChar:= Chr(Random(4) + 65);
-              Seek(SubjectFile,Random(10));
-              READ(SubjectFile, subject);
-              classIdVar := IntToStr(randNum) + randChar +'/'+subject.subjectID;
-            end;
-          classIdArray[i] := classIdVar;
-          with sClass do
-              begin
-                ClassID :=  IntToStr(randNum) + randChar +'/'+subject.subjectID;
-                SubjectID := subject.subjectID;
-                year := randNum;
-                NoOfStudents := 0;
-              end;
-          WRITE(classFile,sClass);
+            sClass.ClassID := yNineClassArray[i];
+            sClass.year := 9;
+            sClass.NoOfStudents := 0;
+            write(classFile, sClass);
+          end;
+        for i := 0 TO 8 DO
+          begin
+            sClass.ClassId := yTwelveClassArray[i];
+            sClass.year := 12;
+            sClass.NoOfStudents := 0;
+            write(classFile, sClass);
+          end;
       end;
-      delay(1);
-    end;
 
   procedure createClassStudentResolver;
-    var classArray : ARRAY[0..30] OF classRecord;
-        returnArray : ARRAY[0..30] OF LONGINT;
+    const yNineClassArray : ARRAY[0..43] OF STRING = ('9AT1/Ch', '9AT2/Ch', '9AT1/Bi', '9AT2/Bi', '9AT1/Ph', '9AT2/Ph', '9AAX/Ma', '9AAY/Ma', '9AAX/Enl', '9AAY/Enl', '9AAX/Lf', '9AAY/Lf',
+          '9AAX/RPE', '9AAY/RPE', '9AP1/Pe', '9AP2/Pe', '9BT1/Ch', '9BT2/Ch', '9BT1/Bi', '9BT2/Cp', '9BT1/Ph', '9BT2/Ph',
+          '9BAX/Ma', '9BAY/Ma', '9BAX/Enl', '9BAY/Enl', '9BAX/Lf', '9BAY/Lf', '9BAX/RPE', '9BAY/RPE', '9BP1/Pe', '9BP2/Pe', '9B/Fr1', '9B/Dt1', '9B/Gg1', '9B/Hi1', '9C/Dr1', '9C/Ar1', '9C/Py1',
+          '9C/Dt1', '9D/Cp1', '9D/Bs1', '9D/Mu1', '9D/Gm1');
+          yTwelveClassArray : ARRAY[0..7] OF STRING = ('12A/Ph1','12A/Py1','12B/Ph1','12C/Gg1','12C/Cp1','12C/Py1','12D/Mu1','12D/Cp1');
+    var classArray : ARRAY[0..50] OF classRecord;
+        classIDArray : ARRAY[0..50] OF STRING;
+        returnArray : ARRAY[0..50] OF LONGINT;
         yearArray : ARRAY[0..30] OF LONGINT;
         stringArray : ARRAY[0..30] OF STRING;
-        studentYear, i, noOfClassInYear, randClassNo,d : LONGINT;
+        studentYear, d, i, startPoint, randClassNo,randomSide, numberInASide, numberInBSide, randomChoiceClass : LONGINT;
         oldClass, newClass : STRING;
+
     begin
+      writeln('1');
       RESET(StudentFile);
+      writeln('2');
       RESET(classFile);
-      REWRITE(studentClassResolverFile);
-      for i := 0 TO 30 DO
+      writeln('3');
+      rewrite(studentClassResolverFile);
+      writeln('4');
+      for i := 0 to 50 do
         begin
           READ(classFile, classArray[i]);
-          yearArray[i] := classArray[i].year;
-          returnArray[i] := -1;
+          classIDArray[i] := classArray[i].classID;
         end;
-      oldClass:= '-1';
-      newClass:= '-1';
-
-          While NOT EOF(StudentFile) DO
+      numberInASide := 0;
+      numberInBSide := 0;
+      randomSide := RANDOM(2);
+      while not(eof(StudentFile)) do
+        begin
+          READ(StudentFile,student);
+          studentClassResolver.studentID := student.StudentID;
+          if student.year = 9 THEN
             begin
-              for a := 0 to 30 DO
-                returnArray[a] := -1;
-              READ(StudentFile, Student);
-              studentYear := Student.Year;
-              studentClassResolver.studentID := student.StudentID;
-              numberDone := numberDone +1;
-              percentDone := numberDone / total;
-              //Delay(1);
-              noOfClassInYear := -1;
-              for a := 0 TO 30 DO
-                  str(yearArray[a],stringArray[a]);
-              Search.SearchFunctions('L',0,30,IntToStr(studentYear),stringArray,returnArray,empty);
-              i := 0;
-              while returnArray[i] <> -1 DO
+              if (numberInASide < 60) AND (numberInBSide < 60) THEN
+                randomSide := RANDOM(2)
+              else if (numberInASide < 60) THEN
+                randomSide := 0
+              else if (numberInBSide < 60) THEN
+                randomSide := 1;
+              if randomSide = 0 THEN //a or b side
                 begin
-                  i := i +1;
-                  noOfClassInYear := noOfClassInYear +1;
-                end;
-              for b := 0 to noOfClassInYear DO
+                    numberInASide := numberInASide + 1;
+                    //Science
+                    repeat
+                      randomChoiceClass := RANDOM(2);
+                      Search.SearchFunctions('L',0,50,yNineClassArray[0+randomChoiceClass],classIDArray,returnArray,empty);
+                      SEEK(classFile, returnArray[0]);
+                      read(classFile, sClass);
+                    until sClass.NoOfStudents < 30;
+                    a := 0;
+                    startPoint := returnArray[0];
+                    while a <= 4 do
+                      begin
+                        studentClassResolver.classID := yNineClassArray[0+randomChoiceClass+a];
+                        write(studentClassResolverFile, studentClassResolver);
+                        SEEK(classFile, startPoint + a);
+                        read(classFile, sClass);
+                        SEEK(classFile, FilePos(classFile)-1);
+                        sClass.NoOfStudents := sClass.NoOfStudents + 1;
+                        write(classFile, sClass);
+                        a := a + 2;
+                      end;
+                    //Maths
+                    repeat
+                      randomChoiceClass := RANDOM(2);
+                      Search.SearchFunctions('L',0,50,yNineClassArray[6+randomChoiceClass],classIDArray,returnArray,empty);
+                      SEEK(classFile, returnArray[0]);
+                      read(classFile, sClass);
+                    until sClass.NoOfStudents < 30;
+                    studentClassResolver.classID := yNineClassArray[6+randomChoiceClass];
+                    write(studentClassResolverFile,studentClassResolver);
+                    SEEK(classFile, FilePos(classFile)-1);
+                    read(classFile, sClass);
+                    SEEK(classFile, FilePos(classFile)-1);
+                    sClass.NoOfStudents := sClass.NoOfStudents + 1;
+                    write(classFile, sClass);
+                    //Englishs
+                    repeat
+                      randomChoiceClass := RANDOM(2);
+                      Search.SearchFunctions('L',0,50,yNineClassArray[8+randomChoiceClass],classIDArray,returnArray,empty);
+                      SEEK(classFile, returnArray[0]);
+                      read(classFile, sClass);
+                    until sClass.NoOfStudents < 30;
+                    a := 0;
+                    startPoint := returnArray[0];
+                    while a <= 2 do
+                      begin
+                        studentClassResolver.classID := yNineClassArray[8+randomChoiceClass+a];
+                        write(studentClassResolverFile, studentClassResolver);
+                        SEEK(classFile, startPoint + a);
+                        read(classFile, sClass);
+                        SEEK(classFile, FilePos(classFile)-1);
+                        sClass.NoOfStudents := sClass.NoOfStudents + 1;
+                        write(classFile, sClass);
+                        a := a + 1;
+                      end;
+                    //Pe
+                    repeat
+                      randomChoiceClass := RANDOM(2);
+                      Search.SearchFunctions('L',0,50,yNineClassArray[14+randomChoiceClass],classIDArray,returnArray,empty);
+                      SEEK(classFile, returnArray[0]);
+                      read(classFile, sClass);
+                    until sClass.NoOfStudents < 30;
+                    studentClassResolver.classID := yNineClassArray[14+randomChoiceClass];
+                    write(studentClassResolverFile,studentClassResolver);
+                    SEEK(classFile, FilePos(classFile)-1);
+                    read(classFile, sClass);
+                    SEEK(classFile, FilePos(classFile)-1);
+                    sClass.NoOfStudents := sClass.NoOfStudents + 1;
+                    write(classFile, sClass);
+                end
+                else if randomSide = 1 THEN //a or b side
+                  begin
+                    //Science
+                    numberInBSide := numberInBSide + 1;
+                    repeat
+                      randomChoiceClass := RANDOM(2);
+                      Search.SearchFunctions('L',0,50,yNineClassArray[16+randomChoiceClass],classIDArray,returnArray,empty);
+                      SEEK(classFile, returnArray[0]);
+                      read(classFile, sClass);
+                    until sClass.NoOfStudents < 30;
+                    a := 0;
+                    startPoint := returnArray[0];
+                    while a <= 4 do
+                      begin
+                        studentClassResolver.classID := yNineClassArray[16+randomChoiceClass+a];
+                        write(studentClassResolverFile, studentClassResolver);
+                        SEEK(classFile, startPoint + a);
+                        read(classFile, sClass);
+                        SEEK(classFile, FilePos(classFile)-1);
+                        sClass.NoOfStudents := sClass.NoOfStudents + 1;
+                        write(classFile, sClass);
+                        a := a + 2;
+                      end;
+                    //Maths
+                    repeat
+                      randomChoiceClass := RANDOM(2);
+                      Search.SearchFunctions('L',0,50,yNineClassArray[22+randomChoiceClass],classIDArray,returnArray,empty);
+                      SEEK(classFile, returnArray[0]);
+                      read(classFile, sClass);
+                    until sClass.NoOfStudents < 30;
+                    studentClassResolver.classID := yNineClassArray[22+randomChoiceClass];
+                    write(studentClassResolverFile,studentClassResolver);
+                    SEEK(classFile, FilePos(classFile)-1);
+                    read(classFile, sClass);
+                    SEEK(classFile, FilePos(classFile)-1);
+                    sClass.NoOfStudents := sClass.NoOfStudents + 1;
+                    write(classFile, sClass);
+                    //Englishs
+                    repeat
+                      randomChoiceClass := RANDOM(2);
+                      Search.SearchFunctions('L',0,50,yNineClassArray[24+randomChoiceClass],classIDArray,returnArray,empty);
+                      SEEK(classFile, returnArray[0]);
+                      read(classFile, sClass);
+                    until sClass.NoOfStudents < 30;
+                    a := 0;
+                    startPoint := returnArray[0];
+                    while a <= 2 do
+                      begin
+                        studentClassResolver.classID := yNineClassArray[24+randomChoiceClass+a];
+                        write(studentClassResolverFile, studentClassResolver);
+                        SEEK(classFile, startPoint + a);
+                        read(classFile, sClass);
+                        SEEK(classFile, FilePos(classFile)-1);
+                        sClass.NoOfStudents := sClass.NoOfStudents + 1;
+                        write(classFile, sClass);
+                        a := a + 1;
+                      end;
+                    //Pe
+                    repeat
+                      randomChoiceClass := RANDOM(2);
+                      Search.SearchFunctions('L',0,50,yNineClassArray[30+randomChoiceClass],classIDArray,returnArray,empty);
+                      SEEK(classFile, returnArray[0]);
+                      read(classFile, sClass);
+                    until sClass.NoOfStudents < 30;
+                    studentClassResolver.classID := yNineClassArray[30+randomChoiceClass];
+                    write(studentClassResolverFile,studentClassResolver);
+                    SEEK(classFile, FilePos(classFile)-1);
+                    read(classFile, sClass);
+                    SEEK(classFile, FilePos(classFile)-1);
+                    sClass.NoOfStudents := sClass.NoOfStudents + 1;
+                    write(classFile, sClass);
+                end
+                else
+                  begin
+                    writeln('A: ',numberInASide, '  B: ',numberInBSide);
+                    Delay(3000);
+                    DisplayErrorScrn.ErrScr;
+                  end;
+              d:=0;
+              for a := 0 to 8 do
                 begin
-                d := 0;
                   repeat
-                      newClass := classArray[returnArray[b]].ClassID;
-                  until (newClass <> oldClass) OR (noOfClassInYear = 0);
-                  studentClassResolver.classID := newClass;
-                  for a := 0 to 30 DO
-                    stringArray[a] := classArray[a].classId;
-                  Search.SearchFunctions('L',0,30,studentClassResolver.classID,stringArray,returnArray,empty);
-                  SEEK(ClassFile, returnArray[0]);
-                  read(classfile, sClass);
-                  sClass.noOfStudents := sClass.noOfStudents +1;
+                    d := d + 1;
+                    if d > 100 then
+                      begin
+                        writeln;
+                      end;
+                    randomChoiceClass := RANDOM(4);
+                    Search.SearchFunctions('L',0,50,yNineClassArray[32+a+randomChoiceClass],classIDArray,returnArray,empty);
+                    SEEK(classFile, returnArray[0]);
+                    read(classFile, sClass);
+                  until sClass.NoOfStudents < 30;
+                  d := 0;
+                  studentClassResolver.classID := yNineClassArray[32+a+randomChoiceClass];
                   SEEK(classFile, FilePos(classFile)-1);
-                  WRITE(classFile, sClass);
-                  WRITE(StudentClassResolverFile,studentClassResolver);
-                  oldClass := newClass;
+                  read(classFile, sClass);
+                  SEEK(classFile, FilePos(classFile)-1);
+                  sClass.NoOfStudents := sClass.NoOfStudents + 1;
+                  write(classFile,sClass);
+                  a := a + 3;
                 end;
             end;
+        end;
     end;
 
   PROCEDURE assignTeacherToSubject;
@@ -593,13 +735,18 @@ PROGRAM CraeteFiles;
     initialiseFiles;
     CreateTimeTable;
     //loading.startLoading('P',percentDone);
-    {addForms;
+    {addForms;}
     addStudents;
-    addTeachers;
+    {addTeachers;}
+    writeln('start subj');
     createSubjects;
+    writeln('end subj');
+    writeln('start class');
     createClasses;
+    writeln('end class');
+    writeln('start resolver');
     createClassStudentResolver;
-    assignTeacherToSubject;
+    {assignTeacherToSubject;
     assignTeacherToClass;
     createRegisters;}
     writeln('END!');

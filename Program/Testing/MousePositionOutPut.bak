@@ -1,8 +1,9 @@
 PROGRAM MousePositionOutPut;
-  uses opcrt, sysutils, vputils, windows, classes;
+  uses dos, crt;
 
   var x : LONGINT;
+    reg : registers;
+    myloc : byte absolute $0000:$0417;
 
   begin
-    OpMouse.MouseWhereX;
   end.

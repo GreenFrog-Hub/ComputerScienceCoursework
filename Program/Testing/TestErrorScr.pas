@@ -1,0 +1,6 @@
+PROGRAM TestErrorScr;
+  uses DisplayErrorScrn;
+
+  begin
+    DisplayErrorScrn.ErrScr;
+  end.                                                     `

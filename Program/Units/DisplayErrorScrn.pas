@@ -1,0 +1,37 @@
+UNIT DisplayErrorScrn;
+
+  interface
+
+  uses crt, sysutils, vputils;
+  var a : LONGINT;
+    Character : STRING;
+    SadFaceTxt : Text;
+
+  procedure ErrScr;
+
+  implementation
+
+  procedure ErrScr;
+    begin
+      HideCursor;
+      ClrScr;
+      ASSIGN(SadFaceTxt,'C:\ComputerScienceCoursework\Program\files\SadFaceANSI.txt');
+      reset(SadFaceTxt);
+      for a := 0 to 25 DO
+        begin
+          while not EOLn(SadFaceTxt) DO
+            begin
+              read(SadFaceTxt, Character);
+              write(Character);
+            end;
+            readln(SadFaceTxt, Character);
+            writeln;
+            delay(100);
+        end;
+        Delay(10000);
+        halt;
+      end;
+
+  end.
+
+
