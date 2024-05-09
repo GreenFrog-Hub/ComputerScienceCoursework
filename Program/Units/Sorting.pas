@@ -2,11 +2,11 @@ unit Sorting;
   interface
   USES CRT, SYSUTILS, BubbleSort,InsertionSort;
 
-  procedure sortFunction(sortType : CHAR; var UserArray : ARRAY OF LONGINT; upper, lower : LONGINT);
+  procedure sortFunction(sortType : CHAR; var UserArray : ARRAY OF STRING; lower, upper : LONGINT);
 
   IMPLEMENTATION
 
-  PROCEDURE sortFunction(sortType : CHAR; var UserArray : ARRAY OF LONGINT; upper, lower : LONGINT);
+  PROCEDURE sortFunction(sortType : CHAR; var UserArray : ARRAY OF STRING; lower, upper : LONGINT);
     begin
       if sortType = 'I' THEN
         InsertionSort.InsertionSortFunction(UserArray, lower, upper)

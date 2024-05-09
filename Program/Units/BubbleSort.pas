@@ -4,15 +4,16 @@ UNIT BubbleSort;
   USES CRT, SYSUTILS;
 
 
-  PROCEDURE BubbleSortFunction(VAR UserArray : ARRAY OF LONGINT; low, upper: LONGINT);
+  PROCEDURE BubbleSortFunction(VAR UserArray : ARRAY OF STRING; low, upper: LONGINT);
 
     VAR
-      i, Temp : LONGINT;
+      i : LONGINT;
+      Temp : STRING;
       Swaps : BOOLEAN;
 
     IMPLEMENTATION
 
-  PROCEDURE BubbleSortFunction(VAR UserArray : ARRAY OF LONGINT; low, upper: LONGINT);
+  PROCEDURE BubbleSortFunction(VAR UserArray : ARRAY OF STRING; low, upper: LONGINT);
     BEGIN
       upper := upper-1;
       REPEAT

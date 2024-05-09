@@ -2,13 +2,14 @@ UNIT InsertionSort;
   interface
   uses crt, sysutils;
 
-  PROCEDURE InsertionSortFunction(VAR UserArray : ARRAY OF LONGINT; low, upper: LONGINT);
+  PROCEDURE InsertionSortFunction(VAR UserArray : ARRAY OF STRING; low, upper: LONGINT);
     VAR
-      i,temp, position : LONGINT;
+      i,position : LONGINT;
+      temp : STRING;
 
     IMPLEMENTATION
 
-  PROCEDURE InsertionSortFunction(VAR UserArray : ARRAY OF LONGINT; low, upper: LONGINT);
+  PROCEDURE InsertionSortFunction(VAR UserArray : ARRAY OF STRING; low, upper: LONGINT);
     BEGIN
         FOR i := 0 TO upper DO
           BEGIN
