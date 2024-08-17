@@ -5,6 +5,6 @@ PROGRAM CursorGridTest;
   begin
     name := 'bob';
     write(name ,' ' ,name);
-    cursorGrid.start(9,1,1,1);
+    cursorGrid.start(4,4,1,1);
     readln;
   end.

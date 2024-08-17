@@ -1,0 +1,10 @@
+PROGRAM stringLengthTest;
+  var testString : STRING[5];
+    substring : STRING[3];
+
+  begin
+    testString := 'abc';
+    substring := testString[3] + testString[4] + testString[5];
+    writeln(substring);
+    readln;
+  end.
