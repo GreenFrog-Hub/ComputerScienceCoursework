@@ -146,7 +146,7 @@ PROGRAM CraeteFiles;
       total := total + 1500;
       }
       ASSIGN(NameFile,'C:\ComputerScienceCoursework\Program\files\Names.txt');
-      ASSIGN(StudentFile,'C:\ComputerScienceCoursework\Program\files\Students.dta');
+      
       total := total + 140;
        {
       ASSIGN(TeacherFileFromFile,'C:\ComputerScienceCoursework\Program\files\Tnames.txt');
@@ -352,39 +352,23 @@ PROGRAM CraeteFiles;
       ffname, fsname, fform : STRING;
     begin
       rewrite(TeacherFile);
-      for i := 0 TO 51 DO
+      for i := 0 TO 29 DO
         begin
             numberDone := numberDone + 1;
             percentDone := numberDone / total;
-            READLN(NameFile, ffname);
-            READLN(NameFile, fsname);
+            READLN(NameFile, teacher.Fname);
+            READLN(NameFile, teacher.Sname);
             with teacher do
-            begin
-              TeacherID := ffname[1]+fsname[1]+fsname[2];
-              Fname := ffname;
-              Sname := fsname;
-              uname := ffname + fsname;
-              pword := 'ABC123';
-            end;
+              begin
+                TeacherID := ffname[1]+fsname[1]+fsname[2];
+                uname := teacher.FName + teacher.SName;
+                pword := 'ABC123';
+              end;
             write(TeacherFile,teacher);
         end;
-      while not EOF(TeacherFileFromFile) DO
-        begin
-          if fform = 'nil' THEN
-            begin
-            teacher.form := '';
-            end
-          else
-            teacher.form := fform;
-          WRITE(TeacherFile, teacher);
-          end;
-        end;
+
     end;
     
-    procedure orderLoginDetails;
-      begin
-
-      end;
 
    { procedure createLogInFile;
       var i : LONGINT;
@@ -405,30 +389,30 @@ PROGRAM CraeteFiles;
       end;  }
 
 
-    PROCEDURE createSubjects;
-      const subjID : ARRAY[0..19] OF STRING[3] = ('Cs','Ma','Mu','Enl','Gg','Ch','Ph','Bi','DT','Dr',
-                                                  'Lf','Rpe','Fr','Hi','Gm','Bs','Ar','Py','Pe','Sp');
-            subjNm : ARRAY[0..19] OF STRING[20] = ('Computer Science','Maths','Music','English','Geography','Chemistry','Physics','Biology','Design Technology','Drama',
-                                                  'Life Skills','Religion, Philosophy & Ethics','French','History','German','Business Studies','Art','Physcology','Physical Education','Spanish');
-      var i : LONGINT;
-      begin
-        reset(SubjectFile);
-        REWRITE(SubjectFile);
-        for i := 0 TO 9 do
-          begin
-            numberDone := numberDone +1;
-            percentDone := numberDone / total;
-            //Delay(1);
-            with subject do
-              begin
-                subjectID := subjID[i];
-                SubjectName := subjNm[i];
-              end;
-              WRITE(SubjectFile, subject);
+  PROCEDURE createSubjects;
+    const subjID : ARRAY[0..19] OF STRING[3] = ('Cs','Ma','Mu','Enl','Gg','Ch','Ph','Bi','DT','Dr',
+                                                'Lf','Rpe','Fr','Hi','Gm','Bs','Ar','Py','Pe','Sp');
+          subjNm : ARRAY[0..19] OF STRING[20] = ('Computer Science','Maths','Music','English','Geography','Chemistry','Physics','Biology','Design Technology','Drama',
+                                                'Life Skills','Religion, Philosophy & Ethics','French','History','German','Business Studies','Art','Physcology','Physical Education','Spanish');
+    var i : LONGINT;
+    begin
+      reset(SubjectFile);
+      REWRITE(SubjectFile);
+      for i := 0 TO 9 do
+        begin
+          numberDone := numberDone +1;
+          percentDone := numberDone / total;
+          //Delay(1);
+          with subject do
+            begin
+              subjectID := subjID[i];
+              SubjectName := subjNm[i];
             end;
-        end;
+            WRITE(SubjectFile, subject);
+          end;
+      end;
 
-    PROCEDURE createClasses;
+  PROCEDURE createClasses;
     const yNineClassArray : ARRAY[0..43] OF STRING = ('9AT1/Ch', '9AT2/Ch', '9AT1/Bi', '9AT2/Bi', '9AT1/Ph', '9AT2/Ph', '9AAX/Ma', '9AAY/Ma', '9AAX/Enl', '9AAY/Enl', '9AAX/Lf', '9AAY/Lf',
           '9AAX/RPE', '9AAY/RPE', '9AP1/Pe', '9AP2/Pe', '9BT1/Ch', '9BT2/Ch', '9BT1/Bi', '9BT2/Cp', '9BT1/Ph', '9BT2/Ph',
           '9BAX/Ma', '9BAY/Ma', '9BAX/Enl', '9BAY/Enl', '9BAX/Lf', '9BAY/Lf', '9BAX/RPE', '9BAY/RPE', '9BP1/Pe', '9BP2/Pe', '9B/Fr1', '9B/Sp1', '9B/Gg1', '9B/Hi1', '9C/Dr1', '9C/Ar1', '9C/Py1',
@@ -651,102 +635,61 @@ PROGRAM CraeteFiles;
     end;
 
   PROCEDURE assignTeacherToSubject;
-    var SubjectArray : ARRAY[0..9] OF subjectRecord;
+    var a, b : LONGINT;
+
     begin
       RESET(TeacherFile);
       reset(subjectFile);
       REWRITE(teacherSubjectResolverFile);
-      for a := 0 TO 9 DO
-          READ(subjectFile, subjectArray[a]);
-      while not EOF(TeacherFile) DO
+      while not EOF(subjectFile) DO
         begin
           numberDone := numberDone+ 1;
           percentDone := numberDone / total;
           //Delay(1);
-          read(teacherfile,teacher);
-          with teacherSubjectResolver DO
+          read(subjectFile,subject);
+          for b := 0 TO 1 DO
             begin
-              teacherID := teacher.teacherID;
-              subjectID := subjectArray[RANDOM(10)].subjectID;
+              read(teacherfile,teacher);
+              with teacherSubjectResolver DO
+                begin
+                  teacherID := teacher.teacherID;
+                  subjectID := subjectFile.subjectID;
+                end;
+              WRITE(teacherSubjectResolverFile, teacherSubjectResolver);
             end;
-          WRITE(teacherSubjectResolverFile, teacherSubjectResolver);
         end;
       end;
 
   PROCEDURE assignTeacherToClass;
-    var classArray : ARRAY[0..30] OF classRecord;
-      classIDArray : ARRAY[0..30] OF STRING;
-      teachersIDArray : ARRAY[0..99] OF STRING;
-      returnArray : ARRAY[0..99] OF LONGINT;
-      teacherSubject : STRING;
-      subjectArray : ARRAY[0..9] OF subjectRecord;
-      subjectIdArray : ARRAY[0..99] OF STRING;
-      i, noOfClass, randClassNo, noOfTeachersForSubject : LONGINT;
+    var a, b, noClassSubject : LONGINT;
+    classArray : ARRAY[0..50] OF classRecord;
+    classSubjectIDArray : ARRAY[0..50] OF STRING;
+    teacherSubjectArray : ARRAY[0..29] OF teacherSubjectResolver;
+    teacherSubjectArrayteacherIDArray : ARRAY[0..50] OF STRING;
+    teacherSubjectArrayteacherIDArrayReturn: ARRAY [0..50] OF STRING;
     begin
-      RESET(classFile);
-      RESET(teacherFile);
-      RESET(subjectFile);
+      reset(classFile)
       reset(teacherSubjectResolverFile);
-      REWRITE(teacherClassResolverFile);
-      for a := 0 TO 9 DO
-        begin
-          READ(subjectFile, subjectArray[a]);
-        end;
-      for a := 0 TO 30 DO
+      for a := 0 TO 50 DO
         begin
           READ(classFile, classArray[a]);
-          classIDArray[a] := classArray[a].subjectId;
+          classSubjectIDArray[a] := classArray[a].SubjectID;
           returnArray[a] := -1;
         end;
-      for a := 0 TO 99 DO
-          begin
-            READ(teacherFile,teacher);
-            teachersIDArray[a] := teacher.teacherID;
-            READ(teacherSubjectResolverFile, teacherSubjectResolver);
-            subjectIdArray[a] := teacherSubjectResolver.subjectId;
-
-          end;
-      RESET(teacherSubjectResolverFile);
-      RESET(teacherFile);
-      while not EOF(teacherFile) DO
+      a := 0;
+      while not eof(teacherSubjectResolverFile) DO
         begin
-          numberDone := numberDone + 1;
-          percentDone := numberDone / total;
-          //Delay(1);
-          Read(teacherFile,teacher);
-          teacherClassResolver.teacherId := teacher.teacherID;
-          Search.SearchFunctions('L',0,99,teacher.teacherID,teachersIDArray,returnArray,empty);
-          SEEK(teacherSubjectResolverFile,returnArray[0]);
-          READ(teacherSubjectResolverFile, teacherSubjectResolver);
-          teacherSubject := teacherSubjectResolver.subjectID;
-
-          Search.SearchFunctions('L',0,99,teacherSubject,subjectIdArray,returnArray,empty);
-
-          i := 0;
-          noOfTeachersForSubject:=0;
-          while returnArray[i] <> -1 DO
-            begin
-              noOfTeachersForSubject := noOfTeachersForSubject + 1;
-              i := i +1;
-            end;
-
-          Search.SearchFunctions('L',0,30,teacherSubjectResolver.subjectID,classIDArray,returnArray,empty);
-          i := 0;
-          noOfClass := 0;
-          while returnArray[i] <> -1 DO
-            begin
-              noOfClass := noOfClass + 1;
-              i := i + 1;
-            end;
-
-          randClassNo := RANDOM(noOfClass);
-          teacherClassResolver.classID := classArray[returnArray[randClassNo]].classID;
-          WRITE(teacherClassResolverFile, teacherClassResolver);
-
-         for a := 0 to 30 DO
+          READ(teacherSubjectResolverFile, teacherSubjectArray[a]);
+          teacherSubjectArray[a] := teacherSubjectArray[a].SubjectID;
           returnArray[a] := -1;
+          a := a +1;
         end;
-      end;
+      while NOT EOF(SubjectFile) DO
+        begin
+          READ(SubjectFile, Subject);
+          Search.SearchFunctions('L',0,a,Subject.SubjectID,classSubjectIDArray,returnArray,empty)
+        end;
+    end;
 
 
 
