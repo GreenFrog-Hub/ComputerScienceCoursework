@@ -352,7 +352,7 @@ PROGRAM CraeteFiles;
       ffname, fsname, fform : STRING;
     begin
       rewrite(TeacherFile);
-      for i := 0 TO 29 DO
+      for i := 0 TO 79 DO
         begin
             numberDone := numberDone + 1;
             percentDone := numberDone / total;
@@ -647,7 +647,7 @@ PROGRAM CraeteFiles;
           percentDone := numberDone / total;
           //Delay(1);
           read(subjectFile,subject);
-          for b := 0 TO 1 DO
+          for b := 0 TO 3 DO
             begin
               read(teacherfile,teacher);
               with teacherSubjectResolver DO
@@ -681,13 +681,14 @@ PROGRAM CraeteFiles;
         begin
           READ(teacherSubjectResolverFile, teacherSubjectArray[a]);
           teacherSubjectArray[a] := teacherSubjectArray[a].SubjectID;
-          returnArray[a] := -1;
+          teacherSubjectArrayteacherIDArrayReturn[a] := -1;
           a := a +1;
         end;
       while NOT EOF(SubjectFile) DO
         begin
           READ(SubjectFile, Subject);
-          Search.SearchFunctions('L',0,a,Subject.SubjectID,classSubjectIDArray,returnArray,empty)
+          Search.SearchFunctions('L',0,50,Subject.SubjectID,classSubjectIDArray,returnArray,empty)
+          Search.SearchFunctions('L',0,a,Subject.SubjectID,teacherSubjectArray,teacherSubjectArrayteacherIDArrayReturn,empty)
         end;
     end;
 

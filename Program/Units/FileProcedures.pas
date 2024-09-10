@@ -7,24 +7,34 @@ PROGRAM FileProcedures;
     TYPE
         StudentsRecord = RECORD
                           StudentID : LONGINT;
-                          FName : STRING;
-                          SName : String;
+                          FName : STRING[20];
+                          SName : String[20];
                           Year : LONGINT;
-                          Form : STRING;
-                          Uname : String;
-                          Pword : String;
+                          Form : STRING[5];
+                          Uname : String[40];
+                          Pword : String[20];
                           Attendance : real;
                         end;
 
-
-
-
-        StudentFile = class
+        Files = class
             protected
-                dataStore1 : StudentsRecord;
+                test : LONGINT;
+                indexArray: ARRAY[0..139] OF LONGINT;
+                dataArray: ARRAy[0..139] OF STRING;
+
+            public
+              constructor Create;
+              procedure display;
+              procedure sort;
+            end;
+    type
+        StudentFile = Class(Files)
+            protected
+                data : StudentsRecord;
                 dataStore2 : StudentsRecord;
                 dataFile: File OF StudentsRecord;
                 indexArray: ARRAY[0..139] OF LONGINT;
+                dataArray: ARRAY[0..139] OF STRING;
 
             public
                 constructor Create;
@@ -34,17 +44,37 @@ PROGRAM FileProcedures;
                 procedure readHere;
                 procedure readFile(readFromPosition : LONGINT);
                 procedure sort;
-                procedure createstudentIdArray;
 
         end;
 
     //IMPLEMENTATION
+    var Student: StudentFile;
+    constructor Files.Create;
+      begin
+      end;
+
+    procedure Files.display;
+        var a : LONGINT;
+        begin
+            //for a := 0 TO 139 DO
+                //writeln(indexArray[a]);
+        end;
+
+    procedure Files.sort;
+        begin
+            
+        end;
+
 
     constructor StudentFile.Create;
+        var a : longint;
         begin
+            inherited Create;
             ASSIGN(dataFile,'C:\ComputerScienceCoursework\Program\files\Students.dta');
             for a := 0 TO 139 DO
-                indexArray[a] := a;
+              begin
+                self.indexArray[a] := a;
+              end;
         end;
 
     procedure StudentFile.SetData(StudentId : LONGINT;
@@ -56,10 +86,10 @@ PROGRAM FileProcedures;
                           SPword : String;
                           SAttendance : real);
         begin
-            with dataStore1 do
+            with data do
                 begin
                     StudentID := StudentId;
-                    FName := FirstName;3
+                    FName := FirstName;
                     SName := SurName;
                     Year := SYear;
                     Form := SForm;
@@ -71,7 +101,7 @@ PROGRAM FileProcedures;
 
     procedure StudentFile.DisplayData;
         begin
-        with dataStore1 do
+        with data do
             begin
                 writeln(StudentID);
                 writeln(FName);
@@ -85,7 +115,7 @@ PROGRAM FileProcedures;
 
     procedure StudentFile.writeToFile;
         begin
-            write(dataFile, data)
+            write(dataFile, data);
         end;
 
 
@@ -103,37 +133,26 @@ PROGRAM FileProcedures;
                 end;
         end;
 
-    procedure createstudentIdArray;
+    procedure StudentFile.sort;
+        var a : LONGINT;
         begin
-
-        end;
-
-    procedure StudentFile.Sort;
-        var upper : LONGINT;
-            swaps : BOOLEAN;
-        begin
-            RESET(dataFile);
-            upper := FILEPOS(SEEKEOF(dataFile));
-            REPEAT
-                Swaps:= false;
-                FOR i := 0 TO upper DO
-                BEGIN
-                    IF UserArray[i] > UserArray[i+1] THEN
-                    BEGIN
-                        Temp := UserArray[i];
-                        UserArray[i] := UserArray[i+1];
-                        UserArray[i+1] := Temp;
-                        Swaps := true;
-                    END;
-                END;
-                upper := upper -1;
-            UNTIL (NOT Swaps) OR (upper < 0);
+          writeln('a');
+          RESET(dataFile);
+          indexArray := self.indexArray;
+          for a := 0 TO 139 DO
+            begin
+              READ(dataFile,data);
+              self.dataArray[a] := IntToStr(data.StudentID);
+            end;
+          dataArray := self.dataArray;
+          Files.display;
         end;
 
 
     begin
         Student := StudentFile.Create;
-        Student.printArray;
+        student.sort;
+        readln;
     END.
 
 
