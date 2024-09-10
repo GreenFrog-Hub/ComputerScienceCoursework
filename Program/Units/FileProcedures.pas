@@ -18,14 +18,13 @@ PROGRAM FileProcedures;
 
         Files = class
             protected
-                test : LONGINT;
-                indexArray: ARRAY[0..139] OF LONGINT;
-                dataArray: ARRAy[0..139] OF STRING;
+                upper : LONGINT;
+                dataArray: ARRAY[0..139] OF STRING;
 
             public
               constructor Create;
               procedure display;
-              procedure sort;
+              procedure sort(var indexArray : ARRAY OF LONGINT);
             end;
     type
         StudentFile = Class(Files)
@@ -34,7 +33,8 @@ PROGRAM FileProcedures;
                 dataStore2 : StudentsRecord;
                 dataFile: File OF StudentsRecord;
                 indexArray: ARRAY[0..139] OF LONGINT;
-                dataArray: ARRAY[0..139] OF STRING;
+                studentArray: ARRAY[0..139] OF StudentsRecord;
+                studentIdArray: ARRAY[0..139] OF STRING;
 
             public
                 constructor Create;
@@ -60,9 +60,29 @@ PROGRAM FileProcedures;
                 //writeln(indexArray[a]);
         end;
 
-    procedure Files.sort;
+    procedure Files.sort(var indexArray : ARRAY OF LONGINT);
+        var TempIndex, i : LONGINT;
+            TempStr : STRING;
+            Swaps: BOOLEAN;
         begin
-            
+            upper := upper-1;
+            REPEAT
+                Swaps:= false;
+                FOR i := 0 TO upper DO
+                BEGIN
+                    IF dataArray[i] > dataArray[i+1] THEN
+                    BEGIN
+                        TempStr := dataArray[i];
+                        dataArray[i] := dataArray[i+1];
+                        dataArray[i+1] := TempStr;
+                        Swaps := true;
+                        TempIndex := indexArray[i];
+                        indexArray[i] := indexArray[i+1];
+                        indexArray[i+1] := TempIndex;
+                    END;
+                END;
+                upper := upper -1;
+            UNTIL (NOT Swaps) OR (upper < 0);
         end;
 
 
@@ -71,9 +91,10 @@ PROGRAM FileProcedures;
         begin
             inherited Create;
             ASSIGN(dataFile,'C:\ComputerScienceCoursework\Program\files\Students.dta');
+            RESET(dataFile);
             for a := 0 TO 139 DO
               begin
-                self.indexArray[a] := a;
+                indexArray[a] := a;
               end;
         end;
 
@@ -109,7 +130,9 @@ PROGRAM FileProcedures;
                 writeln(Year);
                 writeln(Form);
                 writeln(Uname);
+                writeln(PWord);
                 writeln(Attendance);
+                writeln('-------------------------------------------------------------------------');
             end;
         end;
 
@@ -138,13 +161,24 @@ PROGRAM FileProcedures;
         begin
           writeln('a');
           RESET(dataFile);
-          indexArray := self.indexArray;
+          upper:= 139;
           for a := 0 TO 139 DO
             begin
               READ(dataFile,data);
-              self.dataArray[a] := IntToStr(data.StudentID);
+              studentArray[a] := data;
+              dataArray[a] := IntToStr(data.StudentID);
             end;
-          dataArray := self.dataArray;
+          //dataArray := studentIdArray;
+        writeln('point');
+        Files.sort(indexArray);
+        RESET(dataFile);
+        for a := 0 TO 139 DO
+            begin
+                data := studentArray[indexArray[a]];
+                DisplayData;
+                WRITE(dataFile,studentArray[indexArray[a]]);
+            end;
+
           Files.display;
         end;
 
@@ -152,6 +186,8 @@ PROGRAM FileProcedures;
     begin
         Student := StudentFile.Create;
         student.sort;
+        student.readFile(0);
+        student.DisplayData;
         readln;
     END.
 
