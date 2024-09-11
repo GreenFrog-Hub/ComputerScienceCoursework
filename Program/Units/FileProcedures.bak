@@ -25,6 +25,7 @@ PROGRAM FileProcedures;
               constructor Create;
               procedure display;
               procedure sort(var indexArray : ARRAY OF LONGINT);
+              procedure strIntArrayToStr;
             end;
     type
         StudentFile = Class(Files)
@@ -60,8 +61,21 @@ PROGRAM FileProcedures;
                 //writeln(indexArray[a]);
         end;
 
+    procedure Files.strIntArrayToStr;
+        var a, b : LONGINT;
+        begin
+            for a := 0 TO 139 DO
+                begin
+                    for b := 1 TO (Length(dataArray[a])) DO
+                        begin
+                            dataArray[a][b] := Chr(StrToInt(dataArray[a][b])+97);
+                        end;
+                    //writeln(dataArray[a]);
+                end;
+        end;
+
     procedure Files.sort(var indexArray : ARRAY OF LONGINT);
-        var TempIndex, i : LONGINT;
+        var TempIndex, i, code, tmp1, tmp2 : LONGINT;
             TempStr : STRING;
             Swaps: BOOLEAN;
         begin
@@ -157,7 +171,8 @@ PROGRAM FileProcedures;
         end;
 
     procedure StudentFile.sort;
-        var a : LONGINT;
+        var a,b : LONGINT;
+            maxStrLen : STRING;
         begin
           writeln('a');
           RESET(dataFile);
@@ -166,16 +181,23 @@ PROGRAM FileProcedures;
             begin
               READ(dataFile,data);
               studentArray[a] := data;
-              dataArray[a] := IntToStr(data.StudentID);
+              maxStrLen :='3';
+              dataArray[a] := Format('%'+maxStrLen+'s',[IntToStr(data.StudentID)]);
+              writeln(dataArray[a]);
             end;
           //dataArray := studentIdArray;
         writeln('point');
+        //Files.strIntArrayToStr;
+        writeln('pause');
+        //readln;
         Files.sort(indexArray);
         RESET(dataFile);
+        writeln('=====================================');
         for a := 0 TO 139 DO
             begin
                 data := studentArray[indexArray[a]];
                 DisplayData;
+                //writeln(data.StudentID);
                 WRITE(dataFile,studentArray[indexArray[a]]);
             end;
 
