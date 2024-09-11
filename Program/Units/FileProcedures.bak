@@ -20,12 +20,14 @@ PROGRAM FileProcedures;
             protected
                 upper : LONGINT;
                 dataArray: ARRAY[0..139] OF STRING;
+                fileArray: ARRAY[0..7,0..139] OF STRING;
 
             public
               constructor Create;
               procedure display;
               procedure sort(var indexArray : ARRAY OF LONGINT);
               procedure strIntArrayToStr;
+              function search(searchValue : STRING) : LONGINT;
             end;
     type
         StudentFile = Class(Files)
@@ -45,11 +47,13 @@ PROGRAM FileProcedures;
                 procedure readHere;
                 procedure readFile(readFromPosition : LONGINT);
                 procedure sort;
+                function search(searchValue : STRING) : LONGINT;
 
         end;
 
     //IMPLEMENTATION
     var Student: StudentFile;
+        searchValue : LONGINT;
     constructor Files.Create;
       begin
       end;
@@ -97,6 +101,33 @@ PROGRAM FileProcedures;
                 END;
                 upper := upper -1;
             UNTIL (NOT Swaps) OR (upper < 0);
+        end;
+
+    function Files.search(searchValue:STRING) : LONGINT;
+        var found : BOOLEAN;
+            c, b : LONGINT;
+        begin
+            found := false;
+            c := -1;
+            while found = false do
+                begin
+                c := c + 1;
+                for b := 0 TO 7 DO
+                    begin
+                      writeln(c);
+                        if fileArray[b,c] = LowerCase(searchValue) THEN
+                          begin
+                            writeln(fileArray[b,c]);
+                            found := true;
+                            search := c;
+                          end;
+                    end;
+                if found = true THEN
+                  begin
+                    break
+                  end;
+            end;
+            search := -1;
         end;
 
 
@@ -174,7 +205,6 @@ PROGRAM FileProcedures;
         var a,b : LONGINT;
             maxStrLen : STRING;
         begin
-          writeln('a');
           RESET(dataFile);
           upper:= 139;
           for a := 0 TO 139 DO
@@ -183,33 +213,48 @@ PROGRAM FileProcedures;
               studentArray[a] := data;
               maxStrLen :='3';
               dataArray[a] := Format('%'+maxStrLen+'s',[IntToStr(data.StudentID)]);
-              writeln(dataArray[a]);
             end;
-          //dataArray := studentIdArray;
-        writeln('point');
-        //Files.strIntArrayToStr;
-        writeln('pause');
-        //readln;
         Files.sort(indexArray);
         RESET(dataFile);
-        writeln('=====================================');
         for a := 0 TO 139 DO
             begin
                 data := studentArray[indexArray[a]];
-                DisplayData;
+                //DisplayData;
                 //writeln(data.StudentID);
                 WRITE(dataFile,studentArray[indexArray[a]]);
             end;
 
-          Files.display;
+          //Files.display;
         end;
+
+        function StudentFile.search(searchValue : STRING) : LONGINT;
+            var a, searchResult: LONGINT;
+            begin
+                RESET(dataFile);
+                for a := 0 TO 139 DO
+                    begin
+                        read(dataFile, data);
+                        Str(data.StudentID, fileArray[0,a]);
+                        fileArray[1,a] := data.FName;
+                        fileArray[2,a] := data.SName;
+                        Str(data.Year, fileArray[3,a]);
+                        fileArray[4,a] := data.Form;
+                        fileArray[5,a] := data.Uname;
+                        fileArray[6,a] := data.PWord;
+                        Str(data.Attendance, fileArray[7,a]);
+                    end;
+                searchResult := Files.search(searchValue);
+                search := searchResult;
+            end;
 
 
     begin
         Student := StudentFile.Create;
         student.sort;
-        student.readFile(0);
-        student.DisplayData;
+        searchValue := student.search('Robert');
+        writeln(searchValue);
+        //student.readFile(searchValue);
+        //Student.DisplayData;
         readln;
     END.
 
