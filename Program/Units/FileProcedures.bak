@@ -24,9 +24,9 @@ PROGRAM FileProcedures;
 
             public
               constructor Create;
+              destructor Destroy; override;
               procedure display;
               procedure sort(var indexArray : ARRAY OF LONGINT);
-              procedure strIntArrayToStr;
               function search(searchValue : STRING) : LONGINT;
             end;
     type
@@ -41,6 +41,7 @@ PROGRAM FileProcedures;
 
             public
                 constructor Create;
+                destructor Destroy; override;
                 procedure SetData(StudentId : LONGINT; FirstName: STRING; SurName : STRING; SYear : LONGINT; SForm : STRING; SUname : String; SPword : String; SAttendance : real);
                 procedure DisplayData;
                 procedure writeToFile;
@@ -58,24 +59,16 @@ PROGRAM FileProcedures;
       begin
       end;
 
+    destructor Files.Destroy;
+        begin
+            writeln('parent class free');
+        end;
+
     procedure Files.display;
         var a : LONGINT;
         begin
             //for a := 0 TO 139 DO
                 //writeln(indexArray[a]);
-        end;
-
-    procedure Files.strIntArrayToStr;
-        var a, b : LONGINT;
-        begin
-            for a := 0 TO 139 DO
-                begin
-                    for b := 1 TO (Length(dataArray[a])) DO
-                        begin
-                            dataArray[a][b] := Chr(StrToInt(dataArray[a][b])+97);
-                        end;
-                    //writeln(dataArray[a]);
-                end;
         end;
 
     procedure Files.sort(var indexArray : ARRAY OF LONGINT);
@@ -106,6 +99,7 @@ PROGRAM FileProcedures;
     function Files.search(searchValue:STRING) : LONGINT;
         var found : BOOLEAN;
             c, b : LONGINT;
+            tmp : STRING;
         begin
             found := false;
             c := -1;
@@ -114,20 +108,26 @@ PROGRAM FileProcedures;
                 c := c + 1;
                 for b := 0 TO 7 DO
                     begin
-                      writeln(c);
-                        if fileArray[b,c] = LowerCase(searchValue) THEN
+                      //writeln(c);
+                      tmp := LowerCase(fileArray[b,c]);
+                      //writeln(tmp);
+
+                        if tmp = LowerCase(searchValue) THEN
                           begin
-                            writeln(fileArray[b,c]);
+                            //writeln(fileArray[b,c]);
                             found := true;
                             search := c;
                           end;
                     end;
+                    //writeln('-----------------------------------------------');
                 if found = true THEN
                   begin
                     break
                   end;
+
             end;
-            search := -1;
+            if found = false THEN
+              search := -1;
         end;
 
 
@@ -141,6 +141,13 @@ PROGRAM FileProcedures;
               begin
                 indexArray[a] := a;
               end;
+        end;
+
+    destructor StudentFile.Destroy;
+        begin
+            CLOSE(dataFile);
+            writeln('child class free');
+            inherited Destroy;
         end;
 
     procedure StudentFile.SetData(StudentId : LONGINT;
@@ -250,11 +257,12 @@ PROGRAM FileProcedures;
 
     begin
         Student := StudentFile.Create;
-        student.sort;
-        searchValue := student.search('Robert');
-        writeln(searchValue);
+        //student.sort;
+        //searchValue := student.search('Eldridge');
+        //writeln(searchValue);
         //student.readFile(searchValue);
         //Student.DisplayData;
+        Student.free;
         readln;
     END.
 
