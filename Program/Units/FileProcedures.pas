@@ -27,7 +27,7 @@ PROGRAM FileProcedures;
               destructor Destroy; override;
               procedure display;
               procedure sort(var indexArray : ARRAY OF LONGINT);
-              function search(searchValue : STRING) : LONGINT;
+              function search(searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE) : LONGINT;
             end;
     type
         StudentFile = Class(Files)
@@ -48,7 +48,7 @@ PROGRAM FileProcedures;
                 procedure readHere;
                 procedure readFile(readFromPosition : LONGINT);
                 procedure sort;
-                function search(searchValue : STRING) : LONGINT;
+                function search(searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE) : LONGINT;
 
         end;
 
@@ -96,27 +96,37 @@ PROGRAM FileProcedures;
             UNTIL (NOT Swaps) OR (upper < 0);
         end;
 
-    function Files.search(searchValue:STRING) : LONGINT;
+    function Files.search(searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE) : LONGINT;
         var found : BOOLEAN;
-            c, b : LONGINT;
+            a, b, c : LONGINT;
             tmp : STRING;
         begin
             found := false;
-            c := -1;
+            a := -1;
             while found = false do
                 begin
-                c := c + 1;
+                a := a + 1;
                 for b := 0 TO 7 DO
                     begin
                       //writeln(c);
-                      tmp := LowerCase(fileArray[b,c]);
+                      tmp := LowerCase(fileArray[b,a]);
                       //writeln(tmp);
 
-                        if tmp = LowerCase(searchValue) THEN
+                        if tmp = LowerCase(searchValues[0]) THEN
                           begin
                             //writeln(fileArray[b,c]);
                             found := true;
-                            search := c;
+                            for c := 0 to (SizeOf(searchFields)-1) do
+                                begin
+                                    tmp := LowerCase(FileArray[searchFields[c],a]);
+                                    if LowerCase(searchValues[c]) <> tmp THEN
+                                    begin
+                                        found := false;
+                                        break;
+                                    end
+                                    else
+                                      search := a;
+                                end;
                           end;
                     end;
                     //writeln('-----------------------------------------------');
@@ -145,9 +155,9 @@ PROGRAM FileProcedures;
 
     destructor StudentFile.Destroy;
         begin
-            CLOSE(dataFile);
-            writeln('child class free');
-            inherited Destroy;
+            //CLOSE(dataFile);
+            //writeln('child class free');
+            //inherited Destroy;
         end;
 
     procedure StudentFile.SetData(StudentId : LONGINT;
@@ -196,7 +206,10 @@ PROGRAM FileProcedures;
 
     procedure StudentFile.readHere;
         begin
-            read(dataFile,data);
+            if FIlePos(dataFile) < FileSize(dataFile) then
+                begin
+                    read(dataFile,data);
+                end;
         end;
 
     procedure StudentFile.readFile(readFromPosition : LONGINT);
@@ -234,7 +247,7 @@ PROGRAM FileProcedures;
           //Files.display;
         end;
 
-        function StudentFile.search(searchValue : STRING) : LONGINT;
+        function StudentFile.search(searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE) : LONGINT;
             var a, searchResult: LONGINT;
             begin
                 RESET(dataFile);
@@ -250,15 +263,15 @@ PROGRAM FileProcedures;
                         fileArray[6,a] := data.PWord;
                         Str(data.Attendance, fileArray[7,a]);
                     end;
-                searchResult := Files.search(searchValue);
+                searchResult := Files.search(searchValues, searchFields);
                 search := searchResult;
             end;
 
 
     begin
         Student := StudentFile.Create;
-        //student.sort;
-        //searchValue := student.search('Eldridge');
+        student.sort;
+        //searchValue := student.search(['Eldridge'],[2]);
         //writeln(searchValue);
         //student.readFile(searchValue);
         //Student.DisplayData;
