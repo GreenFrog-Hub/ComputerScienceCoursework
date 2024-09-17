@@ -1,0 +1,20 @@
+PROGRAM classTesting;
+  uses crt, sysutils, studentProcedures;
+
+  var student : StudentFile;
+      a : LONGINT;
+      returnArray : ARRAY[0..139] OF LONGINT;
+  begin
+    student:=StudentFile.Create;
+    student.sort;
+    student.search(['9'],[0], returnArray);
+    a := 0;
+    while returnArray[a] <> -1 DO
+      begin
+        student.readFile(returnArray[a]);
+        student.DisplayData;
+        a := a + 1;
+      end;
+
+    readln;
+  end.

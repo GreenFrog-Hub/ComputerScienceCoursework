@@ -1,0 +1,159 @@
+unit studentProcedures;
+  interface
+
+    USES crt, sysutils, FileProcedures;
+
+    TYPE
+        StudentsRecord = RECORD
+                          StudentID : LONGINT;
+                          FName : STRING[20];
+                          SName : String[20];
+                          Year : LONGINT;
+                          Form : STRING[5];
+                          Uname : String[40];
+                          Pword : String[20];
+                          Attendance : real;
+                        end;
+
+    type
+        StudentFile = Class(Files)
+            public
+                data : StudentsRecord;
+                dataFile: File OF StudentsRecord;
+                indexArray: ARRAY[0..139] OF LONGINT;
+                recordArray: ARRAY[0..139] OF StudentsRecord;
+                recordIdArray: ARRAY[0..139] OF STRING;
+                constructor Create;
+                procedure SetData(StudentId : LONGINT; FirstName: STRING; SurName : STRING; SYear : LONGINT; SForm : STRING; SUname : String; SPword : String; SAttendance : real);
+                procedure DisplayData;
+                procedure writeToFile;
+                procedure readHere;
+                procedure readFile(readFromPosition : LONGINT);
+                procedure sort;
+                procedure search(searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE; var returnArray: ARRAY OF LONGINT);
+
+        end;
+
+    IMPLEMENTATION
+
+    constructor StudentFile.Create;
+        var a : longint;
+        begin
+            inherited Create;
+            ASSIGN(dataFile,'C:\ComputerScienceCoursework\Program\files\Students.dta');
+            RESET(dataFile);
+            for a := 0 TO 139 DO
+              begin
+                indexArray[a] := a;
+              end;
+        end;
+
+    procedure StudentFile.SetData(StudentId : LONGINT;
+                          FirstName : STRING;
+                          SurName : STRING;
+                          SYear : LONGINT;
+                          SForm : STRING;
+                          SUname : String;
+                          SPword : String;
+                          SAttendance : real);
+
+        begin
+            with data do
+                begin
+                    StudentID := StudentId;
+                    FName := FirstName;
+                    SName := SurName;
+                    Year := SYear;
+                    Form := SForm;
+                    Uname := SUname;
+                    Pword := SPword;
+                    Attendance := SAttendance;
+                end;
+        end;
+
+    procedure StudentFile.DisplayData;
+        begin
+        with data do
+            begin
+                writeln(StudentID);
+                writeln(FName);
+                writeln(SName);
+                writeln(Year);
+                writeln(Form);
+                writeln(Uname);
+                writeln(PWord);
+                writeln(Attendance);
+                writeln('-------------------------------------------------------------------------');
+            end;
+        end;
+
+    procedure StudentFile.writeToFile;
+        begin
+            write(dataFile, data);
+        end;
+
+
+    procedure StudentFile.readHere;
+        begin
+            if FIlePos(dataFile) < FileSize(dataFile) then
+                begin
+                    read(dataFile,data);
+                end;
+        end;
+
+    procedure StudentFile.readFile(readFromPosition : LONGINT);
+        begin
+            if readFromPosition < FileSize(dataFile) then
+                begin
+                    SEEK(dataFile,readFromPosition);
+                    read(dataFile,data);
+                end;
+        end;
+
+    procedure StudentFile.sort;
+        var a,b : LONGINT;
+            maxStrLen : STRING;
+        begin
+          RESET(dataFile);
+          upper:= 139;
+          for a := 0 TO 139 DO
+            begin
+              READ(dataFile,data);
+              recordArray[a] := data;
+              maxStrLen :='3';
+              dataArray[a] := Format('%'+maxStrLen+'s',[IntToStr(data.StudentID)]);
+            end;
+        Files.sort(indexArray);
+        RESET(dataFile);
+        for a := 0 TO 139 DO
+            begin
+                data := recordArray[indexArray[a]];
+                WRITE(dataFile,recordArray[indexArray[a]]);
+            end;
+
+        end;
+
+        procedure StudentFile.search(searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE; var returnArray : ARRAY OF LONGINT);
+            var a, searchResult: LONGINT;
+            begin
+                RESET(dataFile);
+                for a := 0 TO 139 DO
+                    begin
+                        read(dataFile, data);
+                        Str(data.StudentID, fileArray[0,a]);
+                        fileArray[1,a] := data.FName;
+                        fileArray[2,a] := data.SName;
+                        Str(data.Year, fileArray[3,a]);
+                        fileArray[4,a] := data.Form;
+                        fileArray[5,a] := data.Uname;
+                        fileArray[6,a] := data.PWord;
+                        Str(data.Attendance, fileArray[7,a]);
+                        returnArray[a] := -1;
+                    end;
+                Files.search(139,searchValues, searchFields, returnArray);
+            end;
+
+
+    END.
+
+

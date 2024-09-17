@@ -1,0 +1,7 @@
+unit filesUnitTest;
+  interface
+  uses crt, sysutils,fileprocedures;
+  var student : StudentFile;
+
+  implementation
+  end.

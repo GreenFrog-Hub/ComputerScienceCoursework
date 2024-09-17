@@ -21,7 +21,7 @@ PROGRAM loadingTest;
           percentDone := i/a;
           Delay(10);
           n := round(percentDone);
-          PlaySound(n*150,10);
+          //PlaySound(n*150,10);
         end;
       end;
 

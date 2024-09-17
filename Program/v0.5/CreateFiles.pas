@@ -138,21 +138,17 @@ PROGRAM CraeteFiles;
       ASSIGN(TimeTableFile,'C:\ComputerScienceCoursework\Program\files\TimeTable.dta');
       total:= total +51;
 
-      {ASSIGN(FileFormFromFile,'C:\ComputerScienceCoursework\Program\files\TForms.txt');
-      ASSIGN(FormFile,'C:\ComputerScienceCoursework\Program\files\Forms.dta');
-      total := total + 20;
-
+      {
       ASSIGN(RegisterFile,'C:\ComputerScienceCoursework\Program\files\Registers.dta');
       total := total + 1500;
       }
       ASSIGN(NameFile,'C:\ComputerScienceCoursework\Program\files\Names.txt');
-      
+      ASSIGN(StudentFile,'C:\ComputerScienceCoursework\Program\files\Students.dta');
       total := total + 140;
-       {
-      ASSIGN(TeacherFileFromFile,'C:\ComputerScienceCoursework\Program\files\Tnames.txt');
+
       ASSIGN(TeacherFile,'C:\ComputerScienceCoursework\Program\files\Teachers.dta');
-      total := total + 100;
-      }
+      total := total + 51;
+
       ASSIGN(classFile,'C:\ComputerScienceCoursework\Program\files\classes.dta');
       total := total + 51;
 
@@ -161,12 +157,12 @@ PROGRAM CraeteFiles;
 
       ASSIGN(studentClassResolverFile,'C:\ComputerScienceCoursework\Program\files\studentClassResolver.dta');
       total := total + 140;
-      {
+
       ASSIGN(teacherSubjectResolverFile,'C:\ComputerScienceCoursework\Program\files\teacherSubjectResolver.dta');
-      total:= total + 100;
+      total:= total + 51;
 
       ASSIGN(teacherClassResolverFile,'C:\ComputerScienceCoursework\Program\files\teacherClassResolver.dta');
-      total := total + 100;}
+      total := total + 51;
 
       ASSIGN(LogInDetailsFile,'C:\ComputerScienceCoursework\Program\files\LogInDetails.dta');
     end;
@@ -217,98 +213,22 @@ PROGRAM CraeteFiles;
       end;
 
   procedure createRegisters;
-    var days, i : LONGINT;
-      startDate, endDate, date : TDateTime;
-      dateArray : ARRAY[0..9] OF TDateTime;
-      classArray : ARRAY[0..30] OF classRecord;
-      classIdArray : ARRAY[0..30] OF STRING;
-      returnArray : ARRAY[0..2700] OF LONGINT;
-      studentClassIdArray : ARRAY[0..2700] OF STRING;
-      formArray : ARRAY[0..19] OF formRecord;
-      d,r,randomNumber,randomMark : longint;
-      dayName : LONGINT;
+    var i : LONGINT;
+      startDate, date : TDateTime;
     begin
-      reset(classFile);
-      reset(formFile);
-      reset(studentClassResolverFile);
-      REWRITE(RegisterFile);
-      reset(RegisterFile);
-      for a := 0 to 30 DO
-        begin
-          read(classFile, classArray[a]);
-          classIdArray[a] := classArray[a].classId;
-        end;
-
-      for a := 0 TO 19 DO
-        READ(FormFile, formArray[a]);
-
-      for a := 0 to 2700 DO
-        begin
-          read(studentClassResolverFile, studentClassResolver);
-          studentClassIdArray[a] := studentClassResolver.classId;
-          returnArray[a] := -1;
-        end;
-
-      days := 0;
       startDate := StrToDateTime('13/09/2024');
-      date := startDate;
-      while days <= 10 DO
+      for i := 0 to 9 do
         begin
-        if (DayOfWeek(Date) = 7) OR (DayOfWeek(Date) = 1) THEN
-          begin
-            date := date + 1;
-          end
+          if ((DayOfWeek(startDate)-1) = -1) OR (DayOfWeek(startDate)-1 = 6) THEN
+            begin
+              i := i -1;
+            end
           else
             begin
-              dateArray[days]:=date;
-              date := date + 1;
-              days := days + 1;
-            end;
-      end;
-      for d := 0 TO 9 DO
-        begin
-          for c := 0 TO 30 DO
-            begin
-              for r := 1 TO 5 DO
-                begin
-                  studentRegisterMark.studentId := -1;
-                  studentRegisterMark.registerMark := true;
-
-                  for a := 0 to 50 DO
-                    register.registerMarks[a] := studentRegisterMark;
-
-                  numberDone := numberDone + 1;
-                  percentDone := numberDone / total;
-                  i := 0;
-                  register.lessonNo := r;
-                  register.date := dateArray[d];
-                  register.classId := classIdArray[c];
-                  Search.SearchFunctions('L',0,2700,classIdArray[c],studentClassIdArray,returnArray,empty);
-
-                  while returnArray[i] <> -1 Do
-                    begin
-                      SEEK(studentClassResolverFile,returnArray[i]);
-                      read(studentClassResolverFile, studentClassResolver);
-                      studentRegisterMark.studentID := studentClassResolver.studentID;
-                      randomNumber := RANDOM(10);
-                      if randomNumber = 9 THEN
-                        studentRegisterMark.registerMark := false
-                      else
-                        studentRegisterMark.registerMark := true;
-                      returnArray[i] := -1;
-                      register.registerMarks[i] := studentRegisterMark;
-                      i := i + 1;
-                    end;
-                  if r = 4 THEN
-                    register.isOfstedRegister := true
-                  else
-                    register.isOfstedRegister := false;
-                  register.registerID := IntToStr(r) + DateToStr(dateArray[d]) + classIdArray[c];
-                  WRITE(RegisterFile, register);
-
-                end;
+              
             end;
         end;
+      
     end;
 
 
@@ -352,7 +272,7 @@ PROGRAM CraeteFiles;
       ffname, fsname, fform : STRING;
     begin
       rewrite(TeacherFile);
-      for i := 0 TO 79 DO
+      for i := 0 TO 50 DO
         begin
             numberDone := numberDone + 1;
             percentDone := numberDone / total;
@@ -360,7 +280,7 @@ PROGRAM CraeteFiles;
             READLN(NameFile, teacher.Sname);
             with teacher do
               begin
-                TeacherID := ffname[1]+fsname[1]+fsname[2];
+                TeacherID := FName[1]+SName[1]+SName[2];
                 uname := teacher.FName + teacher.SName;
                 pword := 'ABC123';
               end;
@@ -368,7 +288,7 @@ PROGRAM CraeteFiles;
         end;
 
     end;
-    
+
 
    { procedure createLogInFile;
       var i : LONGINT;
@@ -639,56 +559,34 @@ PROGRAM CraeteFiles;
 
     begin
       RESET(TeacherFile);
-      reset(subjectFile);
+      reset(classFile);
       REWRITE(teacherSubjectResolverFile);
-      while not EOF(subjectFile) DO
+      while not EOF(TeacherFile) DO
         begin
           numberDone := numberDone+ 1;
           percentDone := numberDone / total;
           //Delay(1);
-          read(subjectFile,subject);
-          for b := 0 TO 3 DO
-            begin
-              read(teacherfile,teacher);
-              with teacherSubjectResolver DO
-                begin
-                  teacherID := teacher.teacherID;
-                  subjectID := subjectFile.subjectID;
-                end;
-              WRITE(teacherSubjectResolverFile, teacherSubjectResolver);
-            end;
+          read(TeacherFile,teacher);
+          read(classFile,sClass);
+          teacherSubjectResolver.teacherId := teacher.teacherID;
+          teacherSubjectResolver.subjectId := sClass.subjectID
         end;
       end;
 
-  PROCEDURE assignTeacherToClass;
-    var a, b, noClassSubject : LONGINT;
-    classArray : ARRAY[0..50] OF classRecord;
-    classSubjectIDArray : ARRAY[0..50] OF STRING;
-    teacherSubjectArray : ARRAY[0..29] OF teacherSubjectResolver;
-    teacherSubjectArrayteacherIDArray : ARRAY[0..50] OF STRING;
-    teacherSubjectArrayteacherIDArrayReturn: ARRAY [0..50] OF STRING;
+   PROCEDURE assignTeacherToClass;
     begin
-      reset(classFile)
-      reset(teacherSubjectResolverFile);
-      for a := 0 TO 50 DO
+      reset(classFile);
+      reset(teacherfile);
+      REWRITE(teacherClassResolverFile);
+      while not(eof(classFile)) DO
         begin
-          READ(classFile, classArray[a]);
-          classSubjectIDArray[a] := classArray[a].SubjectID;
-          returnArray[a] := -1;
-        end;
-      a := 0;
-      while not eof(teacherSubjectResolverFile) DO
-        begin
-          READ(teacherSubjectResolverFile, teacherSubjectArray[a]);
-          teacherSubjectArray[a] := teacherSubjectArray[a].SubjectID;
-          teacherSubjectArrayteacherIDArrayReturn[a] := -1;
-          a := a +1;
-        end;
-      while NOT EOF(SubjectFile) DO
-        begin
-          READ(SubjectFile, Subject);
-          Search.SearchFunctions('L',0,50,Subject.SubjectID,classSubjectIDArray,returnArray,empty)
-          Search.SearchFunctions('L',0,a,Subject.SubjectID,teacherSubjectArray,teacherSubjectArrayteacherIDArrayReturn,empty)
+          numberDone := numberDone+1;
+          percentDone := numberDone / total;
+          read(classFile,sClass);
+          read(teacherfile, teacher);
+          teacherClassResolver.teacherID := teacher.teacherID;
+          teacherClassResolver.classID := sClass.classId;
+          write(teacherClassResolverFile,teacherClassResolver);
         end;
     end;
 
@@ -697,25 +595,29 @@ PROGRAM CraeteFiles;
 
   begin
     randomize;
+    // writeln('start');
     initialiseFiles;
     loading.startLoading('P',percentDone);
     delay(1000);
+    // writeln('timetable');
     CreateTimetable;
     {addForms;}
+    // writeln('students');
     addStudents;
-    {addTeachers;}
-    //writeln('start subj');
+    //writeln('teachers');
+    addTeachers;
+    // writeln('start subj');
     createSubjects;
-    //writeln('end subj');
-    //writeln('start class');
+    // writeln('end subj');
+    // writeln('start class');
     createClasses;
-    //writeln('end class');
-    //writeln('start resolver');
+    // writeln('end class');
+    // writeln('start resolver');
     createClassStudentResolver;
-    {assignTeacherToSubject;
     assignTeacherToClass;
-    createRegisters;}
-
+    assignTeacherToSubject;
+    {createRegisters;}
+    //ClrScr;
     //writeln('END!');
     //DisplayErrorScrn.ErrScr;
     readln;

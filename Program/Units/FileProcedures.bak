@@ -1,6 +1,6 @@
-PROGRAM FileProcedures;
+unit FileProcedures;
 {$M+}
-    //interface
+    interface
 
     USES crt, sysutils;
 
@@ -17,59 +17,39 @@ PROGRAM FileProcedures;
                         end;
 
         Files = class
-            protected
+            public
                 upper : LONGINT;
                 dataArray: ARRAY[0..139] OF STRING;
                 fileArray: ARRAY[0..7,0..139] OF STRING;
-
-            public
               constructor Create;
-              destructor Destroy; override;
-              procedure display;
               procedure sort(var indexArray : ARRAY OF LONGINT);
-              function search(searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE) : LONGINT;
+              procedure search(max : LONGINT; searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE; var returnArray : ARRAY OF LONGINT);
             end;
     type
         StudentFile = Class(Files)
-            protected
+            public
                 data : StudentsRecord;
-                dataStore2 : StudentsRecord;
                 dataFile: File OF StudentsRecord;
                 indexArray: ARRAY[0..139] OF LONGINT;
                 studentArray: ARRAY[0..139] OF StudentsRecord;
                 studentIdArray: ARRAY[0..139] OF STRING;
-
-            public
                 constructor Create;
-                destructor Destroy; override;
                 procedure SetData(StudentId : LONGINT; FirstName: STRING; SurName : STRING; SYear : LONGINT; SForm : STRING; SUname : String; SPword : String; SAttendance : real);
                 procedure DisplayData;
                 procedure writeToFile;
                 procedure readHere;
                 procedure readFile(readFromPosition : LONGINT);
                 procedure sort;
-                function search(searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE) : LONGINT;
+                procedure search(searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE; var returnArray: ARRAY OF LONGINT);
 
         end;
 
-    //IMPLEMENTATION
-    var Student: StudentFile;
-        searchValue : LONGINT;
+    IMPLEMENTATION
+
+
     constructor Files.Create;
       begin
       end;
-
-    destructor Files.Destroy;
-        begin
-            writeln('parent class free');
-        end;
-
-    procedure Files.display;
-        var a : LONGINT;
-        begin
-            //for a := 0 TO 139 DO
-                //writeln(indexArray[a]);
-        end;
 
     procedure Files.sort(var indexArray : ARRAY OF LONGINT);
         var TempIndex, i, code, tmp1, tmp2 : LONGINT;
@@ -96,25 +76,22 @@ PROGRAM FileProcedures;
             UNTIL (NOT Swaps) OR (upper < 0);
         end;
 
-    function Files.search(searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE) : LONGINT;
+    procedure Files.search(max : LONGINT; searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE; var returnArray : ARRAY OF LONGINT);
         var found : BOOLEAN;
-            a, b, c : LONGINT;
+            a, b, c, returnIndex : LONGINT;
             tmp : STRING;
         begin
             found := false;
             a := -1;
-            while found = false do
+            returnIndex := 0;
+            while a <> max do
                 begin
                 a := a + 1;
                 for b := 0 TO 7 DO
                     begin
-                      //writeln(c);
                       tmp := LowerCase(fileArray[b,a]);
-                      //writeln(tmp);
-
                         if tmp = LowerCase(searchValues[0]) THEN
                           begin
-                            //writeln(fileArray[b,c]);
                             found := true;
                             for c := 0 to (SizeOf(searchFields)-1) do
                                 begin
@@ -125,19 +102,14 @@ PROGRAM FileProcedures;
                                         break;
                                     end
                                     else
-                                      search := a;
+                                        begin
+                                        returnArray[returnIndex] := a;
+                                        returnIndex := returnIndex+1;
+                                        end;
                                 end;
                           end;
                     end;
-                    //writeln('-----------------------------------------------');
-                if found = true THEN
-                  begin
-                    break
-                  end;
-
             end;
-            if found = false THEN
-              search := -1;
         end;
 
 
@@ -153,13 +125,6 @@ PROGRAM FileProcedures;
               end;
         end;
 
-    destructor StudentFile.Destroy;
-        begin
-            //CLOSE(dataFile);
-            //writeln('child class free');
-            //inherited Destroy;
-        end;
-
     procedure StudentFile.SetData(StudentId : LONGINT;
                           FirstName : STRING;
                           SurName : STRING;
@@ -168,6 +133,7 @@ PROGRAM FileProcedures;
                           SUname : String;
                           SPword : String;
                           SAttendance : real);
+
         begin
             with data do
                 begin
@@ -239,15 +205,12 @@ PROGRAM FileProcedures;
         for a := 0 TO 139 DO
             begin
                 data := studentArray[indexArray[a]];
-                //DisplayData;
-                //writeln(data.StudentID);
                 WRITE(dataFile,studentArray[indexArray[a]]);
             end;
 
-          //Files.display;
         end;
 
-        function StudentFile.search(searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE) : LONGINT;
+        procedure StudentFile.search(searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE; var returnArray : ARRAY OF LONGINT);
             var a, searchResult: LONGINT;
             begin
                 RESET(dataFile);
@@ -262,21 +225,12 @@ PROGRAM FileProcedures;
                         fileArray[5,a] := data.Uname;
                         fileArray[6,a] := data.PWord;
                         Str(data.Attendance, fileArray[7,a]);
+                        returnArray[a] := -1;
                     end;
-                searchResult := Files.search(searchValues, searchFields);
-                search := searchResult;
+                Files.search(139,searchValues, searchFields, returnArray);
             end;
 
 
-    begin
-        Student := StudentFile.Create;
-        student.sort;
-        //searchValue := student.search(['Eldridge'],[2]);
-        //writeln(searchValue);
-        //student.readFile(searchValue);
-        //Student.DisplayData;
-        Student.free;
-        readln;
     END.
 
 
