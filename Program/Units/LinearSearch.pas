@@ -21,6 +21,7 @@ UNIT LinearSearch;
         begin
           returnArray[a] := i;
           a := a + 1;
+          //writeln('confirm');
         end;
       UNTIL (i = high);
     END;
