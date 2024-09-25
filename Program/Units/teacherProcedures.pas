@@ -51,7 +51,7 @@ unit teacherProcedures;
                           SurName : STRING;
                           SForm : STRING;
                           SUname : String;
-                          SPword : String;);
+                          SPword : String);
 
         begin
             with data do
@@ -72,11 +72,9 @@ unit teacherProcedures;
                 writeln(TeacherID);
                 writeln(FName);
                 writeln(SName);
-                writeln(Year);
                 writeln(Form);
                 writeln(Uname);
                 writeln(PWord);
-                writeln(Attendance);
                 writeln('-------------------------------------------------------------------------');
             end;
         end;
@@ -110,7 +108,12 @@ unit teacherProcedures;
         begin
           RESET(dataFile);
           upper:= 50;
-          
+          for a := 0 TO 50 DO
+            begin
+              READ(dataFile,data);
+              dataArray[a] := data.teacherID;
+              recordArray[a] := data;
+            end;
         Files.sort(indexArray);
         RESET(dataFile);
         for a := 0 TO 50 DO
@@ -136,7 +139,7 @@ unit teacherProcedures;
                         fileArray[6,a] := data.PWord;
                         returnArray[a] := -1;
                     end;
-                Files.search(50,searchValues, searchFields, returnArray);
+                Files.search(50,7,searchValues, searchFields, returnArray);
             end;
 
 

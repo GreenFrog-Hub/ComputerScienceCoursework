@@ -1,0 +1,132 @@
+unit studentProcedures;
+  interface
+
+    USES crt, sysutils, FileProcedures;
+
+    TYPE
+        dataRecord = RECORD
+                          PersonID: STRING[5];
+                          Username: STRING[40];
+                          Passwowrd: String[20];
+                         end;
+
+    type
+        logInFile = Class(Files)
+            public
+                data : dataRecord;
+                dataFile: File OF dataRecord;
+                indexArray: ARRAY[0..190] OF LONGINT;
+                recordArray: ARRAY[0..190] OF dataRecord;
+                recordIdArray: ARRAY[0..190] OF STRING;
+                constructor Create;
+                procedure SetData(iPersonID: STRING; iUsername: STRING; iPasswowrd: String);
+                procedure DisplayData;
+                procedure writeToFile;
+                procedure readHere;
+                procedure readFile(readFromPosition : LONGINT);
+                procedure sort;
+                procedure search(searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE; var returnArray: ARRAY OF LONGINT);
+
+        end;
+
+    IMPLEMENTATION
+
+    constructor logInFile.Create;
+        var a : longint;
+        begin
+            inherited Create;
+            ASSIGN(dataFile,'C:\ComputerScienceCoursework\Program\files\LogInDetails.dta');
+            RESET(dataFile);
+            for a := 0 TO 190 DO
+              begin
+                indexArray[a] := a;
+              end;
+        end;
+
+    procedure logInFile.SetData(iPersonID: STRING;
+                          iUsername: STRING;
+                          iPasswowrd: String);
+
+        begin
+            with data do
+                begin
+                    PersonID := iPersonID;
+                    Username:=iUsername;
+                    Passwowrd:=iPasswowrd;
+                end;
+        end;
+
+    procedure logInFile.DisplayData;
+        begin
+        with data do
+            begin
+                writeln(PersonID);
+                writeln(Username);
+                writeln(Passwowrd);
+                writeln('-------------------------------------------------------------------------');
+            end;
+        end;
+
+    procedure logInFile.writeToFile;
+        begin
+            write(dataFile, data);
+        end;
+
+
+    procedure logInFile.readHere;
+        begin
+            if FIlePos(dataFile) < FileSize(dataFile) then
+                begin
+                    read(dataFile,data);
+                end;
+        end;
+
+    procedure logInFile.readFile(readFromPosition : LONGINT);
+        begin
+            if readFromPosition < FileSize(dataFile) then
+                begin
+                    SEEK(dataFile,readFromPosition);
+                    read(dataFile,data);
+                end;
+        end;
+
+    procedure logInFile.sort;
+        var a,b : LONGINT;
+            maxStrLen : STRING;
+        begin
+          RESET(dataFile);
+          upper:= 190;
+          for a := 0 TO 190 DO
+            begin
+              READ(dataFile,data);
+              recordArray[a] := data;
+              dataArray[a] := data.Username
+            end;
+        Files.sort(indexArray);
+        RESET(dataFile);
+        for a := 0 TO 190 DO
+            begin
+                data := recordArray[indexArray[a]];
+                WRITE(dataFile,recordArray[indexArray[a]]);
+            end;
+
+        end;
+
+        procedure logInFile.search(searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE; var returnArray : ARRAY OF LONGINT);
+            var a, searchResult: LONGINT;
+            begin
+                RESET(dataFile);
+                for a := 0 TO 190 DO
+                    begin
+                        read(dataFile, data);
+                        fileArray[0,a] := data.PersonID
+                        fileArray[1,a] := data.Username;
+                        fileArray[2,a] := data.Passwowrd;
+                    end;
+                Files.search(190,3,searchValues, searchFields, returnArray);
+            end;
+
+
+    END.
+
+

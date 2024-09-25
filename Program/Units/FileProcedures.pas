@@ -8,11 +8,11 @@ unit FileProcedures;
         Files = class
             public
                 upper : LONGINT;
-                dataArray: ARRAY[0..139] OF STRING;
-                fileArray: ARRAY[0..7,0..139] OF STRING;
+                dataArray: ARRAY[0..1400] OF STRING;
+                fileArray: ARRAY[0..7,0..1400] OF STRING;
               constructor Create;
               procedure sort(var indexArray : ARRAY OF LONGINT);
-              procedure search(max : LONGINT; searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE; var returnArray : ARRAY OF LONGINT);
+              procedure search(max, fields : LONGINT; searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE; var returnArray : ARRAY OF LONGINT);
             end;
 
     IMPLEMENTATION
@@ -47,17 +47,17 @@ unit FileProcedures;
             UNTIL (NOT Swaps) OR (upper < 0);
         end;
 
-    procedure Files.search(max : LONGINT; searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE; var returnArray : ARRAY OF LONGINT);
+    procedure Files.search(max, fields : LONGINT; searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE; var returnArray : ARRAY OF LONGINT);
         var found : BOOLEAN;
             a, b, c, returnIndex : LONGINT;
             tmp : STRING;
         begin
             a := -1;
             returnIndex := 0;
-            while a <> max do
+            while a < max do
                 begin
                 a := a + 1;
-                for b := 0 TO 7 DO
+                for b := 0 TO (fields-1) DO
                     begin
                       tmp := LowerCase(fileArray[b,a]);
                         if tmp = LowerCase(searchValues[0]) THEN

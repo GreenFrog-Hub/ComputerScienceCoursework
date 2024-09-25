@@ -12,7 +12,6 @@ unit studentProcedures;
                           Form : STRING[5];
                           Uname : String[40];
                           Pword : String[20];
-                          Attendance : real;
                         end;
 
     type
@@ -24,8 +23,9 @@ unit studentProcedures;
                 recordArray: ARRAY[0..139] OF StudentsRecord;
                 recordIdArray: ARRAY[0..139] OF STRING;
                 constructor Create;
-                procedure SetData(StudentId : LONGINT; FirstName: STRING; SurName : STRING; SYear : LONGINT; SForm : STRING; SUname : String; SPword : String; SAttendance : real);
+                procedure SetData(StudentId : LONGINT; FirstName: STRING; SurName : STRING; SYear : LONGINT; SForm : STRING; SUname : String; SPword : String);
                 procedure DisplayData;
+                procedure displayFile;
                 procedure writeToFile;
                 procedure readHere;
                 procedure readFile(readFromPosition : LONGINT);
@@ -54,8 +54,7 @@ unit studentProcedures;
                           SYear : LONGINT;
                           SForm : STRING;
                           SUname : String;
-                          SPword : String;
-                          SAttendance : real);
+                          SPword : String);
 
         begin
             with data do
@@ -67,7 +66,6 @@ unit studentProcedures;
                     Form := SForm;
                     Uname := SUname;
                     Pword := SPword;
-                    Attendance := SAttendance;
                 end;
         end;
 
@@ -82,9 +80,29 @@ unit studentProcedures;
                 writeln(Form);
                 writeln(Uname);
                 writeln(PWord);
-                writeln(Attendance);
                 writeln('-------------------------------------------------------------------------');
             end;
+        end;
+
+    procedure StudentFile.displayFile;
+        var a : LONGINT;
+        begin
+            reset(dataFile);
+            while not (eof(dataFile)) do
+                begin
+                    READ(dataFile,data);
+                    with data do
+                        begin
+                            writeln(StudentID);
+                            writeln(FName);
+                            writeln(SName);
+                            writeln(Year);
+                            writeln(Form);
+                            writeln(Uname);
+                            writeln(PWord);
+                            writeln('-------------------------------------------------------------------------');
+                        end;
+                end;
         end;
 
     procedure StudentFile.writeToFile;
@@ -147,10 +165,9 @@ unit studentProcedures;
                         fileArray[4,a] := data.Form;
                         fileArray[5,a] := data.Uname;
                         fileArray[6,a] := data.PWord;
-                        Str(data.Attendance, fileArray[7,a]);
                         returnArray[a] := -1;
                     end;
-                Files.search(139,searchValues, searchFields, returnArray);
+                Files.search(139,7,searchValues, searchFields, returnArray);
             end;
 
 

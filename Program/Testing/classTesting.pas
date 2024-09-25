@@ -1,20 +1,50 @@
 PROGRAM classTesting;
-  uses crt, sysutils, studentProcedures;
+  uses crt, sysutils, studentProcedures, teacherProcedures,
+  LogInProcedures, attendancProcedures, classProcedures,
+  studentClassProcedures, registerProcedures;
 
-  var student : StudentFile;
+  var teacher : TeacherFile;
+      student : StudentFile;
+      logIn : logInFile;
+      Attendance : AttendanceFile;
+      sklClass : classFile;
+      studentClass : studentClassFile;
+      registers : registerFile;
       a : LONGINT;
-      returnArray : ARRAY[0..139] OF LONGINT;
+      returnArray : ARRAY[0..1385] OF LONGINT;
   begin
-    student:=StudentFile.Create;
-    student.sort;
-    student.search(['9'],[0], returnArray);
-    a := 0;
+    for a := 0 to 1384 do
+      begin
+        returnArray[a] := -1;
+      end;
+    //sklClass := classFile.create;
+    Attendance := AttendanceFile.create;
+    studentClass := studentClassFile.create;
+    registers := registerFile.create;
+    //login := logInFile.create;
+    //teacher :=  TeacherFile.create;
+    //student:=StudentFile.Create;
+    //student.sort;
+    //teacher.sort;
+    //teacher.readFile(0);
+    //teacher.displayData;
+    //login.sort;
+    registers.displayFile;
+    studentClass.displayFile;
+    ClrScr;
+    Attendance.displayFile;
+    //registers.displayFile;
+    //registers.readfile(0);
+    //registers.displayData;
+    //Attendance.search(['60'],[2], returnArray);
+    {a := 0;
     while returnArray[a] <> -1 DO
       begin
-        student.readFile(returnArray[a]);
-        student.DisplayData;
+        StudentClass.readFile(returnArray[a]);
+        StudentClass.DisplayData;
         a := a + 1;
       end;
-
+     }
     readln;
   end.
+
