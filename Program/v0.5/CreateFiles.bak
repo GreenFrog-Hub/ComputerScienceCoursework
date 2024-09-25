@@ -95,7 +95,6 @@ PROGRAM CraeteFiles;
     TimeTableFile : FILE OF TimeTableRecord;
     TimeTableInfoFromFile : STRING;
 
-    FileFormFromFile : TextFile;
     Form : FormRecord;
     FormFile : FILE OF FormRecord;
 
@@ -151,7 +150,7 @@ PROGRAM CraeteFiles;
       total:= total +51;
 
       ASSIGN(RegisterFile,'C:\ComputerScienceCoursework\Program\files\Registers.dta');
-      total := total + 10;
+      total := total + 20;
 
       ASSIGN(NameFile,'C:\ComputerScienceCoursework\Program\files\Names.txt');
       ASSIGN(StudentFile,'C:\ComputerScienceCoursework\Program\files\Students.dta');
@@ -182,6 +181,8 @@ PROGRAM CraeteFiles;
 
       ASSIGN(LogInDetailsFile,'C:\ComputerScienceCoursework\Program\files\LogInDetails.dta');
       total := total + 191;
+
+
     end;
 
   procedure CreateTimeTable;
@@ -248,18 +249,31 @@ PROGRAM CraeteFiles;
     end;
 
   procedure createRegisters;
-    var a,b,c,i,randomMark : LONGINT;
+    var a,b,c,i,randomMark,day : LONGINT;
         dayArray : ARRAY[0..310] OF STRING;
         dayReturnArray : ARRAY[0..310] OF LONGINT;
         studentClassResolverClassArray : ARRAY[0..1384] OF STRING;
         classReturnArray : ARRAY[0..1384] OF LONGINT;
-        classId : STRING[8];
-      startDate, date : TDateTime;
+        classId, startDate : STRING;
+        studentFormIdArray : ARRAY[0..139] OF STRING;
+        returnStudentFormIdArray : ARRAY[0..139] OF LONGINT;
+        outText : Text;
+        date : TDateTime;
     begin
-      startDate := StrToDateTime('13/09/2024');
+      ASSIGN(outText,'C:\ComputerScienceCoursework\Program\files\registerOut.txt');
+      REWRITE(outText);
       reset(TimeTableFile);
       reset(studentClassResolverFile);
+      RESET(StudentFIle);
       rewrite(RegisterFile);
+      i := 0;
+      startDate := '13/09/2024';
+      for i := 0 To 139 DO
+        begin
+          READ(StudentFile,Student);
+          studentFormIdArray[i] := Student.Form;
+          returnStudentFormIdArray[i] := -1;
+        end;
       i := 0;
       while not(eof(TimeTableFile)) DO
         begin
@@ -283,7 +297,8 @@ PROGRAM CraeteFiles;
           {writeln('i: ',i);
           writeln(DayOfWeek(startDate+b)-1);
           readln;}
-          if ((DayOfWeek(startDate+b)-1) = -1) OR (DayOfWeek(startDate+b)-1 = 6) THEN
+          day := DayOfWeek(StrToDate(startDate)+b-1);
+          if (day = 7) OR (day = 6) THEN
             begin
               i := i -1;
             end
@@ -291,23 +306,43 @@ PROGRAM CraeteFiles;
             begin
               numberDone := numberDone +1;
               percentDone := numberDone / total;
-              Search.SearchFunctions('L',0,269,IntToStr(DayOfWeek(startDate+b)-1),dayArray,dayReturnArray,empty);
+              for c := 0 TO 269 DO
+                dayReturnArray[c] := -1;
+              Search.SearchFunctions('L',0,269,IntToStr(DayOfWeek(StrToDate(startDate)+b-1)),dayArray,dayReturnArray,empty);
               a := 0;
               while dayReturnArray[a] <> -1 DO
                 begin
                   SEEK(TimeTableFile,dayReturnArray[a]);
                   read(TimeTableFile, TimeTable);
                   Register.LessonNo := TimeTable.LessonNo;
-                  Register.Date := startDate+b;
+                  Register.Date := StrToDate(startDate)+b;
                   if TimeTable.LessonNo = 4 THEN
                     Register.isOfstedRegister := true
                   else
                     Register.isOfstedRegister := false;
+                  Register.classID := '';
                   Register.classID := TimeTable.classID;
                   register.registerID := IntToStr(register.lessonNo) + register.classID + DateTimeToStr(register.date);
-                  classId := Register.classID;
-                  Search.SearchFunctions('L',0,1384,ClassID,studentClassResolverClassArray,classReturnArray,empty);
+                  classId := format('%s',[Register.classID]);
+                  for c := 0 to 1384 DO
+                    classReturnArray[c] := -1;
+                  Search.SearchFunctions('L',0,1384,Register.ClassID,studentClassResolverClassArray,classReturnArray,empty);
                   c := 0;
+                  {if Register.ClassID = '9AP1' THEN
+                    write('')
+                  else if Register.ClassID = '9AP2' THEN
+                    write('')
+                  else if Register.ClassID = '9BP1' THEN
+                    write('')
+                  else if Register.ClassID = '9BP2' THEN
+                    write('');           }
+                  writeln(outText, Register.ClassID);
+                  while classReturnArray[c] <> -1 DO
+                    begin
+                      writeln(outText,IntToStr(classReturnArray[c]));
+                      c := c +1;
+                    end;
+                  c:=0;
                   while classReturnArray[c] <> -1 DO
                     begin
                       SEEK(studentClassResolverFile, classReturnArray[c]);
@@ -339,12 +374,85 @@ PROGRAM CraeteFiles;
                       c := c +1;
                     end;
                   write(RegisterFile,Register);
+
                   a := a +1;
                 end;
             end;
             b := b +1;
         end;
 
+
+        b:= 0;
+        for i := 0 to 9 DO
+          begin
+            day := DayOfWeek(StrToDate(startDate)+b-1);
+            if (day = 7) OR (day = 6) THEN
+              begin
+                i := i -1;
+              end
+            else
+              begin
+                numberDone := numberDone +1;
+                percentDone := numberDone / total;
+                for c := 0 TO 310 DO
+                  dayReturnArray[c] := -1;
+                Search.SearchFunctions('L',269,310,IntToStr(DayOfWeek(StrToDate(startDate)+b-1)),dayArray,dayReturnArray,empty);
+                a := 0;
+                while dayReturnArray[a] <> -1 DO
+                  begin
+                    SEEK(TimeTableFile,dayReturnArray[a]);
+                    read(TimeTableFile, TimeTable);
+                    if TimeTable.LessonNo = 0 THEN
+                      begin
+                        Register.LessonNo := TimeTable.LessonNo;
+                        Register.Date := StrToDate(startDate)+b;
+                        Register.isOfstedRegister := true;
+                        Register.classID := '';
+                        Register.classID := TimeTable.classID;
+                        register.registerID := IntToStr(register.lessonNo) + register.classID + DateTimeToStr(register.date);
+                        classId := format('%s',[Register.classID]);
+                        for c := 0 TO 139 DO
+                          returnStudentFormIdArray[c] := -1;
+                        Search.SearchFunctions('L',0,139,Register.ClassID,studentFormIdArray,returnStudentFormIdArray,empty);
+                        c := 0;
+                        while returnStudentFormIdArray[c] <> -1 DO
+                          begin
+                            SEEK(StudentFile, returnStudentFormIdArray[c]);
+                            read(StudentFile, Student);
+                            studentRegisterMark.studentID := student.studentID;
+                            SEEK(AttendanceFile,student.studentID);
+                            read(AttendanceFile,Attendance);
+                            Attendance.Total := Attendance.Total +1;
+                            randomMark := RANDOM(100);
+                            if randomMark <= 90 then
+                              begin
+                                studentRegisterMark.registerMark := 'P';
+                                Attendance.NumberPresent := Attendance.NumberPresent + 1;
+                              end
+                            else if randomMark <= 97 then
+                              begin
+                                studentRegisterMark.registerMark := 'L';
+                                Attendance.NumberLate := Attendance.NumberLate + 1;
+                              end
+                            else
+                              begin
+                                studentRegisterMark.registerMark := 'A';
+                                Attendance.NumberAbsent := Attendance.NumberAbsent + 1;
+                              end;
+                            Register.registerMarks[c] := studentRegisterMark;
+                            SEEK(AttendanceFile,FilePos(AttendanceFile)-1);
+                            Attendance.Attendance := (Attendance.NumberPresent / Attendance.Total);
+                            write(AttendanceFile,Attendance);
+                            c := c +1;
+                          end;
+                          write(RegisterFile,Register);
+
+                      end;
+                      a := a + 1;
+                  end;
+              end;
+              b := b + 1;
+          end;
     end;
 
 
@@ -450,7 +558,7 @@ PROGRAM CraeteFiles;
         while not EOF(StudentFile) do
           begin
             READ(StudentFile,student);
-            LogInDetails.PersonID := Format('%'+5+'s',[IntToStr(student.StudentID)]);
+            LogInDetails.PersonID := Format('%'+'5'+'s',[IntToStr(student.StudentID)]);
             LogInDetails.Username := student.Uname;
             LogInDetails.Passwowrd := student.Pword;
             write(LogInDetailsFile,LogInDetails);
@@ -791,6 +899,8 @@ PROGRAM CraeteFiles;
       end;
     writeln('TimeTable number: ',q); }
     createRegisters;
+    RESET(RegisterFIle);
+    READ(registerFile, register);
     //writeln('end reg');
     //ClrScr;
     //writeln('END!');
