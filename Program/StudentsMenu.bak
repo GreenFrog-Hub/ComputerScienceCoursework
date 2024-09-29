@@ -1,0 +1,13 @@
+UNIT StudentsMenu;
+  interface
+  uses crt, sysutils;
+  procedure start;
+  implementation
+
+  procedure start;
+    begin
+      writeln('welcome student');
+      readln;
+    end;
+
+  end.

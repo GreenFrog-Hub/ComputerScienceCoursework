@@ -1,4 +1,4 @@
-unit studentProcedures;
+unit LogInProcedures;
   interface
 
     USES crt, sysutils, FileProcedures;
@@ -13,7 +13,7 @@ unit studentProcedures;
     type
         logInFile = Class(Files)
             public
-                data : dataRecord;
+                class var data : dataRecord;
                 dataFile: File OF dataRecord;
                 indexArray: ARRAY[0..190] OF LONGINT;
                 recordArray: ARRAY[0..190] OF dataRecord;
@@ -119,7 +119,7 @@ unit studentProcedures;
                 for a := 0 TO 190 DO
                     begin
                         read(dataFile, data);
-                        fileArray[0,a] := data.PersonID
+                        fileArray[0,a] := data.PersonID;
                         fileArray[1,a] := data.Username;
                         fileArray[2,a] := data.Passwowrd;
                     end;

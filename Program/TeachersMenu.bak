@@ -1,0 +1,13 @@
+UNIT TeachersMenu;
+  interface
+  uses crt, sysutils;
+  procedure startTeacher;
+  implementation
+
+  procedure startTeacher8;
+    begin
+      writeln('welcome teacher');
+      readln;
+    end;
+
+  end.
