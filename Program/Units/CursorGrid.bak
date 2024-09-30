@@ -2,47 +2,62 @@ UNIT CursorGrid;
   interface
   uses crt, sysutils, vputils;
 
-  var stepx , stepY, movePos : LONGINT;
+  var stepx , stepY, movePos, minX, minY, maxX, maxY: LONGINT;
 
   procedure moveUp;
   procedure moveDown;
   procedure moveLeft;
   procedure moveRight;
-  procedure start(moveStepX, moveStepY, startX, startY : LONGINT);
+  procedure start(moveStepX, moveStepY, startX, startY : LONGINT; boundaries : ARRAY OF LONGINT; var x, y : LONGINT);
 
   implementation
   procedure moveUp;
     begin
-      movePos := WhereY - stepy;
-      GoToXY(WhereX, movePos);
+      if WhereY <> minY THEN
+        begin
+          movePos := WhereY - stepy;
+          GoToXY(WhereX, movePos);
+        end;
     end;
 
   procedure moveDown;
     begin
-      movePos := WhereY + stepy;
-      GoToXY(WhereX, movePos);
+      if WhereY <> maxY THEN
+        begin
+          movePos := WhereY + stepy;
+          GoToXY(WhereX, movePos);
+        end;
     end;
 
   procedure moveLeft;
     begin
-      movePos := WhereX - stepx;
-      GoToXY(movePos, WhereY);
+      if WhereX <> minX THEN 
+        begin
+          movePos := WhereX - stepx;
+          GoToXY(movePos, WhereY);
+        end; 
     end;
 
   procedure moveRight;
     begin
-      movePos := WhereX + stepX;
-      GoToXY(movePos, WhereY);
+      if WhereX <> maxX THEN
+        begin
+          movePos := WhereX + stepX;
+          GoToXY(movePos, WhereY);
+        end;
     end;
 
-  procedure start(moveStepX, moveStepY, startX, startY : LONGINT);
+  procedure start(moveStepX, moveStepY, startX, startY : LONGINT; boundaries : ARRAY OF LONGINT; var x, y : LONGINT);
     var keyPress : char;
     begin
       stepX := moveStepX;
       stepY := moveStepY;
+      minX := boundaries[0];
+      minY := boundaries[1];
+      maxX := boundaries[2];
+      maxY := boundaries[3];
       //HideCursor;
       GoToXY(startX,startY);
-      TextColor(green);
       repeat
         keyPress := readkey;
         if keyPress = #0 then
@@ -55,6 +70,8 @@ UNIT CursorGrid;
             end;
           end;
       until keyPress = #13;
+      x := WhereX - startX;
+      y := WhereY - startY;
     end;
 
   end.

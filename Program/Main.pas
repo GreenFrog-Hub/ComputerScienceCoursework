@@ -1,5 +1,5 @@
 PROGRAM Main;
-  USES Crt, Sysutils, LogInScreen, LogInProcedures, studentProcedures, teacherProcedures, StudentsMenu, TeachersMenu;
+  USES Crt, Sysutils, LogInScreen, loading, LogInProcedures, studentProcedures, teacherProcedures, StudentsMenu, TeachersMenu;
   var i, empty, ErrCode : LONGINT;
       userId : STRING;
       userDetailsArray : ARRAY[0..1] OF STRING;
@@ -7,6 +7,9 @@ PROGRAM Main;
       logIn : logInFile;
       student : StudentFIle;
       teacher : TeacherFile;
+      percentDone : REAL;
+      logedIn : BOOLEAN;
+
   begin
     {studentsmenu.startStudent;}
     logIn := logInFile.create;
@@ -17,26 +20,38 @@ PROGRAM Main;
     teacher.readHere;
     teacher.DisplayData;
     readln;
-    ClrScr;
-    LogInScreen.startLogIn(userDetailsArray);
-    logIn.search(userDetailsArray,[1,2], userDetailsReturnArray);
-    if userDetailsReturnArray[0] = -1 THEN
-      writeln('UserName Or Password is incorrect.')
-    else
+    logedIn := false;
+    while logedIn = false do
       begin
-        login.readFile(userDetailsReturnArray[0]);
-        {LogIn.displayData;}
-        userId := Trim(login.data.PersonID);
-        {writeln(userID);
-        readln;       }
-        val(userid,empty,ErrCode);
-        if ErrCode <> 0 THEN
+        ClrScr;
+        LogInScreen.startLogIn(userDetailsArray);
+        logIn.search(userDetailsArray,[1,2], userDetailsReturnArray);
+        loading.startLoading('L', percentDone);
+        Delay(2000);
+        loading.silentKillLoading;
+        Delay(100);
+        if userDetailsReturnArray[0] = -1 THEN
           begin
-            TeachersMenu.startTeacher;
+            writeln('UserName Or Password is incorrect.');
+            readkey;
           end
         else
           begin
-            StudentsMenu.startStudent;
+            logedIn := true;
+            login.readFile(userDetailsReturnArray[0]);
+            {LogIn.displayData;}
+            userId := Trim(login.data.PersonID);
+            {writeln(userID);
+            readln;       }
+            val(userid,empty,ErrCode);
+            if ErrCode <> 0 THEN
+              begin
+                TeachersMenu.startTeacher;
+              end
+            else
+              begin
+                StudentsMenu.startStudent(empty);
+              end;
           end;
-      end;
+    end;
   end.

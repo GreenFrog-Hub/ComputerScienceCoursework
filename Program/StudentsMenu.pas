@@ -1,13 +1,61 @@
 UNIT StudentsMenu;
   interface
-  uses crt, sysutils;
-  procedure startStudent;
+  uses crt, sysutils, VPUtils, studentProcedures, attendancProcedures, createMenu;
+  var studentID : LONGINT;
+      student : StudentFIle;
+      attendance : AttendanceFile;
+      mainMenuOptions : ARRAY[0..2] OF STRING = ('Attendance','Timetable', 'Log Out');
+  procedure startStudent(inputStudentId : LONGINT);
+  procedure mainMenu;
   implementation
 
-  procedure startStudent;
+  procedure AttendanceMenu;
     begin
-      writeln('welcome student');
+      Writeln('Attendance');
       readln;
+    end;
+
+  procedure TimeTableMenu;
+    begin
+      writeln('TimeTable');
+      readln;
+    end;
+
+  procedure LogOutMenu;
+    begin
+      writeln('Logging out');
+      Delay(1000);
+    end;
+
+
+  procedure mainMenu;
+    var choice : LONGINT;
+    begin
+      choice := 0;
+      student.readFile(studentID);
+      attendance.readFile(studentID);
+      repeat
+        ClrScr;
+        HideCursor;
+        writeln('welcome ', student.data.fname, ' ', student.data.sname, ' ');
+        GOTOXY(1,3);
+        writeln('Attendance: ', Format('%.2f', [attendance.data.attendance*100]),'%');
+        choice := createMenu.writeMenu([1,5],3,mainMenuOptions, choice);
+        case choice of
+          0 : AttendanceMenu;
+          1 : TimeTableMenu;
+          2 : LogOutMenu;
+        end;
+      until choice = 2;
+
+    end;
+
+  procedure startStudent(inputStudentId : LONGINT);
+    begin
+      studentID := inputStudentId;
+      attendance := AttendanceFile.create;
+      student := StudentFIle.create;
+      mainMenu;
     end;
 
   end.

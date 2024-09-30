@@ -17,6 +17,7 @@ function loadingBar(p : pointer) : LONGINT;
     b,c,completeBars,uncompleteBars : LONGINT;
 procedure StartLoading(loadingType : CHAR; var percentIn : real);
 procedure EndLoading;
+procedure silentKillLoading;
 
 implementation
 const LoadingSymbols : ARRAY[1..4] OF CHAR = ('/',#196,'\','|');
@@ -90,4 +91,12 @@ procedure EndLoading;
     writeln('Time elapsed: ',TimeToStr(endRunTime - startRunTime));
     ShowCursor;
     end;
+
+procedure silentKillLoading;
+  begin
+    KillThread(1);
+    loadingDone := true;
+    ClrScr;
+    ShowCursor;
+  end;
 end.

@@ -1,0 +1,27 @@
+unit createMenu;
+
+  interface
+
+  uses crt, sysutils, CursorGrid, VPUtils;
+
+  function writeMenu(startPos : ARRAY OF LONGINT; numberOfChoices : LONGINT; menuChoices: ARRAY OF STRING; optionStart : LONGINT) : LONGINT;
+
+  implementation
+
+  function writeMenu(startPos : ARRAY OF LONGINT; numberOfChoices : LONGINT; menuChoices: ARRAY OF STRING; optionStart : LONGINT) : LONGINT;
+    var a, x, y : LONGINT;
+    begin
+      HideCursor;
+      GOTOXY(startPos[0],startPos[1]);
+      for a := 0 TO numberOfChoices -1 DO
+        begin
+          writeln(a+1,': ',menuChoices[a]);
+        end;
+      ShowCursor;
+      Delay(100);
+      CursorGrid.start(0,1,startPos[0],startPos[1]+optionStart,[startPos[0],startPos[1],startPos[0],numberOfChoices+startPos[1]-1],x,y);
+      ClrScr;
+      writeMenu := optionStart + y;
+    end;
+
+  end.

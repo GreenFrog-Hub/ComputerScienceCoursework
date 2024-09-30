@@ -26,7 +26,7 @@ PROGRAM loadingTest;
       end;
 
   begin
-    loading.StartLoading('P',percentDone);
+    loading.StartLoading('L',percentDone);
     fibanachi;
     loading.EndLoading;
     //for n := 0 TO 1000 DO
