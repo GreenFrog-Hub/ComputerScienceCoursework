@@ -6,11 +6,10 @@ unit FileProcedures;
 
     TYPE
         Files = class
-            protected
+            public
                 upper : LONGINT;
                 dataArray: ARRAY[0..1400] OF STRING;
                 fileArray: ARRAY[0..7,0..1400] OF STRING;
-            public
               constructor Create;
               destructor Destroy; override;
               procedure sort(var indexArray : ARRAY OF LONGINT);

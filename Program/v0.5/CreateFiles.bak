@@ -182,7 +182,7 @@ PROGRAM CraeteFiles;
       ASSIGN(LogInDetailsFile,'C:\ComputerScienceCoursework\Program\files\LogInDetails.dta');
       total := total + 191;
     end;
-  
+
 
   procedure closeAllFiles;
     begin
@@ -195,7 +195,7 @@ PROGRAM CraeteFiles;
       close(classFile);
       close(subjectFile);
       close(studentClassResolverFile);
-      close(teacherSubjectResolver);
+      close(teacherSubjectResolverFile);
       close(teacherClassResolverFile);
       close(FormFile);
       close(AttendanceFile);

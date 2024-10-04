@@ -13,7 +13,7 @@ unit LogInProcedures;
 
     type
         logInFile = Class(Files)
-            public
+              public
                 data : dataRecord;
                 dataFile: File OF dataRecord;
                 indexArray: ARRAY[0..190] OF LONGINT;
@@ -48,7 +48,7 @@ unit LogInProcedures;
     destructor LogInFile.Destroy;
         begin
             close(dataFile);
-            inherited;
+            inherited Destroy;
         end;
     procedure logInFile.SetData(iPersonID: STRING;
                           iUsername: STRING;

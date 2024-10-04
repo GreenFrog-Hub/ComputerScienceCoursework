@@ -13,13 +13,12 @@ unit LogInProcedures;
 
     type
         logInFile = Class(Files)
-            protected
+              public
                 data : dataRecord;
                 dataFile: File OF dataRecord;
                 indexArray: ARRAY[0..190] OF LONGINT;
                 recordArray: ARRAY[0..190] OF dataRecord;
                 recordIdArray: ARRAY[0..190] OF STRING;
-            public
                 constructor Create;
                 destructor Destroy; override;
                 procedure SetData(iPersonID: STRING; iUsername: STRING; iPasswowrd: String);

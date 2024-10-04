@@ -4,8 +4,8 @@ UNIT StudentsMenu;
   attendancProcedures, studentClassProcedures,createMenu, writeTimeTableLayout;
 
   procedure startStudent(inputStudentId : LONGINT);
+  procedure CompleteTimeTable(inputDate : TDateTime);
   procedure TimeTableMenu;
-//  procedure TimeTableMenu;
   procedure AttendanceMenu;
   procedure LogOutMenu;
   procedure mainMenu;
@@ -29,7 +29,7 @@ UNIT StudentsMenu;
       readln;
     end;
 
-  procedure TimeTableMenu;
+  procedure CompleteTimeTable(inputDate : TDateTime);
     var a, b, c, day, NumberOfDays : LONGINT;
         CurrentDate : TDateTime;
         week : STRING;
@@ -37,7 +37,7 @@ UNIT StudentsMenu;
         //dateArray : ARRAY OF STRING;
     begin
       writeTimeTableLayout.DrawTimeTable;
-      CurrentDate := Date;//inputDate;
+      CurrentDate := inputDate;
       day := DayOfWeek(CurrentDate-2);
       HideCursor;
       for a := 0 to 4 DO
@@ -49,6 +49,7 @@ UNIT StudentsMenu;
             TextColor(White);
           write(DateToStr(CurrentDate-day+a));
         end;
+      TextColor(White);
       NumberOfDays := 0;
       while StrToDateTime('13/09/2024') + NumberOfDays <> CurrentDate-day+a-1 DO
         NumberOfDays := NumberOfDays +1;
@@ -99,13 +100,13 @@ UNIT StudentsMenu;
         end;
     end;
 
-  {procedure TimeTableMenu;
+  procedure TimeTableMenu;
     var TodayDate : TDateTime;
     begin
       TodayDate := Date;
       CompleteTimeTable(TodayDate);
       readln;
-    end;}
+    end;
 
   procedure LogOutMenu;
     begin

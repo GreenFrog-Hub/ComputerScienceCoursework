@@ -1,7 +1,6 @@
 PROGRAM Main;
-  USES Crt, Sysutils, LogInScreen, loading, LogInProcedures, studentProcedures,
-  teacherProcedures, StudentsMenu, TeachersMenu, timeTableProcedures, studentClassProcedures,
-  attendancProcedures;
+  USES Crt, Sysutils, LogInScreen, loading, LogInProcedures,
+  teacherProcedures, TeachersMenu, StudentsMenu;
   var userType : STRING;
       intUserID : LONGINT;
 
@@ -11,7 +10,6 @@ PROGRAM Main;
       userDetailsArray : ARRAY[0..1] OF STRING;
       userDetailsReturnArray : ARRAY[0..1] OF LONGINT;
       logIn : logInFile;
-      student : StudentFIle;
       teacher : TeacherFile;
       percentDone : REAL;
       logedIn : BOOLEAN;
@@ -58,6 +56,7 @@ PROGRAM Main;
                 start := 'S';
               end;
           end;
+          logIn.free;
     end;
   end;
 
