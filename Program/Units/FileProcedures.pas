@@ -1,16 +1,18 @@
 unit FileProcedures;
-
+{$M+}
     interface
 
     USES crt, sysutils;
 
     TYPE
         Files = class
-            public
+            protected
                 upper : LONGINT;
                 dataArray: ARRAY[0..1400] OF STRING;
                 fileArray: ARRAY[0..7,0..1400] OF STRING;
+            public
               constructor Create;
+              destructor Destroy; override;
               procedure sort(var indexArray : ARRAY OF LONGINT);
               procedure search(max, fields : LONGINT; searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE; var returnArray : ARRAY OF LONGINT);
             end;
@@ -21,6 +23,10 @@ unit FileProcedures;
     constructor Files.Create;
       begin
       end;
+
+    destructor Files.Destroy;
+        begin
+        end;
 
     procedure Files.sort(var indexArray : ARRAY OF LONGINT);
         var TempIndex, i, code, tmp1, tmp2 : LONGINT;

@@ -20,7 +20,7 @@ PROGRAM AciiTable;
           end;
 
       end;
-    CursorGrid.start(10,1,1,1);
+    //CursorGrid.start(10,1,1,1);
     read(specChar);
     clrscr;
     writeln(specChar);

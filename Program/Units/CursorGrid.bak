@@ -31,11 +31,11 @@ UNIT CursorGrid;
 
   procedure moveLeft;
     begin
-      if WhereX <> minX THEN 
+      if WhereX <> minX THEN
         begin
           movePos := WhereX - stepx;
           GoToXY(movePos, WhereY);
-        end; 
+        end;
     end;
 
   procedure moveRight;
@@ -56,7 +56,6 @@ UNIT CursorGrid;
       minY := boundaries[1];
       maxX := boundaries[2];
       maxY := boundaries[3];
-      //HideCursor;
       GoToXY(startX,startY);
       repeat
         keyPress := readkey;

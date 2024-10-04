@@ -5,10 +5,7 @@ uses sysutils, vputils, crt, math;
 
 type rPtr = ^real;
 
-var loadingDone : BOOLEAN;
-  percentDone : real;
-  percentPtr : rptr;
-  startRunTime, endRunTime : TDateTime;
+
 
 function loadingText(p : pointer) : LONGINT;
   var a : LONGINT;
@@ -21,6 +18,11 @@ procedure silentKillLoading;
 
 implementation
 const LoadingSymbols : ARRAY[1..4] OF CHAR = ('/',#196,'\','|');
+
+var loadingDone : BOOLEAN;
+  percentDone : real;
+  percentPtr : rptr;
+  startRunTime, endRunTime : TDateTime;
 
 function loadingText(p : pointer) : LONGINT;
   var a : LONGINT;

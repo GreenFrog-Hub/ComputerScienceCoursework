@@ -132,14 +132,16 @@ unit studentClassProcedures;
             var a, searchResult: LONGINT;
             begin
                 RESET(dataFile);
-                for a := 0 TO 1384 DO
+                a := 0;
+                while not EOF(dataFile) DO
                     begin
                         read(dataFile, data);
                         fileArray[0,a] := data.classID;
                         Str(data.StudentID, fileArray[1,a]);
                         returnArray[a] := -1;
+                        a := a + 1;
                     end;
-                Files.search(1384,2,searchValues, searchFields, returnArray);
+                Files.search(a+1,2,searchValues, searchFields, returnArray);
             end;
 
 

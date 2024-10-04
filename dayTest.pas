@@ -1,12 +1,12 @@
 program dayTest;
   uses crt,sysutils;
-  var date : TDateTime;
+  var tdate : TDateTime;
     day : LONGINT;
 
 
   begin
-    date := Now;
-    day := DayOfWeek(date);
+    tdate := Date;
+    day := DayOfWeek(tDate);
     writeln(day);
     readln;
   end.

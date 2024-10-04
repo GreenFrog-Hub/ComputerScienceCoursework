@@ -8,7 +8,7 @@ UNIT CursorGrid;
   procedure moveDown;
   procedure moveLeft;
   procedure moveRight;
-  procedure start(moveStepX, moveStepY, startX, startY : LONGINT; boundaries : ARRAY OF LONGINT; var x, y : LONGINT);
+  procedure startGrid(moveStepX, moveStepY, startX, startY : LONGINT; boundaries : ARRAY OF LONGINT; var x, y : LONGINT);
 
   implementation
   procedure moveUp;
@@ -47,7 +47,7 @@ UNIT CursorGrid;
         end;
     end;
 
-  procedure start(moveStepX, moveStepY, startX, startY : LONGINT; boundaries : ARRAY OF LONGINT; var x, y : LONGINT);
+  procedure startGrid(moveStepX, moveStepY, startX, startY : LONGINT; boundaries : ARRAY OF LONGINT; var x, y : LONGINT);
     var keyPress : char;
     begin
       stepX := moveStepX;

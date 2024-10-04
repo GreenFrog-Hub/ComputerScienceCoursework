@@ -11,13 +11,16 @@ unit studentClassProcedures;
 
     type
         studentClassFile = Class(Files)
-            public
-                data : dataRecord;
+            protected
                 dataTextFile : TextFile;
                 dataFile: File OF dataRecord;
-                indexArray: ARRAY[0..1384] OF LONGINT;
-                recordArray: ARRAY[0..1384] OF dataRecord;
-                recordIdArray: ARRAY[0..1384] OF STRING;
+                indexArray: ARRAY[0..1400] OF LONGINT;
+                recordArray: ARRAY[0..1400] OF dataRecord;
+                recordIdArray: ARRAY[0..1400] OF STRING;
+            
+            public
+                data : dataRecord;
+                
                 constructor Create;
                 procedure SetData(iStudentID : LONGINT; iClassID : STRING);
                 procedure DisplayData;
@@ -39,7 +42,7 @@ unit studentClassProcedures;
             ASSIGN(dataFile,'C:\ComputerScienceCoursework\Program\files\studentClassResolver.dta');
             ASSIGN(dataTextFile,'C:\ComputerScienceCoursework\Program\files\out.txt');
             RESET(dataFile);
-            for a := 0 TO 1384 DO
+            for a := 0 TO 1400 DO
               begin
                 indexArray[a] := a;
               end;
@@ -58,7 +61,6 @@ unit studentClassProcedures;
 
     procedure studentClassFile.DisplayData;
         begin
-
                 writeln(data.ClassID);
                 writeln(data.StudentID);
                 writeln('-------------------------------------------------------------------------');
@@ -112,8 +114,8 @@ unit studentClassProcedures;
             maxStrLen : STRING;
         begin
           RESET(dataFile);
-          upper:= 1384;
-          for a := 0 TO 1384 DO
+          upper:= 1400;
+          for a := 0 TO 1400 DO
             begin
               READ(dataFile,data);
               recordArray[a] := data;
@@ -121,7 +123,7 @@ unit studentClassProcedures;
             end;
         Files.sort(indexArray);
         RESET(dataFile);
-        for a := 0 TO 1384 DO
+        for a := 0 TO 1400 DO
             begin
                 data := recordArray[indexArray[a]];
                 WRITE(dataFile,recordArray[indexArray[a]]);
@@ -133,14 +135,16 @@ unit studentClassProcedures;
             var a, searchResult: LONGINT;
             begin
                 RESET(dataFile);
-                for a := 0 TO 1384 DO
+                a := 0;
+                while not EOF(dataFile) DO
                     begin
                         read(dataFile, data);
                         fileArray[0,a] := data.classID;
                         Str(data.StudentID, fileArray[1,a]);
                         returnArray[a] := -1;
+                        a := a + 1;
                     end;
-                Files.search(1384,2,searchValues, searchFields, returnArray);
+                Files.search(a,2,searchValues, searchFields, returnArray);
             end;
 
 

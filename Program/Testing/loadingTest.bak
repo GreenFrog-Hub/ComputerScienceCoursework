@@ -6,7 +6,7 @@ PROGRAM loadingTest;
 
   var fibanachiSequence : intArray;
   n : LONGINT;
-  percentDone : real;
+  percentComeplete : real;
 
   procedure fibanachi;
     var a, i : longint;
@@ -20,13 +20,13 @@ PROGRAM loadingTest;
             fibanachiSequence[i] := fibanachiSequence[i-1] + fibanachiSequence[i-2];
           percentDone := i/a;
           Delay(10);
-          n := round(percentDone);
+          n := round(percentComeplete);
           //PlaySound(n*150,10);
         end;
       end;
 
   begin
-    loading.StartLoading('P',percentDone);
+    loading.StartLoading('P',percentComeplete);
     fibanachi;
     loading.EndLoading;
     //for n := 0 TO 1000 DO

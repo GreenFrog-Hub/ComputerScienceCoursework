@@ -2,7 +2,7 @@ unit createMenu;
 
   interface
 
-  uses crt, sysutils, CursorGrid;
+  uses crt, sysutils, CursorGrid, VPUtils;
 
   function writeMenu(startPos : ARRAY OF LONGINT; numberOfChoices : LONGINT; menuChoices: ARRAY OF STRING; optionStart : LONGINT) : LONGINT;
 
@@ -17,7 +17,9 @@ unit createMenu;
         begin
           writeln(a+1,': ',menuChoices[a]);
         end;
-      CursorGrid.start(0,1,startPos[0],startPos[1]+optionStart,[startPos[0],startPos[1],startPos[0],numberOfChoices+startPos[1]-1],x,y);
+      ShowCursor;
+      Delay(100);
+      CursorGrid.startGrid(0,1,startPos[0],startPos[1]+optionStart,[startPos[0],startPos[1],startPos[0],numberOfChoices+startPos[1]-1],x,y);
       ClrScr;
       writeMenu := optionStart + y;
     end;

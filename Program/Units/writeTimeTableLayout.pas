@@ -1,0 +1,28 @@
+UNIT writeTimeTableLayout;
+  interface
+  uses crt, sysutils, vputils;
+  procedure DrawTimeTable;
+  var Character : STRING;
+      TimeTableLayout : TextFile;
+  implementation
+  procedure DrawTimeTable;
+    var a : LONGINT;
+    begin
+      HideCursor;
+      ClrScr;
+      ASSIGN(TimeTableLayout,'C:\ComputerScienceCoursework\Program\files\TimeTableLayout.txt');
+      reset(TimeTableLayout);
+      for a := 0 to 25 DO
+        begin
+          while not EOLn(TimeTableLayout) DO
+            begin
+              read(TimeTableLayout, Character);
+              write(Character);
+            end;
+            readln(TimeTableLayout, Character);
+            writeln;
+        end;
+      ShowCursor;
+
+    end;
+end.

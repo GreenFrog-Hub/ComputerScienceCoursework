@@ -34,7 +34,7 @@ function loadingText(p : pointer) : LONGINT;
         a := a+1;
         if a > 4 THEN
           a := 1;
-        Delay(75);
+        Delay(100);
         GoToXY(1,1);
         DelLine;
       end;

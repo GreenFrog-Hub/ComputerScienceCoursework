@@ -1,6 +1,12 @@
 PROGRAM Main;
-  USES Crt, Sysutils, LogInScreen, loading, LogInProcedures, studentProcedures, teacherProcedures, StudentsMenu, TeachersMenu;
-  var i, empty, ErrCode : LONGINT;
+  USES Crt, Sysutils, LogInScreen, loading, LogInProcedures, studentProcedures,
+  teacherProcedures, StudentsMenu, TeachersMenu, timeTableProcedures, studentClassProcedures,
+  attendancProcedures;
+  var userType : STRING;
+      intUserID : LONGINT;
+
+  function start:STRING;
+    var i, ErrCode : LONGINT;
       userId : STRING;
       userDetailsArray : ARRAY[0..1] OF STRING;
       userDetailsReturnArray : ARRAY[0..1] OF LONGINT;
@@ -9,7 +15,6 @@ PROGRAM Main;
       teacher : TeacherFile;
       percentDone : REAL;
       logedIn : BOOLEAN;
-
   begin
     {studentsmenu.startStudent;}
     logIn := logInFile.create;
@@ -27,7 +32,7 @@ PROGRAM Main;
         LogInScreen.startLogIn(userDetailsArray);
         logIn.search(userDetailsArray,[1,2], userDetailsReturnArray);
         loading.startLoading('L', percentDone);
-        Delay(2000);
+        // Delay(2000);
         loading.silentKillLoading;
         Delay(100);
         if userDetailsReturnArray[0] = -1 THEN
@@ -43,15 +48,23 @@ PROGRAM Main;
             userId := Trim(login.data.PersonID);
             {writeln(userID);
             readln;       }
-            val(userid,empty,ErrCode);
+            val(userid,intUserID,ErrCode);
             if ErrCode <> 0 THEN
               begin
-                TeachersMenu.startTeacher;
+                start := 'T';
               end
             else
               begin
-                StudentsMenu.startStudent(empty);
+                start := 'S';
               end;
           end;
     end;
+  end;
+
+  begin
+    userType := start;
+    if userType = 'T' THEN
+      TeachersMenu.startTeacher
+    else
+      StudentsMenu.startStudent(intUserID);
   end.

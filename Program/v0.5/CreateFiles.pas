@@ -131,7 +131,7 @@ PROGRAM CraeteFiles;
     teacherClassResolverFile : FILE OF teacherClassResolverRecord;
 
     empty, ErrCode, q : LONGINT;
-    percentDone : REAL;
+    percentComplete : REAL;
 
     LogInDetails: LogInDetailsRecord;
     LogInDetailsFile : FILE OF LogInDetailsRecord;
@@ -143,7 +143,7 @@ PROGRAM CraeteFiles;
 
   procedure initialiseFiles;
     begin
-      percentDone := 0.0;
+      percentComplete := 0.0;
       total := 0;
       ASSIGN(TimeTableTextFile,'C:\ComputerScienceCoursework\Program\files\TimeTableText.txt');
       ASSIGN(TimeTableFile,'C:\ComputerScienceCoursework\Program\files\TimeTable.dta');
@@ -163,7 +163,7 @@ PROGRAM CraeteFiles;
       total := total + 51;
 
       ASSIGN(subjectFile,'C:\ComputerScienceCoursework\Program\files\subjects.dta');
-      total := total + 10;
+      total := total + 21;
 
       ASSIGN(studentClassResolverFile,'C:\ComputerScienceCoursework\Program\files\studentClassResolver.dta');
       total := total + 140;
@@ -181,8 +181,25 @@ PROGRAM CraeteFiles;
 
       ASSIGN(LogInDetailsFile,'C:\ComputerScienceCoursework\Program\files\LogInDetails.dta');
       total := total + 191;
+    end;
 
 
+  procedure closeAllFiles;
+    begin
+      close(TimeTableTextFile);
+      close(TimeTableFile);
+      close(RegisterFile);
+      close(NameFile);
+      close(StudentFile);
+      close(TeacherFile);
+      close(classFile);
+      close(subjectFile);
+      close(studentClassResolverFile);
+      close(teacherSubjectResolverFile);
+      close(teacherClassResolverFile);
+      close(FormFile);
+      close(AttendanceFile);
+      close(LogInDetailsFile);
     end;
 
   procedure CreateTimeTable;
@@ -194,7 +211,7 @@ PROGRAM CraeteFiles;
       while not EOF(TimeTableTextFile) do
         begin
           numberDone := numberDone +1;
-          percentDone := numberDone/total;
+          percentComplete := numberDone/total;
           readln(TimeTableTextFile,TimeTableInfoFromFile);
           TimeTable.ClassId := TimeTableInfoFromFile;
           repeat
@@ -222,14 +239,14 @@ PROGRAM CraeteFiles;
       for i := 0 to 3 DO
         begin
           numberDone := numberDone + 1;
-          percentDone := numberDone / total;
+          percentComplete := numberDone / total;
           //Delay(1);
           form.formID := '9' + 'AA' + Chr(i +65);
           form.NumberInForm := 0;
           write(FormFile, form);
         end;
       numberDone := numberDone + 1;
-      percentDone := numberDone / total;
+      percentComplete := numberDone / total;
       //Delay(1);
       form.formID := '12' + 'AAA';
       form.NumberInForm := 0;
@@ -305,7 +322,7 @@ PROGRAM CraeteFiles;
           else
             begin
               numberDone := numberDone +1;
-              percentDone := numberDone / total;
+              percentComplete := numberDone / total;
               for c := 0 TO 269 DO
                 dayReturnArray[c] := -1;
               Search.SearchFunctions('L',0,269,IntToStr(DayOfWeek(StrToDate(startDate)+b-1)),dayArray,dayReturnArray,empty);
@@ -393,8 +410,8 @@ PROGRAM CraeteFiles;
             else
               begin
                 numberDone := numberDone +1;
-                percentDone := numberDone / total;
-                for c := 0 TO 310 DO
+                percentComplete := numberDone / total;
+                for c := 0 TO 320 DO
                   dayReturnArray[c] := -1;
                 Search.SearchFunctions('L',269,320,IntToStr(DayOfWeek(StrToDate(startDate)+b-1)),dayArray,dayReturnArray,empty);
                 a := 0;
@@ -477,7 +494,7 @@ PROGRAM CraeteFiles;
             end;
           a := a + 1;
           numberDone:= numberDone +1;
-          percentDone := numberDone/total;
+          percentComplete := numberDone/total;
           Student.StudentID := i;
           READLN(NameFile, student.fname);
           READLN(NameFile, student.sname);
@@ -499,7 +516,7 @@ PROGRAM CraeteFiles;
       for i := 120 to 139 DO
         begin
           numberDone := numberDone +1;
-          percentDone := numberDone/total;
+          percentComplete := numberDone/total;
           Student.StudentID := i;
           READLN(NameFile, student.fname);
           READLN(NameFile, student.sname);
@@ -530,7 +547,7 @@ PROGRAM CraeteFiles;
       for i := 0 TO 50 DO
         begin
             numberDone := numberDone + 1;
-            percentDone := numberDone / total;
+            percentComplete := numberDone / total;
             READLN(NameFile, teacher.Fname);
             READLN(NameFile, teacher.Sname);
             Teacher.TeacherID := teacher.FName[1]+teacher.SName[1]+teacher.SName[2];
@@ -563,7 +580,7 @@ PROGRAM CraeteFiles;
             LogInDetails.Passwowrd := student.Pword;
             write(LogInDetailsFile,LogInDetails);
             numberDone := numberDone +1;
-            percentDone := numberDone/total;
+            percentComplete := numberDone/total;
           end;
         while not EOF(TeacherFile) do
           begin
@@ -573,25 +590,25 @@ PROGRAM CraeteFiles;
             LogInDetails.Passwowrd := teacher.Pword;
             write(LogInDetailsFile,LogInDetails);
             numberDone := numberDone +1;
-            percentDone := numberDone/total;
+            percentComplete := numberDone/total;
           end;
 
       end;
 
 
   PROCEDURE createSubjects;
-    const subjID : ARRAY[0..19] OF STRING[3] = ('Cs','Ma','Mu','Enl','Gg','Ch','Ph','Bi','DT','Dr',
-                                                'Lf','Rpe','Fr','Hi','Gm','Bs','Ar','Py','Pe','Sp');
-          subjNm : ARRAY[0..19] OF STRING[20] = ('Computer Science','Maths','Music','English','Geography','Chemistry','Physics','Biology','Design Technology','Drama',
-                                                'Life Skills','Religion, Philosophy & Ethics','French','History','German','Business Studies','Art','Physcology','Physical Education','Spanish');
+    const subjID : ARRAY[0..20] OF STRING[3] = ('Cs','Ma','Mu','Enl','Gg','Ch','Ph','Bi','DT','Dr',
+                                                'Lf','Rpe','Fr','Hi','Gm','Bs','Ar','Py','Pe','Sp','So');
+          subjNm : ARRAY[0..20] OF STRING[20] = ('Computer Science','Maths','Music','English','Geography','Chemistry','Physics','Biology','Design Technology','Drama',
+                                                'Life Skills','Religion, Philosophy & Ethics','French','History','German','Business Studies','Art','Physcology','Physical Education','Spanish','Sociology');
     var i : LONGINT;
     begin
       reset(SubjectFile);
       REWRITE(SubjectFile);
-      for i := 0 TO 9 do
+      for i := 0 TO 20 do
         begin
           numberDone := numberDone +1;
-          percentDone := numberDone / total;
+          percentComplete := numberDone / total;
           //Delay(1);
           with subject do
             begin
@@ -606,7 +623,7 @@ PROGRAM CraeteFiles;
     const yNineClassArray : ARRAY[0..43] OF STRING = ('9AT1/Ch', '9AT2/Ch', '9AT1/Bi', '9AT2/Bi', '9AT1/Ph', '9AT2/Ph', '9AAX/Ma', '9AAY/Ma', '9AAX/Enl', '9AAY/Enl', '9AAX/Lf', '9AAY/Lf',
           '9AAX/RPE', '9AAY/RPE', '9AP1/Pe', '9AP2/Pe', '9BT1/Ch', '9BT2/Ch', '9BT1/Bi', '9BT2/Cp', '9BT1/Ph', '9BT2/Ph',
           '9BAX/Ma', '9BAY/Ma', '9BAX/Enl', '9BAY/Enl', '9BAX/Lf', '9BAY/Lf', '9BAX/RPE', '9BAY/RPE', '9BP1/Pe', '9BP2/Pe', '9B/Fr1', '9B/Sp1', '9B/Gg1', '9B/Hi1', '9C/Dr1', '9C/Ar1', '9C/Py1',
-          '9C/Dt1', '9D/Cp1', '9D/Bs1', '9D/Mu1', '9D/Gm1');
+          '9C/Dt1', '9D/So1', '9D/Bs1', '9D/Mu1', '9D/Gm1');
           yTwelveClassArray : ARRAY[0..6] OF STRING = ('12A/Ph1','12A/Py1','12B/Ph1','12C/Cp1','12C/Py1','12D/Mu1','12D/Cp1');
       VAR i : LONGINT;
       begin
@@ -615,7 +632,7 @@ PROGRAM CraeteFiles;
         for i := 0 TO 43 DO
           begin
             numberDone := numberDone + 1;
-            percentDone := numberDone/total;
+            percentComplete := numberDone/total;
             sClass.ClassID := yNineClassArray[i];
             sClass.year := 9;
             sClass.NoOfStudents := 0;
@@ -637,7 +654,7 @@ PROGRAM CraeteFiles;
         for i := 0 TO 6 DO
           begin
             numberDone:= numberDone +1;
-            percentDone := numberDone/total;
+            percentComplete := numberDone/total;
             sClass.ClassId := yTwelveClassArray[i];
             sClass.year := 12;
             sClass.NoOfStudents := 0;
@@ -656,7 +673,7 @@ PROGRAM CraeteFiles;
     const yNineClassArray : ARRAY[0..43] OF STRING = ('9AT1/Ch', '9AT2/Ch', '9AT1/Bi', '9AT2/Bi', '9AT1/Ph', '9AT2/Ph', '9AAX/Ma', '9AAY/Ma', '9AAX/Enl', '9AAY/Enl', '9AAX/Lf', '9AAY/Lf',
           '9AAX/RPE', '9AAY/RPE', '9AP1/Pe', '9AP2/Pe', '9BT1/Ch', '9BT2/Ch', '9BT1/Bi', '9BT2/Cp', '9BT1/Ph', '9BT2/Ph',
           '9BAX/Ma', '9BAY/Ma', '9BAX/Enl', '9BAY/Enl', '9BAX/Lf', '9BAY/Lf', '9BAX/RPE', '9BAY/RPE', '9BP1/Pe', '9BP2/Pe', '9B/Fr1', '9B/Sp1', '9B/Gg1', '9B/Hi1', '9C/Dr1', '9C/Ar1', '9C/Py1',
-          '9C/Dt1', '9D/Cp1', '9D/Bs1', '9D/Mu1', '9D/Gm1');
+          '9C/Dt1', '9D/So1', '9D/Bs1', '9D/Mu1', '9D/Gm1');
           yTwelveClassArray : ARRAY[0..6] OF STRING = ('12A/Ph1','12A/Py1','12B/Ph1','12C/Cp1','12C/Py1','12D/Mu1','12D/Cp1');
     VAR startPoint, randomChoiceClass, i,d,l : LONGINT;
         returnArray : ARRAY[0..50] OF LONGINT;
@@ -701,7 +718,7 @@ PROGRAM CraeteFiles;
     const yNineClassArray : ARRAY[0..43] OF STRING = ('9AT1/Ch', '9AT2/Ch', '9AT1/Bi', '9AT2/Bi', '9AT1/Ph', '9AT2/Ph', '9AAX/Ma', '9AAY/Ma', '9AAX/Enl', '9AAY/Enl', '9AAX/Lf', '9AAY/Lf',
           '9AAX/RPE', '9AAY/RPE', '9AP1/Pe', '9AP2/Pe', '9BT1/Ch', '9BT2/Ch', '9BT1/Bi', '9BT2/Cp', '9BT1/Ph', '9BT2/Ph',
           '9BAX/Ma', '9BAY/Ma', '9BAX/Enl', '9BAY/Enl', '9BAX/Lf', '9BAY/Lf', '9BAX/RPE', '9BAY/RPE', '9BP1/Pe', '9BP2/Pe', '9B/Fr1', '9B/Sp1', '9B/Gg1', '9B/Hi1', '9C/Dr1', '9C/Ar1', '9C/Py1',
-          '9C/Dt1', '9D/Cp1', '9D/Bs1', '9D/Mu1', '9D/Gm1');
+          '9C/Dt1', '9D/So1', '9D/Bs1', '9D/Mu1', '9D/Gm1');
           yTwelveClassArray : ARRAY[0..6] OF STRING = ('12A/Ph1','12A/Py1','12B/Ph1','12C/Cp1','12C/Py1','12D/Mu1','12D/Cp1');
     var returnArray : ARRAY[0..51] OF LONGINT;
         yearArray : ARRAY[0..30] OF LONGINT;
@@ -721,7 +738,7 @@ PROGRAM CraeteFiles;
       while not(eof(StudentFile)) do
         begin
           numberDone := numberDone+1;
-          percentDone := numberDone/total;
+          percentComplete := numberDone/total;
           READ(StudentFile,student);
           studentClassResolver.studentID := student.StudentID;
           if student.year = 9 THEN
@@ -835,7 +852,7 @@ PROGRAM CraeteFiles;
       while not EOF(TeacherFile) DO
         begin
           numberDone := numberDone+ 1;
-          percentDone := numberDone / total;
+          percentComplete := numberDone / total;
           //Delay(1);
           read(TeacherFile,teacher);
           read(classFile,sClass);
@@ -852,7 +869,7 @@ PROGRAM CraeteFiles;
       while not(eof(classFile)) DO
         begin
           numberDone := numberDone+1;
-          percentDone := numberDone / total;
+          percentComplete := numberDone / total;
           read(classFile,sClass);
           read(teacherfile, teacher);
           teacherClassResolver.teacherID := teacher.teacherID;
@@ -868,7 +885,7 @@ PROGRAM CraeteFiles;
     randomize;
     // writeln('start');
     initialiseFiles;
-    loading.startLoading('P',percentDone);
+    loading.startLoading('P',percentComplete);
     //delay(1000);
     //writeln('timetable');
     CreateTimetable;
@@ -907,4 +924,5 @@ PROGRAM CraeteFiles;
     //DisplayErrorScrn.ErrScr;
     createLogInFile;
     readln;
+    closeAllFiles;
   end.

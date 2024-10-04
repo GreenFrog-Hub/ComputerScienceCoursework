@@ -1,4 +1,5 @@
 unit LogInProcedures;
+{$M+}
   interface
 
     USES crt, sysutils, FileProcedures;
@@ -12,13 +13,15 @@ unit LogInProcedures;
 
     type
         logInFile = Class(Files)
-            public
+            protected
                 data : dataRecord;
                 dataFile: File OF dataRecord;
                 indexArray: ARRAY[0..190] OF LONGINT;
                 recordArray: ARRAY[0..190] OF dataRecord;
                 recordIdArray: ARRAY[0..190] OF STRING;
+            public
                 constructor Create;
+                destructor Destroy; override;
                 procedure SetData(iPersonID: STRING; iUsername: STRING; iPasswowrd: String);
                 procedure DisplayData;
                 procedure writeToFile;
@@ -43,6 +46,11 @@ unit LogInProcedures;
               end;
         end;
 
+    destructor LogInFile.Destroy;
+        begin
+            close(dataFile);
+            inherited Destroy;
+        end;
     procedure logInFile.SetData(iPersonID: STRING;
                           iUsername: STRING;
                           iPasswowrd: String);
