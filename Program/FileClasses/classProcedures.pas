@@ -13,16 +13,19 @@ unit classProcedures;
 
     type
         classFile = Class(Files)
+            private
+                dataTextFile : TextFile;
+                dataFile: File OF dataRecord;
+                indexArray: ARRAY[0..51] OF LONGINT;
+                recordArray: ARRAY[0..51] OF dataRecord;
+                recordIdArray: ARRAY[0..51] OF STRING;
             public
                 data : dataRecord;
-                dataFile: File OF dataRecord;
-                indexArray: ARRAY[0..1384] OF LONGINT;
-                recordArray: ARRAY[0..1384] OF dataRecord;
-                recordIdArray: ARRAY[0..1384] OF STRING;
                 constructor Create;
                 procedure SetData(iClassID : STRING; iYear : LONGINT; isubjectID : STRING; iNoOfStudents : LONGINT);
                 procedure DisplayData;
                 procedure displayFile;
+                procedure extractToTextFile;
                 procedure writeToFile;
                 procedure readHere;
                 procedure readFile(readFromPosition : LONGINT);
@@ -37,9 +40,10 @@ unit classProcedures;
         var a : longint;
         begin
             inherited Create;
-            ASSIGN(dataFile,'C:\ComputerScienceCoursework\Program\files\classFile.dta');
+            ASSIGN(dataFile,'C:\ComputerScienceCoursework\Program\files\classes.dta');
+            ASSIGN(dataTextFile,'C:\ComputerScienceCoursework\Program\fileOuts\classesOut.txt');
             RESET(dataFile);
-            for a := 0 TO 1384 DO
+            for a := 0 TO 51 DO
               begin
                 indexArray[a] := a;
               end;
@@ -88,6 +92,21 @@ unit classProcedures;
                 end;
         end;
 
+    procedure classFile.extractToTextFile;
+        begin
+            reset(dataFile);
+            rewrite(dataTextFile);
+            while not eof(dataFile) DO
+                begin
+                    read(dataFile, data);
+                    writeln(dataTextFile, data.ClassID);
+                    writeln(dataTextFile, data.Year);
+                    writeln(dataTextFile, data.subjectID);
+                    writeln(dataTextFile, data.NoOfStudents);
+                    writeln(dataTextFile, '');
+                end;
+        end;
+
     procedure classFile.writeToFile;
         begin
             write(dataFile, data);
@@ -116,8 +135,8 @@ unit classProcedures;
             maxStrLen : STRING;
         begin
           RESET(dataFile);
-          upper:= 1384;
-          for a := 0 TO 1384 DO
+          upper:= 51;
+          for a := 0 TO 51 DO
             begin
               READ(dataFile,data);
               recordArray[a] := data;
@@ -125,7 +144,7 @@ unit classProcedures;
             end;
         Files.sort(indexArray);
         RESET(dataFile);
-        for a := 0 TO 1384 DO
+        for a := 0 TO 51 DO
             begin
                 data := recordArray[indexArray[a]];
                 WRITE(dataFile,recordArray[indexArray[a]]);
@@ -137,20 +156,16 @@ unit classProcedures;
             var a, searchResult: LONGINT;
             begin
                 RESET(dataFile);
-                for a := 0 TO 1384 DO
+                for a := 0 TO 51 DO
                     begin
                         read(dataFile, data);
-                        writeln(ClassID);
-                        writeln(Year);
-                        writeln(subjectID);
-                        writeln(NoOfStudents);
-                        fileArray[0,a] := data.classID;
+                        fileArray[0,a] := LowerCase(data.classID);
                         Str(data.Year, fileArray[1,a]);
-                        fileArray[2,a] := data.subjectID;
+                        fileArray[2,a] := LowerCase(data.subjectID);
                         Str(data.NoOfStudents, fileArray[3,a]);
                         returnArray[a] := -1;
                     end;
-                Files.search(1384,4,searchValues, searchFields, returnArray);
+                Files.search(51,4,searchValues, searchFields, returnArray);
             end;
 
 

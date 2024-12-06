@@ -16,16 +16,19 @@ unit studentProcedures;
 
     type
         StudentFile = Class(Files)
-            public
-                data : StudentsRecord;
+            private
                 dataFile: File OF StudentsRecord;
+                dataTextFile : TextFile;
                 indexArray: ARRAY[0..139] OF LONGINT;
                 recordArray: ARRAY[0..139] OF StudentsRecord;
                 recordIdArray: ARRAY[0..139] OF STRING;
+            public
+                data : StudentsRecord;
                 constructor Create;
                 procedure SetData(StudentId : LONGINT; FirstName: STRING; SurName : STRING; SYear : LONGINT; SForm : STRING; SUname : String; SPword : String);
                 procedure DisplayData;
                 procedure displayFile;
+                procedure extractToTextFile;
                 procedure writeToFile;
                 procedure readHere;
                 procedure readFile(readFromPosition : LONGINT);
@@ -41,6 +44,7 @@ unit studentProcedures;
         begin
             inherited Create;
             ASSIGN(dataFile,'C:\ComputerScienceCoursework\Program\files\Students.dta');
+            ASSIGN(dataTextFile,'C:\ComputerScienceCoursework\Program\fileOuts\outStudents.txt');
             RESET(dataFile);
             for a := 0 TO 139 DO
               begin
@@ -103,6 +107,24 @@ unit studentProcedures;
                             writeln('-------------------------------------------------------------------------');
                         end;
                 end;
+        end;
+    
+    procedure StudentFile.extractToTextFile;
+        begin
+            reset(dataFile);
+            rewrite(dataTextFile);
+            while not eof(dataFile) do
+                begin
+                    read(dataFile, data);
+                    writeln(dataTextFile, data.StudentID);
+                    writeln(dataTextFile, data.FName);
+                    writeln(dataTextFile, data.SName);
+                    writeln(dataTextFile, data.Year);
+                    writeln(dataTextFile, data.Form);
+                    writeln(dataTextFile, data.Uname);
+                    writeln(dataTextFile, data.PWord);
+                    writeln(dataTextFile, '');
+                end; 
         end;
 
     procedure StudentFile.writeToFile;

@@ -15,17 +15,19 @@ unit attendancProcedures;
 
     type
         AttendanceFile = Class(Files)
-            public
-                data : dataRecord;
-                dataTextFile : TextFile;
+            private
                 dataFile: File OF dataRecord;
+                dataTextFile : TextFile;
                 indexArray: ARRAY[0..139] OF LONGINT;
                 recordArray: ARRAY[0..139] OF dataRecord;
                 recordIdArray: ARRAY[0..139] OF STRING;
+            public
+                data : dataRecord;
                 constructor Create;
                 procedure SetData(iStudentID : LONGINT; iAttendance : REAL; iTotal : LONGINT; iNumberPresent : LONGINT; iNumberLate : LONGINT; iNumberAbsent : LONGINT);
                 procedure DisplayData;
                 procedure displayFile;
+                procedure extractToTextFile;
                 procedure writeToFile;
                 procedure readHere;
                 procedure readFile(readFromPosition : LONGINT);
@@ -41,7 +43,7 @@ unit attendancProcedures;
         begin
             inherited Create;
             ASSIGN(dataFile,'C:\ComputerScienceCoursework\Program\files\attendanceFile.dta');
-            ASSIGN(dataTextFile,'C:\ComputerScienceCoursework\Program\files\attendanceOut.txt');
+            ASSIGN(dataTextFile,'C:\ComputerScienceCoursework\Program\fileOuts\attendanceOut.txt');
             RESET(dataFile);
             for a := 0 TO 139 DO
               begin
@@ -83,7 +85,6 @@ unit attendancProcedures;
         var a : LONGINT;
         begin
             reset(dataFile);
-            REWRITE(dataTextFile);
             while not (eof(dataFile)) do
                 begin
                     READ(dataFile,data);
@@ -97,14 +98,24 @@ unit attendancProcedures;
                             writeln(NumberAbsent);
                             writeln('-------------------------------------------------------------------------');
                         end;
-                        writeln(dataTextFile, data.StudentID);
-                        writeln(dataTextFile, data.Attendance);
-                        writeln(dataTextFile, data.Total);
-                        writeln(dataTextFile, data.NumberPresent);
-                        writeln(dataTextFile, data.NumberLate);
-                        writeln(dataTextFile, data.NumberAbsent);
-                        writeln(dataTextFile, '');
                 end;
+        end;
+    
+    procedure AttendanceFile.extractToTextFile;
+        begin
+            reset(dataFile);
+            rewrite(dataTextFile);
+            while not eof(dataFile) do
+                begin
+                    read(dataFile, data);
+                    writeln(dataTextFile, data.StudentID);
+                    writeln(dataTextFile, data.Attendance);
+                    writeln(dataTextFile, data.Total);
+                    writeln(dataTextFile, data.NumberPresent);
+                    writeln(dataTextFile, data.NumberLate);
+                    writeln(dataTextFile, data.NumberAbsent);
+                    writeln(dataTextFile, '');
+                end; 
         end;
 
     procedure AttendanceFile.writeToFile;

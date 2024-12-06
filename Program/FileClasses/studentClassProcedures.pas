@@ -11,17 +11,19 @@ unit studentClassProcedures;
 
     type
         studentClassFile = Class(Files)
-            public
-                data : dataRecord;
+            private
                 dataTextFile : TextFile;
                 dataFile: File OF dataRecord;
                 indexArray: ARRAY[0..1384] OF LONGINT;
                 recordArray: ARRAY[0..1384] OF dataRecord;
                 recordIdArray: ARRAY[0..1384] OF STRING;
+            public
+                data : dataRecord;
                 constructor Create;
                 procedure SetData(iStudentID : LONGINT; iClassID : STRING);
                 procedure DisplayData;
                 procedure displayFile;
+                procedure extractToTextFile;
                 procedure writeToFile;
                 procedure readHere;
                 procedure readFile(readFromPosition : LONGINT);
@@ -37,7 +39,7 @@ unit studentClassProcedures;
         begin
             inherited Create;
             ASSIGN(dataFile,'C:\ComputerScienceCoursework\Program\files\studentClassResolver.dta');
-            ASSIGN(dataTextFile,'C:\ComputerScienceCoursework\Program\files\out.txt');
+            ASSIGN(dataTextFile,'C:\ComputerScienceCoursework\Program\fileOuts\outStudentClass.txt');
             RESET(dataFile);
             for a := 0 TO 1384 DO
               begin
@@ -81,6 +83,19 @@ unit studentClassProcedures;
                     writeln(dataTextFile, IntToStr(data.StudentID));
                 end;
             close(dataTextFile);
+        end;
+    
+    procedure studentClassFile.extractToTextFile;
+        begin
+            reset(dataFile);
+            rewrite(dataTextFile);
+            while not eof(dataFile) do
+                begin
+                    read(dataFile, data);
+                    writeln(dataTextFile, data.ClassID);
+                    writeln(dataTextFile, data.StudentID);
+                    writeln(dataTextFile, '');
+                end; 
         end;
 
     procedure studentClassFile.writeToFile;

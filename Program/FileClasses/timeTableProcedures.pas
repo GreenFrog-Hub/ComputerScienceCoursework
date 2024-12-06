@@ -1,28 +1,32 @@
-unit classProcedures;
+unit timeTableProcedures;
   interface
 
     USES crt, sysutils, FileProcedures;
 
     TYPE
-        dataRecord = RECORD
+        TimeTableRecord = RECORD
+                          Day : LONGINT;
+                          LessonNo : LONGINT;
                           ClassID : STRING[8];
-                          Year : LONGINT;
-                          subjectID : STRING[3];
-                          NoOfStudents : LONGINT;
                         end;
 
     type
-        classFile = Class(Files)
+        TimeTableFile = Class(Files)
+            private
+                dataFile: File OF TimeTableRecord;
+                dataTextFile : TextFile;
+                indexArray: ARRAY[0..320] OF LONGINT;
+                recordArray: ARRAY[0..320] OF TimeTableRecord;
+                recordIdArray: ARRAY[0..320] OF STRING;
             public
-                data : dataRecord;
-                dataFile: File OF dataRecord;
-                indexArray: ARRAY[0..51] OF LONGINT;
-                recordArray: ARRAY[0..51] OF dataRecord;
-                recordIdArray: ARRAY[0..51] OF STRING;
+                data : TimeTableRecord;
                 constructor Create;
-                procedure SetData(iClassID : STRING; iYear : LONGINT; isubjectID : STRING; iNoOfStudents : LONGINT);
+                procedure SetData(iDay : LONGINT;
+                          iLessonNo : LONGINT;
+                          iClassID : STRING);
                 procedure DisplayData;
                 procedure displayFile;
+                procedure extractToTextFile;
                 procedure writeToFile;
                 procedure readHere;
                 procedure readFile(readFromPosition : LONGINT);
@@ -33,44 +37,58 @@ unit classProcedures;
 
     IMPLEMENTATION
 
-    constructor classFile.Create;
+    constructor TimeTableFile.Create;
         var a : longint;
         begin
             inherited Create;
-            ASSIGN(dataFile,'C:\ComputerScienceCoursework\Program\files\classes.dta');
+            ASSIGN(dataFile,'C:\ComputerScienceCoursework\Program\files\TimeTable.dta');
+            ASSIGN(dataTextFile,'C:\ComputerScienceCoursework\Program\fileOuts\outTimeTable.txt');
             RESET(dataFile);
-            for a := 0 TO 51 DO
+            for a := 0 TO 319 DO
               begin
                 indexArray[a] := a;
               end;
         end;
 
-    procedure classFile.SetData(iClassID : STRING; iYear : LONGINT; isubjectID : STRING; iNoOfStudents : LONGINT);
+    procedure TimeTableFile.SetData(iDay : LONGINT;
+                          iLessonNo : LONGINT;
+                          iClassID : STRING);
+
         begin
             with data do
                 begin
+                    Day := iDay;
+                    LessonNo := iLessonNo;
                     ClassID := iClassID;
-                    Year := iYear;
-                    subjectID := isubjectID;
-                    NoOfStudents := iNoOfStudents;
                 end;
         end;
 
-
-
-    procedure classFile.DisplayData;
+    procedure TimeTableFile.DisplayData;
         begin
         with data do
             begin
+                writeln(day);
+                writeln(lessonNo);
                 writeln(ClassID);
-                writeln(Year);
-                writeln(subjectID);
-                writeln(NoOfStudents);
                 writeln('-------------------------------------------------------------------------');
             end;
         end;
 
-    procedure classFile.displayFile;
+    procedure TimeTableFile.extractToTextFile;
+        begin
+            reset(dataFile);
+            rewrite(dataTextFile);
+            while not eof(dataFile) do
+                begin
+                    read(dataFile, data);
+                    writeln(dataTextFile, data.day);
+                    writeln(dataTextFile, data.lessonNo);
+                    writeln(dataTextFile, data.ClassID);
+                    writeln(dataTextFile, '');
+                end; 
+        end;
+
+    procedure TimeTableFile.displayFile;
         var a : LONGINT;
         begin
             reset(dataFile);
@@ -79,22 +97,21 @@ unit classProcedures;
                     READ(dataFile,data);
                     with data do
                         begin
+                            writeln(day);
+                            writeln(lessonNo);
                             writeln(ClassID);
-                            writeln(Year);
-                            writeln(subjectID);
-                            writeln(NoOfStudents);
                             writeln('-------------------------------------------------------------------------');
                         end;
                 end;
         end;
 
-    procedure classFile.writeToFile;
+    procedure TimeTableFile.writeToFile;
         begin
             write(dataFile, data);
         end;
 
 
-    procedure classFile.readHere;
+    procedure TimeTableFile.readHere;
         begin
             if FIlePos(dataFile) < FileSize(dataFile) then
                 begin
@@ -102,7 +119,7 @@ unit classProcedures;
                 end;
         end;
 
-    procedure classFile.readFile(readFromPosition : LONGINT);
+    procedure TimeTableFile.readFile(readFromPosition : LONGINT);
         begin
             if readFromPosition < FileSize(dataFile) then
                 begin
@@ -111,21 +128,21 @@ unit classProcedures;
                 end;
         end;
 
-    procedure classFile.sort;
+    procedure TimeTableFile.sort;
         var a,b : LONGINT;
             maxStrLen : STRING;
         begin
           RESET(dataFile);
-          upper:= 51;
-          for a := 0 TO 51 DO
+          upper:= 319;
+          for a := 0 TO 319 DO
             begin
               READ(dataFile,data);
               recordArray[a] := data;
-              dataArray[a] := Format('%'+'8'+'s',[(data.classID)]);
+              dataArray[a] := IntToStr(data.day);
             end;
         Files.sort(indexArray);
         RESET(dataFile);
-        for a := 0 TO 51 DO
+        for a := 0 TO 319 DO
             begin
                 data := recordArray[indexArray[a]];
                 WRITE(dataFile,recordArray[indexArray[a]]);
@@ -133,20 +150,21 @@ unit classProcedures;
 
         end;
 
-        procedure classFile.search(searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE; var returnArray : ARRAY OF LONGINT);
+        procedure TimeTableFile.search(searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE; var returnArray : ARRAY OF LONGINT);
             var a, searchResult: LONGINT;
             begin
                 RESET(dataFile);
-                for a := 0 TO 51 DO
+                for a := 0 TO 319 DO
                     begin
                         read(dataFile, data);
-                        fileArray[0,a] := data.classID;
-                        Str(data.Year, fileArray[1,a]);
-                        fileArray[2,a] := data.subjectID;
-                        Str(data.NoOfStudents, fileArray[3,a]);
+                        if a > 310 THEN
+                          write;
+                        Str(data.day, fileArray[0,a]);
+                        Str(data.LessonNo, fileArray[1,a]);
+                        fileArray[2,a] := data.ClassID;
                         returnArray[a] := -1;
                     end;
-                Files.search(51,4,searchValues, searchFields, returnArray);
+                Files.search(319,3,searchValues, searchFields, returnArray);
             end;
 
 

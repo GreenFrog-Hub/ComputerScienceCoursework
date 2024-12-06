@@ -13,16 +13,19 @@ unit LogInProcedures;
 
     type
         logInFile = Class(Files)
-              public
-                data : dataRecord;
+              private
                 dataFile: File OF dataRecord;
+                dataTextFile : TextFile;
                 indexArray: ARRAY[0..190] OF LONGINT;
                 recordArray: ARRAY[0..190] OF dataRecord;
                 recordIdArray: ARRAY[0..190] OF STRING;
+              public
+                data : dataRecord;
                 constructor Create;
                 destructor Destroy; override;
                 procedure SetData(iPersonID: STRING; iUsername: STRING; iPasswowrd: String);
                 procedure DisplayData;
+                procedure extractToTextFile;
                 procedure writeToFile;
                 procedure readHere;
                 procedure readFile(readFromPosition : LONGINT);
@@ -38,6 +41,7 @@ unit LogInProcedures;
         begin
             inherited Create;
             ASSIGN(dataFile,'C:\ComputerScienceCoursework\Program\files\LogInDetails.dta');
+            ASSIGN(dataTextFile,'C:\ComputerScienceCoursework\Program\fileOuts\logInOut.txt');
             RESET(dataFile);
             for a := 0 TO 190 DO
               begin
@@ -72,6 +76,20 @@ unit LogInProcedures;
                 writeln(Passwowrd);
                 writeln('-------------------------------------------------------------------------');
             end;
+        end;
+
+    procedure logInFile.extractToTextFile;
+        begin
+            reset(dataFile);
+            rewrite(dataTextFile);
+            while not eof(dataFile) DO
+                begin
+                    read(dataFile, data);
+                    writeln(dataTextFile, data.PersonID);
+                    writeln(dataTextFile, data.Username);
+                    writeln(dataTextFile, data.Passwowrd);
+                    writeln(dataTextFile, '');
+                end;
         end;
 
     procedure logInFile.writeToFile;

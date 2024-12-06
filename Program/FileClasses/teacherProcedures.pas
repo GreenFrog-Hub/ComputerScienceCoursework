@@ -15,15 +15,18 @@ unit teacherProcedures;
 
     type
         TeacherFile = Class(Files)
-            public
-                data : TeacherRecord;
+            private
                 dataFile: File OF TeacherRecord;
+                dataTextFile : TextFile;
                 indexArray: ARRAY[0..50] OF LONGINT;
                 recordArray: ARRAY[0..50] OF TeacherRecord;
                 recordIdArray: ARRAY[0..50] OF STRING;
+            public
+                data : TeacherRecord;
                 constructor Create;
                 procedure SetData(TeacherID : LONGINT; FirstName: STRING; SurName : STRING; SForm : STRING; SUname : String; SPword : String);
                 procedure DisplayData;
+                procedure extractToTextFile;
                 procedure writeToFile;
                 procedure readHere;
                 procedure readFile(readFromPosition : LONGINT);
@@ -39,6 +42,7 @@ unit teacherProcedures;
         begin
             inherited Create;
             ASSIGN(dataFile,'C:\ComputerScienceCoursework\Program\files\Teachers.dta');
+            ASSIGN(dataTextFile,'C:\ComputerScienceCoursework\Program\fileOuts\outTeachers.txt');
             RESET(dataFile);
             for a := 0 TO 139 DO
               begin
@@ -77,6 +81,23 @@ unit teacherProcedures;
                 writeln(PWord);
                 writeln('-------------------------------------------------------------------------');
             end;
+        end;
+    
+    procedure TeacherFile.extractToTextFile;
+        begin
+            reset(dataFile);
+            rewrite(dataTextFile);
+            while not eof(dataFile) do
+                begin
+                    read(dataFile, data);
+                    writeln(dataTextFile, data.TeacherID);
+                    writeln(dataTextFile, data.FName);
+                    writeln(dataTextFile, data.SName);
+                    writeln(dataTextFile, data.Form);
+                    writeln(dataTextFile, data.Uname);
+                    writeln(dataTextFile, data.PWord);
+                    writeln(dataTextFile, '');
+                end; 
         end;
 
     procedure TeacherFile.writeToFile;

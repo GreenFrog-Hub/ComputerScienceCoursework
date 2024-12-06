@@ -1,15 +1,20 @@
 PROGRAM dayTesting;
   uses crt, sysutils;
 
-  var i : LONGINT;
+  var day, i : LONGINT;
     startDate : STRING;
 
+
   begin
-    startDate := '23/09/2024';
+    writeln(LowerCase('9ABC'));
+    readln;
+    startDate := '4/11/2024';
     for i := 0 TO 14 DO
       begin
-        writeln(DayOfWeek(StrToDate(startDate)+i-1));
-        writeln('i: ', i);
+        writeln(DateToStr(StrToDate(startDate)+i),':',DayOfWeek(StrToDate(startDate)+i-1));
+        //writeln('i: ', i);
       end;
+    //day := DayOfWeek(Date-1);
+    //writeln('day:' ,day);
     readln;
   end.

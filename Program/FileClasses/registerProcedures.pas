@@ -19,18 +19,20 @@ unit registerProcedures;
 
     type
         registerFile = Class(Files)
-            public
-                studentRegisterMark : studentRegisterMarkRecord;
-                data : dataRecord;
-                dataTextFile : TextFile;
+            private
                 dataFile: File OF dataRecord;
+                dataTextFile : TextFile;
                 indexArray: ARRAY[0..1000] OF LONGINT;
                 recordArray: ARRAY[0..1000] OF dataRecord;
                 recordIdArray: ARRAY[0..1000] OF STRING;
+                studentRegisterMark : studentRegisterMarkRecord;
+            public
+                data : dataRecord;
                 constructor Create;
                 procedure SetData(iRegisterID : STRING; iLessonNo : LONGINT; iDate : TDateTime; iClassID : STRING; iRegisterMarks : ARRAY OF studentRegisterMarkRecord; iisOfstedRegister : BOOLEAN);
                 procedure DisplayData;
                 procedure displayFile;
+                procedure extractToTextFile;
                 procedure writeToFile;
                 procedure readHere;
                 procedure readFile(readFromPosition : LONGINT);
@@ -117,7 +119,19 @@ unit registerProcedures;
                             writeln(isOfstedRegister);
                             writeln('-------------------------------------------------------------------------');
                         end;
-                        writeln(dataTextFile, data.RegisterID);
+                        
+                end;
+        end;
+    
+    procedure registerFile.extractToTextFile;
+        var i : LONGINT;
+        begin
+            reset(dataFile);
+            rewrite(dataTextFile);
+            while not eof(dataFile) do
+                begin
+                    read(dataFile, data);
+                    writeln(dataTextFile, data.RegisterID);
                         writeln(dataTextFile, IntToStr(data.LessonNo));
                         writeln(dataTextFile, DateTimeToStr(data.Date));
                         writeln(dataTextFile, data.classID);
@@ -125,12 +139,15 @@ unit registerProcedures;
                         for i := 0 TO 101 DO
                             begin
                                 studentRegisterMark := data.RegisterMarks[i];
-                                writeln(dataTextFile, studentRegisterMark.studentID);
-                                writeln(dataTextFile, studentRegisterMark.RegisterMark);
+                                write(dataTextFile, '[');
+                                write(dataTextFile, studentRegisterMark.studentID);
+                                write(dataTextFile, ',');
+                                write(dataTextFile, studentRegisterMark.RegisterMark);
+                                writeln(dataTextFile, ']');
                             end;
                         writeln(dataTextFile, '}');
                         writeln(dataTextFile, data.isOfstedRegister);
-                end;
+                end; 
         end;
 
     procedure registerFile.writeToFile;
