@@ -20,6 +20,7 @@ unit studentClassProcedures;
             public
                 data : dataRecord;
                 constructor Create;
+                destructor Destroy; override;
                 procedure SetData(iStudentID : LONGINT; iClassID : STRING);
                 procedure DisplayData;
                 procedure displayFile;
@@ -47,6 +48,12 @@ unit studentClassProcedures;
               end;
         end;
 
+    destructor studentClassFile.Destroy;
+        begin
+            close(dataFile);
+            inherited Destroy;
+        end;
+    
     procedure studentClassFile.SetData(iStudentID : LONGINT; iClassID : STRING);
         begin
             with data do

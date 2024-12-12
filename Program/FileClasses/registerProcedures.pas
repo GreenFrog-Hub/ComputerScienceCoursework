@@ -29,6 +29,7 @@ unit registerProcedures;
             public
                 data : dataRecord;
                 constructor Create;
+                destructor Destroy; override;
                 procedure SetData(iRegisterID : STRING; iLessonNo : LONGINT; iDate : TDateTime; iClassID : STRING; iRegisterMarks : ARRAY OF studentRegisterMarkRecord; iisOfstedRegister : BOOLEAN);
                 procedure DisplayData;
                 procedure displayFile;
@@ -56,6 +57,12 @@ unit registerProcedures;
               end;
         end;
 
+    destructor registerFile.Destroy;
+        begin
+            close(dataFile);
+            inherited Destroy;
+        end;
+    
     procedure registerFile.SetData(iRegisterID : STRING; iLessonNo : LONGINT; iDate : TDateTime; iClassID : STRING; iRegisterMarks : ARRAY OF studentRegisterMarkRecord; iisOfstedRegister : BOOLEAN);
         begin
             with data do

@@ -25,6 +25,7 @@ unit studentProcedures;
             public
                 data : StudentsRecord;
                 constructor Create;
+                destructor Destroy; override;
                 procedure SetData(StudentId : LONGINT; FirstName: STRING; SurName : STRING; SYear : LONGINT; SForm : STRING; SUname : String; SPword : String);
                 procedure DisplayData;
                 procedure displayFile;
@@ -52,6 +53,12 @@ unit studentProcedures;
               end;
         end;
 
+    destructor StudentFile.Destroy;
+        begin
+            close(dataFile);
+            inherited Destroy;
+        end;
+    
     procedure StudentFile.SetData(StudentId : LONGINT;
                           FirstName : STRING;
                           SurName : STRING;

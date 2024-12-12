@@ -22,6 +22,7 @@ unit classProcedures;
             public
                 data : dataRecord;
                 constructor Create;
+                destructor Destroy; override;
                 procedure SetData(iClassID : STRING; iYear : LONGINT; isubjectID : STRING; iNoOfStudents : LONGINT);
                 procedure DisplayData;
                 procedure displayFile;
@@ -47,6 +48,12 @@ unit classProcedures;
               begin
                 indexArray[a] := a;
               end;
+        end;
+
+    destructor classFile.Destroy;
+        begin
+            close(dataFile);
+            inherited Destroy;
         end;
 
     procedure classFile.SetData(iClassID : STRING; iYear : LONGINT; isubjectID : STRING; iNoOfStudents : LONGINT);

@@ -21,6 +21,7 @@ unit timeTableProcedures;
             public
                 data : TimeTableRecord;
                 constructor Create;
+                destructor Destroy; override;
                 procedure SetData(iDay : LONGINT;
                           iLessonNo : LONGINT;
                           iClassID : STRING);
@@ -50,6 +51,12 @@ unit timeTableProcedures;
               end;
         end;
 
+    destructor TimeTableFile.Destroy;
+        begin
+            close(dataFile);
+            inherited Destroy;
+        end;
+    
     procedure TimeTableFile.SetData(iDay : LONGINT;
                           iLessonNo : LONGINT;
                           iClassID : STRING);

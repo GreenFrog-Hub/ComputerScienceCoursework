@@ -24,6 +24,7 @@ unit attendancProcedures;
             public
                 data : dataRecord;
                 constructor Create;
+                destructor Destroy; override;
                 procedure SetData(iStudentID : LONGINT; iAttendance : REAL; iTotal : LONGINT; iNumberPresent : LONGINT; iNumberLate : LONGINT; iNumberAbsent : LONGINT);
                 procedure DisplayData;
                 procedure displayFile;
@@ -49,6 +50,12 @@ unit attendancProcedures;
               begin
                 indexArray[a] := a;
               end;
+        end;
+    
+    destructor AttendanceFile.Destroy;
+        begin
+            close(dataFile);
+            inherited Destroy;
         end;
 
     procedure AttendanceFile.SetData(iStudentID : LONGINT; iAttendance : REAL; iTotal : LONGINT; iNumberPresent : LONGINT; iNumberLate : LONGINT; iNumberAbsent : LONGINT);

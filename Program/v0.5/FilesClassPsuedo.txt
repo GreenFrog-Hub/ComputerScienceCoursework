@@ -1,0 +1,74 @@
+unit FileProcedures
+
+class Files
+  protected upper
+  protected array dataArray[1400]
+  protected array fileArray[7,1400]
+
+  protected procedure new()
+  endprocedure
+  
+  protected procedure destroy()
+  endprocedure
+  
+  // Bubble Sort Algorithm
+  protected procedure sort(var indexArray)
+    upper = upper - 1
+    repeat
+        Swaps = FALSE
+        for i = 0 to upper do
+            // Check if the current element is greater than the next element
+            if dataArray[i] > dataArray[i + 1] then
+                // Swap elements in dataArray
+                TempStr = dataArray[i]
+                dataArray[i] = dataArray[i + 1]
+                dataArray[i + 1] = TempStr
+                Swaps = TRUE
+
+                // Swap corresponding elements in indexArray
+                TempIndex = indexArray[i]
+                indexArray[i] = indexArray[i + 1]
+                indexArray[i + 1] = TempIndex
+            endif
+        next i
+        upper = upper - 1
+    until !Swaps OR upper < 0
+  endprocedure
+  
+  // Linear Search Algorithm
+  protected procedure sort(max, fields, searchValues, searchFields, var returnArray)
+    a = -1
+    returnIndex = 0
+
+    // Check every value in the 2D array
+    while a < max do
+        a = a + 1
+        // Check each item in the record
+        for b = 0 to fields - 1 do
+            data = toLower(fileArray[b][a])
+            // Check if one piece of data matches
+            if data == toLower(searchValues[0]) then
+                found = TRUE
+                // Check each piece of data in the record
+                for c = 0 to LEN(searchFields) - 1 do
+                    data = toLower(fileArray[searchFields[c]][a])
+                    // If not all data matches, continue searching
+                    if toLower(searchValues[c]) != data then
+                        found = FALSE
+                        break
+                    endif
+                next c
+                // If all data matches, add index to returnArray
+                if found == TRUE then
+                    returnArray[returnIndex] = a
+                    returnIndex = returnIndex + 1
+                    break
+                endif
+            endif
+        next b
+    endwhile
+  endprocedure
+
+endclass
+
+  

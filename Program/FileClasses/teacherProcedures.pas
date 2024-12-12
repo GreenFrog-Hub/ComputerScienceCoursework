@@ -24,6 +24,7 @@ unit teacherProcedures;
             public
                 data : TeacherRecord;
                 constructor Create;
+                destructor Destroy; override;
                 procedure SetData(TeacherID : LONGINT; FirstName: STRING; SurName : STRING; SForm : STRING; SUname : String; SPword : String);
                 procedure DisplayData;
                 procedure extractToTextFile;
@@ -50,6 +51,12 @@ unit teacherProcedures;
               end;
         end;
 
+    destructor TeacherFile.Destroy;
+        begin
+            close(dataFile);
+            inherited Destroy;
+        end;
+    
     procedure TeacherFile.SetData(TeacherID : LONGINT;
                           FirstName : STRING;
                           SurName : STRING;
