@@ -1,6 +1,6 @@
 PROGRAM stringEqualsTesting;
   begin
-    if 'a' = 'a' THEN
+    if 'c' > 'a' THEN
       writeln('t')
     else
       writeln('f');

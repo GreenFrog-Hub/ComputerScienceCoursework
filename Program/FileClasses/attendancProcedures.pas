@@ -46,6 +46,7 @@ unit attendancProcedures;
             ASSIGN(dataFile,'C:\ComputerScienceCoursework\Program\files\attendanceFile.dta');
             ASSIGN(dataTextFile,'C:\ComputerScienceCoursework\Program\fileOuts\attendanceOut.txt');
             RESET(dataFile);
+            RESET(dataTextFile);
             for a := 0 TO 139 DO
               begin
                 indexArray[a] := a;
@@ -55,6 +56,7 @@ unit attendancProcedures;
     destructor AttendanceFile.Destroy;
         begin
             close(dataFile);
+            close(dataTextFile);
             inherited Destroy;
         end;
 
@@ -164,8 +166,8 @@ unit attendancProcedures;
         RESET(dataFile);
         for a := 0 TO 139 DO
             begin
-                data := recordArray[indexArray[a]];
                 WRITE(dataFile,recordArray[indexArray[a]]);
+                indexArray[a] := a;
             end;
 
         end;

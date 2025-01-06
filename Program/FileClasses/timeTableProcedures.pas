@@ -45,6 +45,7 @@ unit timeTableProcedures;
             ASSIGN(dataFile,'C:\ComputerScienceCoursework\Program\files\TimeTable.dta');
             ASSIGN(dataTextFile,'C:\ComputerScienceCoursework\Program\fileOuts\outTimeTable.txt');
             RESET(dataFile);
+            RESET(dataTextFile);
             for a := 0 TO 319 DO
               begin
                 indexArray[a] := a;
@@ -54,6 +55,7 @@ unit timeTableProcedures;
     destructor TimeTableFile.Destroy;
         begin
             close(dataFile);
+            close(dataTextFile);
             inherited Destroy;
         end;
     
@@ -151,8 +153,8 @@ unit timeTableProcedures;
         RESET(dataFile);
         for a := 0 TO 319 DO
             begin
-                data := recordArray[indexArray[a]];
                 WRITE(dataFile,recordArray[indexArray[a]]);
+                indexArray[a] := a;
             end;
 
         end;

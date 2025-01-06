@@ -11,6 +11,8 @@ UNIT LinearSearch;
     IMPLEMENTATION
 
   PROCEDURE LinearSearchFunction(low, high : LONGINT; searchValue : STRING; UserArray : ARRAY OF STRING; var returnArray : ARRAY OF INTEGER; var numberDone : LONGINT);
+    VAR
+      i, a,checkItem: LONGINT;
     BEGIN
       i := -1;
       a := 0;

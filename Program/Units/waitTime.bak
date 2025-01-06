@@ -1,0 +1,27 @@
+UNIT waitTime;
+
+  interface
+  uses crt, sysutils, vputils, math;
+
+  procedure waitForTime(message : STRING; timeIndex : LONGINT);
+    var a : LONGINT;
+  implementation
+
+  var waitArray : ARRAY[0..5] OF LONGINT = (30, 60, 300, 600, 1800, 3600);
+
+  procedure waitForTime(message : String; timeIndex : LONGINT);
+    var a : LONGINT;
+    begin
+      HideCursor;
+      ClrScr;
+      Writeln(message, ' please wait');
+      write(floor(waitArray[timeIndex]/60), 'minutes');
+      for a := 0 TO waitArray[timeIndex] do
+        begin
+          Delay(1000);
+          GOTOXY(1,2);
+          write(floor((waitArray[timeIndex]-a)/60));
+        end;
+    end;
+
+  end.

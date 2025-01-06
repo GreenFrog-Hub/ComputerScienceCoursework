@@ -13,7 +13,7 @@ UNIT CursorGrid;
   implementation
   procedure moveUp;
     begin
-      if WhereY <> minY THEN
+      if WhereY - stepy >= minY THEN
         begin
           movePos := WhereY - stepy;
           GoToXY(WhereX, movePos);
@@ -22,7 +22,7 @@ UNIT CursorGrid;
 
   procedure moveDown;
     begin
-      if WhereY <> maxY THEN
+      if WhereY + stepy <= maxY THEN
         begin
           movePos := WhereY + stepy;
           GoToXY(WhereX, movePos);
@@ -31,7 +31,7 @@ UNIT CursorGrid;
 
   procedure moveLeft;
     begin
-      if WhereX <> minX THEN
+      if WhereX - stepx >= minX THEN
         begin
           movePos := WhereX - stepx;
           GoToXY(movePos, WhereY);
@@ -40,7 +40,7 @@ UNIT CursorGrid;
 
   procedure moveRight;
     begin
-      if WhereX <> maxX THEN
+      if WhereX + stepx <= maxX THEN
         begin
           movePos := WhereX + stepX;
           GoToXY(movePos, WhereY);
@@ -69,8 +69,15 @@ UNIT CursorGrid;
             end;
           end;
       until keyPress = #13;
-      x := WhereX - startX;
-      y := WhereY - startY;
+      if stepX <> 0 THEN
+          x := Round((WhereX - startX) / stepX)
+      ELSE
+          x := startX;
+
+      if stepY <> 0 THEN
+        y := round((WhereY - startY) / stepY)
+      ELSE
+        y := startY;
     end;
 
   end.

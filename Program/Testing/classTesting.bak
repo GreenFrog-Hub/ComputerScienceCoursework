@@ -5,7 +5,10 @@ PROGRAM classTesting;
 
   begin
     login := logInFile.create;
-    logIn.free;
+    login.sort;
+    //login.extractToTextFile;
+    login.free;
     classTestingUnit.testFileClass;
+    readln;
   end.
 

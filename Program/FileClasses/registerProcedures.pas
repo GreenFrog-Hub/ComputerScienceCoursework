@@ -49,8 +49,9 @@ unit registerProcedures;
         begin
             inherited Create;
             ASSIGN(dataFile,'C:\ComputerScienceCoursework\Program\files\Registers.dta');
-            ASSIGN(dataTextFile,'C:\ComputerScienceCoursework\Program\files\regOut.txt');
+            ASSIGN(dataTextFile,'C:\ComputerScienceCoursework\Program\fileOuts\regOut.txt');
             RESET(dataFile);
+            RESET(dataTextFile);
             for a := 0 TO 1000 DO
               begin
                 indexArray[a] := a;
@@ -60,9 +61,10 @@ unit registerProcedures;
     destructor registerFile.Destroy;
         begin
             close(dataFile);
+            close(dataTextFile);
             inherited Destroy;
         end;
-    
+
     procedure registerFile.SetData(iRegisterID : STRING; iLessonNo : LONGINT; iDate : TDateTime; iClassID : STRING; iRegisterMarks : ARRAY OF studentRegisterMarkRecord; iisOfstedRegister : BOOLEAN);
         begin
             with data do
@@ -126,10 +128,10 @@ unit registerProcedures;
                             writeln(isOfstedRegister);
                             writeln('-------------------------------------------------------------------------');
                         end;
-                        
+
                 end;
         end;
-    
+
     procedure registerFile.extractToTextFile;
         var i : LONGINT;
         begin
@@ -154,7 +156,7 @@ unit registerProcedures;
                             end;
                         writeln(dataTextFile, '}');
                         writeln(dataTextFile, data.isOfstedRegister);
-                end; 
+                end;
         end;
 
     procedure registerFile.writeToFile;
@@ -196,8 +198,8 @@ unit registerProcedures;
         RESET(dataFile);
         for a := 0 TO 1000 DO
             begin
-                data := recordArray[indexArray[a]];
                 WRITE(dataFile,recordArray[indexArray[a]]);
+                indexArray[a] := a;
             end;
 
         end;

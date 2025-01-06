@@ -1,0 +1,123 @@
+unit generalChildClass
+
+USES crt, sysutils, FileProcedures;
+
+class childClass inherits Files
+
+  private dataFile
+  private dataTextFile
+  private array indexArray[length of data file]
+  private array recordArray[length of data file]
+  private array recordIdArray[length of data file]
+	
+	public data = record(type in which is defined in the ERD)
+	
+	public procedure new
+		super.new
+		dataFile = openRead("fileLocation\\filename.dta")
+		dataTextFile = openRead("fileLocation\\filenameTxtOut.txt")
+		RESET(dataFile);
+		
+		for i = 0 to (length of data file) do
+			indexArray[i] = i
+		next i
+		
+	endproceudure
+	
+	public procedure Destroy
+		dataFile.close()
+		dataTextFile.close()
+		super.Destroy
+	endproceudure
+	
+	public procedure SetData(each record field as parameter)
+		data.field1 = arg1
+		data.field2 = arg2
+		data.field3 = arg3
+		// Continue for other fields...
+	endproceudure
+	
+	public procedure displayData
+		print(data.field1)
+		print(data.field2)
+		print(data.field3)
+		// Continue for other fields...
+	endproceudure
+	
+	public procedure displayFile
+		while !data.endOfFile do
+			dataFile.read
+			print(data.field1)
+			print(data.field2)
+			print(data.field3)
+			// Continue for other fields...
+		endwhile
+	endproceudure
+	
+	public procedure extractToTextFile
+		while !data.endOfFile do
+			dataFile.read
+			dataTextFile.writeLine(data.field1)
+			dataTextFile.writeLine(data.field2)
+			dataTextFile.writeLine(data.field3)
+			// Continue for other fields...
+		endwhile
+	endproceudure
+	
+	public procedure writeToFile
+		dataFile.write(data)
+	endproceudure
+	
+	public procedure readHere
+		if FilePosition(dataFile) < FileSize(dataFile) then
+			data = dataFile.read()
+		endif
+	endproceudure
+	
+	public procedure readFile(readFromPosition)
+		if readFromPosition < FileSize(dataFile) then
+				SEEK(dataFile,readFromPosition);
+				data = dataFile.read()
+		endif
+	endproceudure
+	
+	public procedure sort
+		dataFile.reset()
+		upper = 51
+
+		// Read data into arrays
+		for a from 0 to (length of data file) do
+				dataFile.read(data)
+				recordArray[a] = data
+				dataArray[a] = format("%8s", data.classID)
+		next a 
+
+		// Sort the data
+		Files.sort(indexArray)
+
+		// Write sorted data back to the file
+		dataFile.reset()
+		for a from 0 to (length of data file) do
+				data = recordArray[indexArray[a]]
+				dataFile.write(recordArray[indexArray[a]])
+		next a
+	endproceudure
+	
+	procedure classFile.search(searchValues, searchFields, returnArray)
+    dataFile.reset()
+    // Populate the fileArray with data and prepare returnArray
+    for a from 0 to 51 do
+        dataFile.read(data)
+        fileArray[0][a] = toLower(data.field1)
+        fileArray[1][a] = str(data.field2)
+        fileArray[2][a] = toLower(data.field3)
+        fileArray[3][a] = str(data.field4)
+        returnArray[a] = -1
+    next a
+
+    // Perform the search
+    Files.search(51, 4, searchValues, searchFields, returnArray)
+	endprocedure
+
+endclass		
+			

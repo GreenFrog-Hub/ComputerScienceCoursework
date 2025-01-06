@@ -44,6 +44,7 @@ unit classProcedures;
             ASSIGN(dataFile,'C:\ComputerScienceCoursework\Program\files\classes.dta');
             ASSIGN(dataTextFile,'C:\ComputerScienceCoursework\Program\fileOuts\classesOut.txt');
             RESET(dataFile);
+            RESET(dataTextFile);
             for a := 0 TO 51 DO
               begin
                 indexArray[a] := a;
@@ -53,6 +54,7 @@ unit classProcedures;
     destructor classFile.Destroy;
         begin
             close(dataFile);
+            close(dataTextFile);
             inherited Destroy;
         end;
 
@@ -153,8 +155,8 @@ unit classProcedures;
         RESET(dataFile);
         for a := 0 TO 51 DO
             begin
-                data := recordArray[indexArray[a]];
                 WRITE(dataFile,recordArray[indexArray[a]]);
+                indexArray[a] := a;
             end;
 
         end;

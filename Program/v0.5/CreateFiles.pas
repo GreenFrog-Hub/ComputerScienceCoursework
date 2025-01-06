@@ -144,7 +144,7 @@ PROGRAM CreateFiles;
   procedure initialiseFiles;
     begin
       percentComplete := 0.0; {initializing percentDone and total iterations}
-      total := 0; 
+      total := 0;
       {assigning a place on the drive to the files}
       ASSIGN(TimeTableTextFile,'C:\ComputerScienceCoursework\Program\files\TimeTableText.txt');
       ASSIGN(TimeTableFile,'C:\ComputerScienceCoursework\Program\files\TimeTable.dta');
@@ -233,7 +233,7 @@ PROGRAM CreateFiles;
   procedure addForms;
     var a, i : LONGINT;
     begin
-      REWRITE(FormFile); {clear all exisiting data in the form file} 
+      REWRITE(FormFile); {clear all exisiting data in the form file}
       for i := 0 to 3 DO {iterate for all 4, year 9 forms}
         begin
           numberDone := numberDone + 1;
@@ -325,7 +325,7 @@ PROGRAM CreateFiles;
               while dayReturnArray[a] <> -1 DO // for every class on that day
                 begin
                   //find and get the data about one class
-                  SEEK(TimeTableFile,dayReturnArray[a]); 
+                  SEEK(TimeTableFile,dayReturnArray[a]);
                   read(TimeTableFile, TimeTable);
                   //set register data
                   Register.LessonNo := TimeTable.LessonNo;
@@ -486,9 +486,9 @@ PROGRAM CreateFiles;
         begin
           if (i mod 30 = 0) and (i <> 0) THEN //changes the form every 30 students
             begin
-              seek(formFile, (FilePos(formFile)-1)); 
-              write(FormFile,form); 
-              READ(FormFile, form); 
+              seek(formFile, (FilePos(formFile)-1));
+              write(FormFile,form);
+              READ(FormFile, form);
             end;
           numberDone:= numberDone +1; //update progress bar
           percentComplete := numberDone/total;
@@ -496,15 +496,15 @@ PROGRAM CreateFiles;
           READLN(NameFile, student.fname); //get a first and last name from a list of names
           READLN(NameFile, student.sname);
           student.year := 9;
-          student.uname := student.fname+student.sname; 
-          student.pword := 'ABC123'; 
+          student.uname := student.fname+student.sname;
+          student.pword := 'ABC123';
           student.form := form.formid;
           form.NumberInForm := form.NumberInForm + 1;
           //set attendance data
           Attendance.studentId := i;
           Attendance.Attendance := 1;
-          Attendance.Total := 0; 
-          Attendance.NumberPresent := 0; 
+          Attendance.Total := 0;
+          Attendance.NumberPresent := 0;
           Attendance.NumberLate := 0;
           Attendance.NumberAbsent := 0;
           write(StudentFile,student); //write student and attendance data to their respective files
@@ -519,49 +519,49 @@ PROGRAM CreateFiles;
           READLN(NameFile, student.fname); //get a first and last name from a list of names
           READLN(NameFile, student.sname);
           student.year := 12;
-          student.uname := student.fname+student.sname; 
+          student.uname := student.fname+student.sname;
           student.pword := 'ABC123';
           form.NumberInForm := form.NumberInForm + 1;
           student.form := form.formid;
           //set attendance data
           Attendance.studentId := i;
-          Attendance.Attendance := 1; 
-          Attendance.Total := 0; 
-          Attendance.NumberPresent := 0; 
+          Attendance.Attendance := 1;
+          Attendance.Total := 0;
+          Attendance.NumberPresent := 0;
           Attendance.NumberLate := 0;
           Attendance.NumberAbsent := 0;
           write(StudentFile,student); //append this record to the end of the student file
-          write(AttendanceFile, Attendance); 
+          write(AttendanceFile, Attendance);
         end;
         //write changes to form file
-        seek(formfile, filepos(formFile)-1); 
-        write(formfile,form); 
+        seek(formfile, filepos(formFile)-1);
+        write(formfile,form);
     end;
 
   procedure addTeachers;
     var i : LONGINT;
       ffname, fsname, fform : STRING; {declare all variables to read from files into them}
     begin
-      RESET(FormFile); 
-      rewrite(TeacherFile); 
+      RESET(FormFile);
+      rewrite(TeacherFile);
       for i := 0 TO 50 DO //create 51 teachers, 1 per class
         begin
-            numberDone := numberDone + 1; 
+            numberDone := numberDone + 1;
             percentComplete := numberDone / total;
             READLN(NameFile, teacher.Fname); //read first and surname form names file
             READLN(NameFile, teacher.Sname);
             Teacher.TeacherID := teacher.FName[1]+teacher.SName[1]+teacher.SName[2]; //create the teacher id as first letter of first name and forst two letters of surname
-            Teacher.uname := teacher.FName + teacher.SName; 
-            Teacher.pword := 'ABC123'; 
-            write(TeacherFile,teacher); 
+            Teacher.uname := teacher.FName + teacher.SName;
+            Teacher.pword := 'ABC123';
+            write(TeacherFile,teacher);
         end;
       //assign teachers to forms
-      RESET(TeacherFile); 
-      for i := 0 to 4 DO 
+      RESET(TeacherFile);
+      for i := 0 to 4 DO
         begin
-          read(TeacherFile,teacher); 
-          read(FormFile,form); 
-          teacher.form := form.formID; 
+          read(TeacherFile,teacher);
+          read(FormFile,form);
+          teacher.form := form.formID;
           seek(TeacherFile,FilePos(TeacherFile)-1);
           write(TeacherFile,teacher);
         end;
@@ -609,7 +609,7 @@ PROGRAM CreateFiles;
     begin
       //clear subject file
       REWRITE(SubjectFile);
-      //for every subject write subject name and id to a file 
+      //for every subject write subject name and id to a file
       for i := 0 TO 20 do
         begin
           numberDone := numberDone +1;
@@ -688,23 +688,29 @@ PROGRAM CreateFiles;
         returnArray : ARRAY[0..50] OF LONGINT;
     begin
       RESET(classFile);
+      d := 0;
       repeat
+        d := d + 1;
         randomChoiceClass := RANDOM(noOfAviablableClasses);  //randomly picks classes from the number of available class that student can be in
         if year = 9 THEN
-          Search.SearchFunctions('L',0,50,yNineClassArray[start+randomChoiceClass],classIDArray,returnArray,empty) //checks the year 9 to find the class chosen 
+          Search.SearchFunctions('L',0,50,yNineClassArray[start+randomChoiceClass],classIDArray,returnArray,empty) //checks the year 9 to find the class chosen
         else if year = 12 THEN
-            Search.SearchFunctions('L',0,50,yTwelveClassArray[start+randomChoiceClass],classIDArray,returnArray,empty) //checks the year 12 to find the class chosen 
+            Search.SearchFunctions('L',0,50,yTwelveClassArray[start+randomChoiceClass],classIDArray,returnArray,empty) //checks the year 12 to find the class chosen
         else
           DisplayErrorScrn.ErrScr;
         SEEK(classFile, returnArray[0]); //find the class in the file
         read(classFile, sClass);
+        if d > 10000 THEN
+          begin
+            readln;
+          end;
         until sClass.NoOfStudents < maxStudents; //only exit if there is a place for the student in that class
       l := 0;
       startPoint := returnArray[0];
       for l := 0 to (ClasesToSortInto * 2) -1 do //for every class connceted to that one class
         begin
           if year = 9 THEN
-            studentClassResolver.classID := yNineClassArray[start+randomChoiceClass+l] 
+            studentClassResolver.classID := yNineClassArray[start+randomChoiceClass+l]
           else if year = 12 THEN
               studentClassResolver.classID := yTwelveClassArray[start+randomChoiceClass+l]
           else
@@ -746,9 +752,9 @@ PROGRAM CreateFiles;
         begin
           numberDone := numberDone+1;
           percentComplete := numberDone/total;
-          READ(StudentFile,student); //get the student data 
+          READ(StudentFile,student); //get the student data
           studentClassResolver.studentID := student.StudentID;
-          if student.year = 9 THEN 
+          if student.year = 9 THEN
             begin
               //pick a random side without overflowing one side
               if (numberInASide < 60) AND (numberInBSide < 60) THEN
@@ -836,14 +842,14 @@ PROGRAM CreateFiles;
 
   PROCEDURE assignTeacherToClass;
     begin
-      reset(classFile); 
+      reset(classFile);
       reset(teacherfile);
       REWRITE(teacherClassResolverFile);
       while not(eof(classFile)) DO //for each teacher
         begin
           numberDone := numberDone+1;
           percentComplete := numberDone / total;
-          //assign one teacher per class 
+          //assign one teacher per class
           read(classFile,sClass);
           read(teacherfile, teacher);
           teacherClassResolver.teacherID := teacher.teacherID;
@@ -864,14 +870,14 @@ PROGRAM CreateFiles;
           percentComplete := numberDone / total;
           read(TeacherFile,teacher);
           read(classFile,sClass);
-          //find the class the teacher teaches and gets the subject id of that class and puts it in a resolver file 
+          //find the class the teacher teaches and gets the subject id of that class and puts it in a resolver file
           teacherSubjectResolver.teacherId := teacher.teacherID;
           teacherSubjectResolver.subjectId := sClass.subjectID;
           write(teacherSubjectResolverFile, teacherSubjectResolver);
         end;
       end;
 
-   
+
 
 
 

@@ -60,6 +60,7 @@ unit LogInScreen;
 
   PROCEDURE DisplayInfo; {initial display of information that needs to be entered}
     Begin
+      ClrScr;
       WRITELN('Username: ');
       WRITELN('Password: ');
       GoToXY(11,1); {go to the start of username}

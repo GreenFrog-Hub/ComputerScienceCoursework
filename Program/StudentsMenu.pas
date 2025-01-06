@@ -1,7 +1,7 @@
 UNIT StudentsMenu;
   interface
   uses crt, sysutils, VPUtils, studentProcedures, timeTableProcedures,
-  attendancProcedures, studentClassProcedures,createMenu, writeTimeTableLayout;
+  attendancProcedures, studentClassProcedures,createMenu, writeDesign;
 
   //declaration of all procedures and functions
   procedure startStudent(inputStudentId : LONGINT);
@@ -22,6 +22,7 @@ UNIT StudentsMenu;
       studentClassReturnArray : ARRAY[0..1400] OF LONGINT;
       timetableReturnArray: ARRAY[0..321] OF LONGINT;
       mainMenuOptions : ARRAY[0..2] OF STRING = ('Attendance','Timetable', 'Log Out');
+      animationTimeTable : BOOLEAN;
 
   //Menu for viewing attendance
   procedure AttendanceMenu;
@@ -32,14 +33,22 @@ UNIT StudentsMenu;
 
   //fill timetable with the data
   procedure CompleteTimeTable(inputDate : TDateTime);
-    var a, b, c, day, NumberOfDays : LONGINT;
+    var a, b, c, day, NumberOfDays, timeDelay : LONGINT;
         CurrentDate : TDateTime;
         week : STRING;
         stringStudentId : STRING;
         //dateArray : ARRAY OF STRING;
     begin
       //draw basic timetable outline
-      writeTimeTableLayout.DrawTimeTable;
+      if animationTimeTable = true THEN
+        begin
+          timeDelay := 100;
+        end
+      else
+        begin
+          timeDelay := 0;
+        end;
+      writeDesign.DrawDesign('C:\ComputerScienceCoursework\Program\files\TimeTableLayout.txt', timeDelay);
       CurrentDate := inputDate;
       day := DayOfWeek(CurrentDate-2);
       HideCursor;
@@ -52,6 +61,7 @@ UNIT StudentsMenu;
           else
             TextColor(White);
           write(DateToStr(CurrentDate-day+a));
+          Delay(timeDelay);
         end;
       TextColor(White);
       //calcualte if it is week A or week B
@@ -93,7 +103,7 @@ UNIT StudentsMenu;
                       //got to position and write class id
                       GOTOXY((10*timetable.data.LessonNo+19),( 4*(timetable.data.Day-1)+7));
                       WRITE(Trim(TimeTable.data.ClassID));
-                      Delay(100);
+                      Delay(timeDelay);
                     end;
                 end
               else
@@ -104,7 +114,7 @@ UNIT StudentsMenu;
                       //got to position and write class id
                       GOTOXY((10*timetable.data.LessonNo+19),( 4*(timetable.data.Day-6)+7));
                       WRITE(Trim(TimeTable.data.ClassID));
-                      Delay(100);
+                      Delay(timeDelay);
                     end;
                 end;
               c := c + 1;
@@ -116,8 +126,9 @@ UNIT StudentsMenu;
         begin
           GOTOXY(19, 4*a+7);
           write(student.data.Form);
-          Delay(100);
+          Delay(timeDelay);
         end;
+        animationTimeTable := false;
     end;
 
   //Draw and populate timetable
@@ -170,7 +181,8 @@ UNIT StudentsMenu;
   procedure startStudent(inputStudentId : LONGINT);
     var a : LONGINT;
     begin
-      //populate arrays with -1 
+      animationTimeTable := true;
+      //populate arrays with -1
       for a := 0 TO 1400 DO
         studentClassReturnArray[a] := -1;
       for a := 0 to 320 DO

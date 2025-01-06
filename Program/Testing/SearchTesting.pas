@@ -1,0 +1,36 @@
+PROGRAM SearchTesting;
+  uses crt, sysutils, Search;
+  const length = 5;
+  type  stringArr = Array[0..length] OF STRING;
+        intArr = Array[0..length] OF LONGINT;
+  var a, i, empty : LONGINT;
+      searchValue : STRING;
+      searchArray : stringArr;
+      returnArray : intArr;
+
+  begin
+    while true do
+    begin
+    ClrScr;
+    empty := 0;
+    i := 0;
+    for a := 0 TO length DO
+      begin
+        returnArray[a] := -1;
+        write('Enter Array element ',a,': ');
+        readln(searchArray[a]);
+      end;
+    writeln;
+    write('Enter Search value:');
+    readln(searchValue);
+    writeln;
+    Search.SearchFunctions('L', 0,length, searchValue, searchArray, returnArray, empty);
+    writeln('Found at positions:');
+    while returnArray[i] <> -1 Do
+      begin
+        writeln(returnArray[i]);
+        i := i + 1;
+      end;
+    readln;
+  end;
+  end.

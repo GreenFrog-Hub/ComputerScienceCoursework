@@ -4,20 +4,23 @@ UNIT BinarySearch;
   USES CRT, SYSUTILS;
 
 
-  PROCEDURE BinarySearchFunction(var UserArray, returnArray : ARRAY OF INTEGER; low, high, searchValue: INTEGER);
+  PROCEDURE BinarySearchFunction(low, high : LONGINT; searchValue : STRING; UserArray : ARRAY OF STRING; var returnArray : ARRAY OF INTEGER; var numberDone : LONGINT);
     VAR
       i, mid : LONGINT;
       shouldEnd : BOOLEAN;
 
     IMPLEMENTATION
 
-  PROCEDURE BinarySearchFunction(var UserArray, returnArray : ARRAY OF INTEGER; low, high, searchValue: INTEGER);
+  PROCEDURE BinarySearchFunction(low, high : LONGINT; searchValue : STRING; UserArray : ARRAY OF STRING; var returnArray : ARRAY OF INTEGER; var numberDone : LONGINT);
+    VAR
+      i, mid : LONGINT;
+      shouldEnd : BOOLEAN;
     BEGIN
       REPEAT
         mid := (low+high)DIV 2;
         IF UserArray[mid] <> searchValue THEN
           BEGIN
-                IF UserArray[mid] > searchValue THEN
+                IF UserArray[mid] < searchValue THEN
                   BEGIN
                     low := mid +1;
                   END
