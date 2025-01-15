@@ -2,7 +2,8 @@ PROGRAM ForLoopStep;
   var i : LONGINT;
 
   begin
-    for i := 0 TO 8 DO
+    BlockCurosr;
+    for i := 0 TO -1 DO
       begin
         writeln(i);
       end;

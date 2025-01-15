@@ -18,7 +18,6 @@ unit classProcedures;
                 dataFile: File OF dataRecord;
                 indexArray: ARRAY[0..51] OF LONGINT;
                 recordArray: ARRAY[0..51] OF dataRecord;
-                recordIdArray: ARRAY[0..51] OF STRING;
             public
                 data : dataRecord;
                 constructor Create;
@@ -31,7 +30,7 @@ unit classProcedures;
                 procedure readHere;
                 procedure readFile(readFromPosition : LONGINT);
                 procedure sort;
-                procedure search(searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE; var returnArray: ARRAY OF LONGINT);
+                procedure search(searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE; var returnArray: ARRAY OF LONGINT; switchLowerCase: BOOLEAN);
 
         end;
 
@@ -161,7 +160,7 @@ unit classProcedures;
 
         end;
 
-        procedure classFile.search(searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE; var returnArray : ARRAY OF LONGINT);
+        procedure classFile.search(searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE; var returnArray : ARRAY OF LONGINT; switchLowerCase : BOOLEAN);
             var a, searchResult: LONGINT;
             begin
                 RESET(dataFile);
@@ -174,7 +173,7 @@ unit classProcedures;
                         Str(data.NoOfStudents, fileArray[3,a]);
                         returnArray[a] := -1;
                     end;
-                Files.search(51,4,searchValues, searchFields, returnArray);
+                Files.search(51,4,searchValues, searchFields, returnArray, switchLowerCase);
             end;
 
 

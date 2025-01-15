@@ -64,7 +64,7 @@ PROGRAM CreateFiles;
                           LessonNo : LONGINT;
                           Date : TDateTime;
                           ClassID : STRING[8];
-                          RegisterMarks : ARRAY[0..100] OF studentRegisterMarkRecord;
+                          RegisterMarks : ARRAY[0..40] OF studentRegisterMarkRecord;
                           isOfstedRegister : BOOLEAN;
                         end;
 
@@ -79,7 +79,7 @@ PROGRAM CreateFiles;
 
     teacherClassResolverRecord = RECORD
                           TeacherID : STRING[3];
-                          ClassID : STRING[6];
+                          ClassID : STRING[8];
                         end;
 
     LogInDetailsRecord = RECORD
@@ -510,6 +510,8 @@ PROGRAM CreateFiles;
           write(StudentFile,student); //write student and attendance data to their respective files
           write(AttendanceFile, Attendance);
         end;
+      seek(formFile, (FilePos(formFile)-1));
+      write(FormFile,form);
       read(FormFile, form); {get the year 12 form}
       for i := 120 to 139 DO {generate 20 year 12 students}
         begin
@@ -577,7 +579,8 @@ PROGRAM CreateFiles;
         while not EOF(StudentFile) do
           begin
             READ(StudentFile,student);
-            LogInDetails.PersonID := Format('%'+'5'+'s',[IntToStr(student.StudentID)]); // format the student id as a string
+            //LogInDetails.PersonID := Format('%'+'5'+'s',[IntToStr(student.StudentID)]); // format the student id as a string
+            LogInDetails.PersonID := IntToStr(student.StudentID);
             LogInDetails.Username := student.Uname;
             LogInDetails.Passwowrd := student.Pword;
             write(LogInDetailsFile,LogInDetails);
@@ -657,7 +660,7 @@ PROGRAM CreateFiles;
             else
               sClass.subjectID := yNineClassArray[i][6]+yNineClassArray[i][7];
             write(classFile, sClass);
-            delay(100);
+            //delay(100);
           end;
         //generate year 12 classes
         for i := 0 TO 6 DO
@@ -899,6 +902,7 @@ PROGRAM CreateFiles;
     assignTeacherToSubject;
     createRegisters;
     createLogInFile;
-    readln;
     closeAllFiles;
+    loading.EndLoading;
+    readln;
   end.

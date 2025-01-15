@@ -2,10 +2,9 @@ PROGRAM ForLoopStep;
   var i : LONGINT;
 
   begin
-    for i := 0 TO 8 DO
+    for i := 0 TO -1 DO
       begin
         writeln(i);
-        i := i +3;
       end;
     readln;
   end.

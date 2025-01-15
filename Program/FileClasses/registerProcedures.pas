@@ -13,7 +13,7 @@ unit registerProcedures;
                           LessonNo : LONGINT;
                           Date : TDateTime;
                           ClassID : STRING[8];
-                          RegisterMarks : ARRAY[0..100] OF studentRegisterMarkRecord;
+                          RegisterMarks : ARRAY[0..40] OF studentRegisterMarkRecord;
                           isOfstedRegister : BOOLEAN;
                         end;
 
@@ -24,7 +24,6 @@ unit registerProcedures;
                 dataTextFile : TextFile;
                 indexArray: ARRAY[0..1000] OF LONGINT;
                 recordArray: ARRAY[0..1000] OF dataRecord;
-                recordIdArray: ARRAY[0..1000] OF STRING;
                 studentRegisterMark : studentRegisterMarkRecord;
             public
                 data : dataRecord;
@@ -38,7 +37,7 @@ unit registerProcedures;
                 procedure readHere;
                 procedure readFile(readFromPosition : LONGINT);
                 procedure sort;
-                procedure search(searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE; var returnArray: ARRAY OF LONGINT);
+                procedure search(searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE; var returnArray: ARRAY OF LONGINT; switchLowerCase: BOOLEAN);
 
         end;
 
@@ -91,7 +90,7 @@ unit registerProcedures;
                     writeln(Date);
                     writeln(ClassID);
                     writeln('{');
-                    for i := 0 TO 100 DO
+                    for i := 0 TO 40 DO
                         begin
                             studentRegisterMark := RegisterMarks[i];
                             writeln(studentRegisterMark.studentID);
@@ -118,7 +117,7 @@ unit registerProcedures;
                             writeln(Date);
                             writeln(ClassID);
                             writeln('{');
-                            for i := 0 TO 101 DO
+                            for i := 0 TO 40 DO
                                 begin
                                     studentRegisterMark := data.RegisterMarks[i];
                                     writeln(studentRegisterMark.studentID);
@@ -145,7 +144,7 @@ unit registerProcedures;
                         writeln(dataTextFile, DateTimeToStr(data.Date));
                         writeln(dataTextFile, data.classID);
                         writeln(dataTextFile, '{');
-                        for i := 0 TO 101 DO
+                        for i := 0 TO 40 DO
                             begin
                                 studentRegisterMark := data.RegisterMarks[i];
                                 write(dataTextFile, '[');
@@ -204,7 +203,7 @@ unit registerProcedures;
 
         end;
 
-        procedure registerFile.search(searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE; var returnArray : ARRAY OF LONGINT);
+        procedure registerFile.search(searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE; var returnArray : ARRAY OF LONGINT; switchLowerCase : BOOLEAN);
             var a, searchResult: LONGINT;
             begin
                 RESET(dataFile);
@@ -217,7 +216,7 @@ unit registerProcedures;
                         fileArray[3,a] := data.classID;
                         returnArray[a] := -1;
                     end;
-                Files.search(1000,4,searchValues, searchFields, returnArray);
+                Files.search(1000,4,searchValues, searchFields, returnArray, switchLowerCase);
             end;
 
 

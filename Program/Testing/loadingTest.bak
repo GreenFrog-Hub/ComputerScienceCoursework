@@ -12,23 +12,27 @@ PROGRAM loadingTest;
     var a, i : longint;
     begin
       a := 1000;
-      for i := 0 to a DO
+      for i := 0 to 100 DO
         begin
           if i < 2 THEN
             fibanachiSequence[i] := 1
           else
             fibanachiSequence[i] := fibanachiSequence[i-1] + fibanachiSequence[i-2];
-          percentDone := i/a;
+          percentComeplete := i/100;
           Delay(10);
-          n := round(percentComeplete);
+          //n := round(percentComeplete);
           //PlaySound(n*150,10);
         end;
       end;
 
   begin
+    write;
     loading.StartLoading('P',percentComeplete);
+    //delay(1000);
     fibanachi;
+    //delay(15000);
     loading.EndLoading;
+    //loading.silentKillLoading;
     //for n := 0 TO 1000 DO
       //write(fibanachiSequence[n],' ');
     readln;

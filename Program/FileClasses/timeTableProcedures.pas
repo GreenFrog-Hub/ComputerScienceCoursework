@@ -17,7 +17,6 @@ unit timeTableProcedures;
                 dataTextFile : TextFile;
                 indexArray: ARRAY[0..320] OF LONGINT;
                 recordArray: ARRAY[0..320] OF TimeTableRecord;
-                recordIdArray: ARRAY[0..320] OF STRING;
             public
                 data : TimeTableRecord;
                 constructor Create;
@@ -32,7 +31,7 @@ unit timeTableProcedures;
                 procedure readHere;
                 procedure readFile(readFromPosition : LONGINT);
                 procedure sort;
-                procedure search(searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE; var returnArray: ARRAY OF LONGINT);
+                procedure search(searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE; var returnArray: ARRAY OF LONGINT; switchLowerCase: BOOLEAN);
 
         end;
 
@@ -58,7 +57,7 @@ unit timeTableProcedures;
             close(dataTextFile);
             inherited Destroy;
         end;
-    
+
     procedure TimeTableFile.SetData(iDay : LONGINT;
                           iLessonNo : LONGINT;
                           iClassID : STRING);
@@ -94,7 +93,7 @@ unit timeTableProcedures;
                     writeln(dataTextFile, data.lessonNo);
                     writeln(dataTextFile, data.ClassID);
                     writeln(dataTextFile, '');
-                end; 
+                end;
         end;
 
     procedure TimeTableFile.displayFile;
@@ -159,7 +158,7 @@ unit timeTableProcedures;
 
         end;
 
-        procedure TimeTableFile.search(searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE; var returnArray : ARRAY OF LONGINT);
+        procedure TimeTableFile.search(searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE; var returnArray : ARRAY OF LONGINT; switchLowerCase : BOOLEAN);
             var a, searchResult: LONGINT;
             begin
                 RESET(dataFile);
@@ -173,7 +172,7 @@ unit timeTableProcedures;
                         fileArray[2,a] := data.ClassID;
                         returnArray[a] := -1;
                     end;
-                Files.search(319,3,searchValues, searchFields, returnArray);
+                Files.search(319,3,searchValues, searchFields, returnArray, switchLowerCase);
             end;
 
 

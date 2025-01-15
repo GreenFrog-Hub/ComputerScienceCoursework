@@ -11,20 +11,19 @@ unit studentClassProcedures;
 
     type
         studentClassFile = Class(Files)
-            protected
+            private
                 dataTextFile : TextFile;
                 dataFile: File OF dataRecord;
-                indexArray: ARRAY[0..1400] OF LONGINT;
-                recordArray: ARRAY[0..1400] OF dataRecord;
-                recordIdArray: ARRAY[0..1400] OF STRING;
-            
+                indexArray: ARRAY[0..1384] OF LONGINT;
+                recordArray: ARRAY[0..1384] OF dataRecord;
             public
                 data : dataRecord;
-                
                 constructor Create;
+                destructor Destroy; override;
                 procedure SetData(iStudentID : LONGINT; iClassID : STRING);
                 procedure DisplayData;
                 procedure displayFile;
+                procedure extractToTextFile;
                 procedure writeToFile;
                 procedure readHere;
                 procedure readFile(readFromPosition : LONGINT);
@@ -40,14 +39,22 @@ unit studentClassProcedures;
         begin
             inherited Create;
             ASSIGN(dataFile,'C:\ComputerScienceCoursework\Program\files\studentClassResolver.dta');
-            ASSIGN(dataTextFile,'C:\ComputerScienceCoursework\Program\files\out.txt');
+            ASSIGN(dataTextFile,'C:\ComputerScienceCoursework\Program\fileOuts\outStudentClass.txt');
             RESET(dataFile);
-            for a := 0 TO 1400 DO
+            RESET(dataTextFile);
+            for a := 0 TO 1384 DO
               begin
                 indexArray[a] := a;
               end;
         end;
 
+    destructor studentClassFile.Destroy;
+        begin
+            close(dataFile);
+            close(dataTextFile);
+            inherited Destroy;
+        end;
+    
     procedure studentClassFile.SetData(iStudentID : LONGINT; iClassID : STRING);
         begin
             with data do
@@ -85,6 +92,19 @@ unit studentClassProcedures;
                 end;
             close(dataTextFile);
         end;
+    
+    procedure studentClassFile.extractToTextFile;
+        begin
+            reset(dataFile);
+            rewrite(dataTextFile);
+            while not eof(dataFile) do
+                begin
+                    read(dataFile, data);
+                    writeln(dataTextFile, data.ClassID);
+                    writeln(dataTextFile, data.StudentID);
+                    writeln(dataTextFile, '');
+                end; 
+        end;
 
     procedure studentClassFile.writeToFile;
         begin
@@ -114,8 +134,8 @@ unit studentClassProcedures;
             maxStrLen : STRING;
         begin
           RESET(dataFile);
-          upper:= 1400;
-          for a := 0 TO 1400 DO
+          upper:= 1384;
+          for a := 0 TO 1384 DO
             begin
               READ(dataFile,data);
               recordArray[a] := data;
@@ -123,10 +143,10 @@ unit studentClassProcedures;
             end;
         Files.sort(indexArray);
         RESET(dataFile);
-        for a := 0 TO 1400 DO
+        for a := 0 TO 1384 DO
             begin
-                data := recordArray[indexArray[a]];
                 WRITE(dataFile,recordArray[indexArray[a]]);
+                indexArray[a] := a;
             end;
 
         end;
@@ -144,7 +164,7 @@ unit studentClassProcedures;
                         returnArray[a] := -1;
                         a := a + 1;
                     end;
-                Files.search(a,2,searchValues, searchFields, returnArray);
+                Files.search(a+1,2,searchValues, searchFields, returnArray);
             end;
 
 

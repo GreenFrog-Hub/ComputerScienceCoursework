@@ -18,7 +18,6 @@ unit LogInProcedures;
                 dataTextFile : TextFile;
                 indexArray: ARRAY[0..190] OF LONGINT;
                 recordArray: ARRAY[0..190] OF dataRecord;
-                recordIdArray: ARRAY[0..190] OF STRING;
               public
                 data : dataRecord;
                 constructor Create;
@@ -43,6 +42,7 @@ unit LogInProcedures;
             ASSIGN(dataFile,'C:\ComputerScienceCoursework\Program\files\LogInDetails.dta');
             ASSIGN(dataTextFile,'C:\ComputerScienceCoursework\Program\fileOuts\logInOut.txt');
             RESET(dataFile);
+            RESET(dataTextFile);
             for a := 0 TO 190 DO
               begin
                 indexArray[a] := a;
@@ -52,7 +52,7 @@ unit LogInProcedures;
     destructor LogInFile.Destroy;
         begin
             close(dataFile);
-            //close(dataTextFile);
+            close(dataTextFile);
             inherited Destroy;
         end;
     procedure logInFile.SetData(iPersonID: STRING;

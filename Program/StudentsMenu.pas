@@ -50,7 +50,7 @@ UNIT StudentsMenu;
         end;
       writeDesign.DrawDesign('C:\ComputerScienceCoursework\Program\files\TimeTableLayout.txt', timeDelay);
       CurrentDate := inputDate;
-      day := DayOfWeek(CurrentDate-2);
+      day := DayOfWeek(CurrentDate-1)-1;
       HideCursor;
       //write the dates with current date highlighted
       for a := 0 to 4 DO
@@ -78,7 +78,7 @@ UNIT StudentsMenu;
       //write lessons in timetable
       stringStudentId := IntToStr(studentID);
       //get all classes which the student is in
-      studentClassC.search([stringStudentId],[1],studentClassReturnArray);
+      studentClassC.search([stringStudentId],[1],studentClassReturnArray, true);
       b := 0;
       //for every class
       while studentClassReturnArray[b] <> -1 DO
@@ -88,7 +88,7 @@ UNIT StudentsMenu;
           for a := 0 to 320 DO
             timetableReturnArray[a] := -1;
           //find every time and day that class is on
-          timetable.search([studentClassC.data.ClassID],[2], timetableReturnArray);
+          timetable.search([studentClassC.data.ClassID],[2], timetableReturnArray, true);
           c := 0;
           while timetableReturnArray[c] <> -1 DO
             begin
@@ -101,7 +101,7 @@ UNIT StudentsMenu;
                   if timetable.data.day < 6 THEN
                     begin
                       //got to position and write class id
-                      GOTOXY((10*timetable.data.LessonNo+19),( 4*(timetable.data.Day-1)+7));
+                      GOTOXY((10*timetable.data.LessonNo+20),( 4*(timetable.data.Day-1)+7));
                       WRITE(Trim(TimeTable.data.ClassID));
                       Delay(timeDelay);
                     end;
@@ -112,7 +112,7 @@ UNIT StudentsMenu;
                   if timetable.data.day > 5 THEN
                     begin
                       //got to position and write class id
-                      GOTOXY((10*timetable.data.LessonNo+19),( 4*(timetable.data.Day-6)+7));
+                      GOTOXY((10*timetable.data.LessonNo+20),( 4*(timetable.data.Day-6)+7));
                       WRITE(Trim(TimeTable.data.ClassID));
                       Delay(timeDelay);
                     end;
@@ -124,7 +124,7 @@ UNIT StudentsMenu;
       //write the form data in
       for a := 0 TO 4 DO
         begin
-          GOTOXY(19, 4*a+7);
+          GOTOXY(21, 4*a+7);
           write(student.data.Form);
           Delay(timeDelay);
         end;

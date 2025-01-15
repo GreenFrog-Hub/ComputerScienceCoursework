@@ -1,0 +1,63 @@
+Cs
+Computer Science
+
+Ma
+Maths
+
+Mu
+Music
+
+Enl
+English
+
+Gg
+Geography
+
+Ch
+Chemistry
+
+Ph
+Physics
+
+Bi
+Biology
+
+DT
+Design Technology
+
+Dr
+Drama
+
+Lf
+Life Skills
+
+Rpe
+Religion, Philosophy
+
+Fr
+French
+
+Hi
+History
+
+Gm
+German
+
+Bs
+Business Studies
+
+Ar
+Art
+
+Py
+Physcology
+
+Pe
+Physical Education
+
+Sp
+Spanish
+
+So
+Sociology
+

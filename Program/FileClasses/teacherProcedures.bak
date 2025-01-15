@@ -4,7 +4,7 @@ unit teacherProcedures;
     USES crt, sysutils, FileProcedures;
 
     TYPE
-        dataRecord = RECORD
+        TeacherRecord = RECORD
                           TeacherID : STRING[3];
                           FName : string[20];
                           SName : string[20];
@@ -15,15 +15,18 @@ unit teacherProcedures;
 
     type
         TeacherFile = Class(Files)
-            public
-                data : dataRecord;
-                dataFile: File OF dataRecord;
+            private
+                dataFile: File OF TeacherRecord;
+                dataTextFile : TextFile;
                 indexArray: ARRAY[0..50] OF LONGINT;
-                recordArray: ARRAY[0..50] OF dataRecord;
-                recordIdArray: ARRAY[0..50] OF STRING;
+                recordArray: ARRAY[0..50] OF TeacherRecord;
+            public
+                data : TeacherRecord;
                 constructor Create;
+                destructor Destroy; override;
                 procedure SetData(TeacherID : LONGINT; FirstName: STRING; SurName : STRING; SForm : STRING; SUname : String; SPword : String);
                 procedure DisplayData;
+                procedure extractToTextFile;
                 procedure writeToFile;
                 procedure readHere;
                 procedure readFile(readFromPosition : LONGINT);
@@ -39,13 +42,22 @@ unit teacherProcedures;
         begin
             inherited Create;
             ASSIGN(dataFile,'C:\ComputerScienceCoursework\Program\files\Teachers.dta');
+            ASSIGN(dataTextFile,'C:\ComputerScienceCoursework\Program\fileOuts\outTeachers.txt');
             RESET(dataFile);
-            for a := 0 TO 50 DO
+            RESET(dataTextFile);
+            for a := 0 TO 139 DO
               begin
                 indexArray[a] := a;
               end;
         end;
 
+    destructor TeacherFile.Destroy;
+        begin
+            close(dataFile);
+            close(dataTextFile);
+            inherited Destroy;
+        end;
+    
     procedure TeacherFile.SetData(TeacherID : LONGINT;
                           FirstName : STRING;
                           SurName : STRING;
@@ -78,25 +90,22 @@ unit teacherProcedures;
                 writeln('-------------------------------------------------------------------------');
             end;
         end;
-
-    procedure TeacherFile.displayFile;
-        var a : LONGINT;
+    
+    procedure TeacherFile.extractToTextFile;
         begin
             reset(dataFile);
-            while not (eof(dataFile)) do
+            rewrite(dataTextFile);
+            while not eof(dataFile) do
                 begin
-                    READ(dataFile,data);
-                    with data do
-                        begin
-                            writeln(TeacherID);
-                            writeln(FName);
-                            writeln(SName);
-                            writeln(Form);
-                            writeln(Uname);
-                            writeln(PWord);
-                            writeln('-------------------------------------------------------------------------');
-                        end;
-                end;
+                    read(dataFile, data);
+                    writeln(dataTextFile, data.TeacherID);
+                    writeln(dataTextFile, data.FName);
+                    writeln(dataTextFile, data.SName);
+                    writeln(dataTextFile, data.Form);
+                    writeln(dataTextFile, data.Uname);
+                    writeln(dataTextFile, data.PWord);
+                    writeln(dataTextFile, '');
+                end; 
         end;
 
     procedure TeacherFile.writeToFile;
@@ -132,13 +141,14 @@ unit teacherProcedures;
             begin
               READ(dataFile,data);
               dataArray[a] := data.teacherID;
+              recordArray[a] := data;
             end;
         Files.sort(indexArray);
         RESET(dataFile);
         for a := 0 TO 50 DO
             begin
-                data := recordArray[indexArray[a]];
                 WRITE(dataFile,recordArray[indexArray[a]]);
+                indexArray[a] := a;
             end;
 
         end;

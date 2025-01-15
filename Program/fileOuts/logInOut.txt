@@ -2,11 +2,11 @@ ACa
 AdamCampbell
 ABC123
 
-   90
+90
 AgnusNielsen
 ABC123
 
-   50
+50
 AlfredoAllison
 ABC123
 
@@ -14,7 +14,7 @@ ARo
 AllisonRolling
 ABC123
 
-   15
+15
 AltonJoyner
 ABC123
 
@@ -22,23 +22,23 @@ ALu
 AnderaLueth
 ABC123
 
-   63
+63
 AndreaYarboro
 ABC123
 
-   22
+22
 AnnLavoie
 ABC123
 
-   12
+12
 AnnaRoss
 ABC123
 
-   20
+20
 AntoinetteMcneil
 ABC123
 
-   41
+41
 AntoinetteTipton
 ABC123
 
@@ -46,7 +46,7 @@ AJa
 AshleyJames
 ABC123
 
-    5
+5
 BarbaraKelleher
 ABC123
 
@@ -54,11 +54,11 @@ BCa
 BartonCampisi
 ABC123
 
-   43
+43
 BethWatson
 ABC123
 
-   65
+65
 BillieManes
 ABC123
 
@@ -66,7 +66,7 @@ BTe
 BobbyTerry
 ABC123
 
-   27
+27
 BradAdams
 ABC123
 
@@ -78,7 +78,7 @@ CRi
 CalvinRich
 ABC123
 
-  108
+108
 CatherineRichardson
 ABC123
 
@@ -86,19 +86,19 @@ CGo
 ChanceGonzalez
 ABC123
 
-   59
+59
 CharlesPhillips
 ABC123
 
-   87
+87
 CharlesSmith
 ABC123
 
-  123
+123
 ChayaLucero
 ABC123
 
-   29
+29
 ChesterFleischman
 ABC123
 
@@ -106,7 +106,7 @@ CSn
 ClaireSnow
 ABC123
 
-   79
+79
 ClarissaSinclair
 ABC123
 
@@ -114,35 +114,35 @@ CMi
 CrystalMills
 ABC123
 
-   16
+16
 CynthiaCoker
 ABC123
 
-   62
+62
 CynthiaLangley
 ABC123
 
-  132
+132
 DaleLaxen
 ABC123
 
-   80
+80
 DanielBruton
 ABC123
 
-   68
+68
 DarrylRobinson
 ABC123
 
-   95
+95
 DavidHimes
 ABC123
 
-   57
+57
 DavidSanchez
 ABC123
 
-   77
+77
 DebraRankin
 ABC123
 
@@ -150,19 +150,19 @@ DMc
 DillonMcgee
 ABC123
 
-   36
+36
 DoloresCupps
 ABC123
 
-   75
+75
 DonBurney
 ABC123
 
-   78
+78
 DonGoulding
 ABC123
 
-  127
+127
 DonnaHicks
 ABC123
 
@@ -170,31 +170,31 @@ EWa
 EarlWatlington
 ABC123
 
-   93
+93
 EdwardManalo
 ABC123
 
-   31
+31
 EliseReidinger
 ABC123
 
-   54
+54
 ElizabethHarris
 ABC123
 
-  128
+128
 ElizabethRosado
 ABC123
 
-   66
+66
 EmilyCampbell
 ABC123
 
-  129
+129
 EmilyReid
 ABC123
 
-   26
+26
 EricAdams
 ABC123
 
@@ -202,19 +202,19 @@ ETi
 EricTipton
 ABC123
 
-   21
+21
 EricaHernandez
 ABC123
 
-    2
+2
 EstherBraswell
 ABC123
 
-   32
+32
 EstherCollins
 ABC123
 
-   19
+19
 EthelKowalsky
 ABC123
 
@@ -222,19 +222,19 @@ EBu
 EverettBuchanan
 ABC123
 
-   88
+88
 FlorenceHumphreys
 ABC123
 
-   76
+76
 FlossieKimbrough
 ABC123
 
-  131
+131
 FranceneKurtz
 ABC123
 
-   74
+74
 FrancisLawler
 ABC123
 
@@ -242,11 +242,11 @@ FNe
 FrankNelson
 ABC123
 
-   33
+33
 FredBrent
 ABC123
 
-  122
+122
 FredericSaunders
 ABC123
 
@@ -254,7 +254,7 @@ FSt
 FrederickStewart
 ABC123
 
-  135
+135
 GaryBanks
 ABC123
 
@@ -262,7 +262,7 @@ GMo
 GeorgeMoore
 ABC123
 
-   85
+85
 GeorgeSinisi
 ABC123
 
@@ -274,7 +274,7 @@ GBu
 GwendolynBullis
 ABC123
 
-   24
+24
 HannahPayne
 ABC123
 
@@ -282,11 +282,11 @@ HCa
 HaroldCaron
 ABC123
 
-   82
+82
 HarrisonAronowitz
 ABC123
 
-   91
+91
 HelenBiscoe
 ABC123
 
@@ -294,23 +294,23 @@ HMo
 HelenMontgomery
 ABC123
 
-    4
+4
 HerbertGaston
 ABC123
 
-   48
+48
 IanPew
 ABC123
 
-  130
+130
 JackieBullock
 ABC123
 
-   37
+37
 JamesShortino
 ABC123
 
-   18
+18
 JanelleEldridge
 ABC123
 
@@ -318,19 +318,19 @@ JMo
 JanetMonaghan
 ABC123
 
-   56
+56
 JaniceHarris
 ABC123
 
-  136
+136
 JarrodFitzgerald
 ABC123
 
-  138
+138
 JeanneEscalante
 ABC123
 
-   53
+53
 JeffreyStern
 ABC123
 
@@ -338,7 +338,7 @@ JBr
 JenniferBradshaw
 ABC123
 
-  134
+134
 JeremyClough
 ABC123
 
@@ -354,35 +354,35 @@ JSh
 JoanneShipley
 ABC123
 
-  124
+124
 JoelSmith
 ABC123
 
-  103
+103
 JohnMatten
 ABC123
 
-   47
+47
 JohnMiller
 ABC123
 
-  100
+100
 JohnNimmo
 ABC123
 
-   13
+13
 JohnSmith
 ABC123
 
-  107
+107
 JohnSum
 ABC123
 
-   81
+81
 JohnTune
 ABC123
 
-   39
+39
 JohnnieWilson
 ABC123
 
@@ -394,23 +394,23 @@ JAn
 JosephAndino
 ABC123
 
-   67
+67
 JosephShambo
 ABC123
 
-  113
+113
 JoyceMatthews
 ABC123
 
-  133
+133
 JudyCecil
 ABC123
 
-    6
+6
 KarenGallagher
 ABC123
 
-  120
+120
 KariWilson
 ABC123
 
@@ -422,23 +422,23 @@ KGi
 KathrynGillen
 ABC123
 
-    1
+1
 KeithHolmes
 ABC123
 
-  111
+111
 KellieColeman
 ABC123
 
-   69
+69
 KevinMiller
 ABC123
 
-   46
+46
 LanaBoice
 ABC123
 
-   98
+98
 LarryKing
 ABC123
 
@@ -454,7 +454,7 @@ LLu
 LoisLucas
 ABC123
 
-   73
+73
 LorraineRector
 ABC123
 
@@ -462,15 +462,15 @@ LBo
 LucienBoucher
 ABC123
 
-  116
+116
 LucindaMccarthy
 ABC123
 
-   92
+92
 LucyHenderson
 ABC123
 
-   49
+49
 LydiaCarter
 ABC123
 
@@ -478,43 +478,43 @@ MFo
 MadgeFoster
 ABC123
 
-  139
+139
 MaraReed
 ABC123
 
-   42
+42
 MargaretPurser
 ABC123
 
-  117
+117
 MargaretWright
 ABC123
 
-   70
+70
 MaribelFelker
 ABC123
 
-   61
+61
 MarkMcintosh
 ABC123
 
-   94
+94
 MarkSanders
 ABC123
 
-   23
+23
 MarvinMartin
 ABC123
 
-   17
+17
 MaryAlma
 ABC123
 
-   34
+34
 MaryMacias
 ABC123
 
-    8
+8
 MarylouiseBrooks
 ABC123
 
@@ -522,11 +522,11 @@ MAd
 MichaelAdams
 ABC123
 
-  112
+112
 MichaelHackney
 ABC123
 
-  109
+109
 MikeHawkins
 ABC123
 
@@ -534,19 +534,19 @@ MKu
 MikeKuechler
 ABC123
 
-   52
+52
 MildredHanson
 ABC123
 
-  115
+115
 MollyBenthall
 ABC123
 
-   51
+51
 NancyMaier
 ABC123
 
-   60
+60
 NancyTerrell
 ABC123
 
@@ -566,7 +566,7 @@ NOn
 NoraOneal
 ABC123
 
-   84
+84
 PatriceSmudrick
 ABC123
 
@@ -574,7 +574,7 @@ PRi
 PatriciaRice
 ABC123
 
-   64
+64
 PeterHill
 ABC123
 
@@ -582,19 +582,19 @@ RBu
 RamiroButcher
 ABC123
 
-   71
+71
 RandallDunn
 ABC123
 
-   38
+38
 RaySingleton
 ABC123
 
-  137
+137
 RaymondThompson
 ABC123
 
-  125
+125
 RebeccaBurnett
 ABC123
 
@@ -606,39 +606,39 @@ RSm
 ReginaSmith
 ABC123
 
-  106
+106
 ReneeWest
 ABC123
 
-  101
+101
 RexMorales
 ABC123
 
-  121
+121
 RichardShoulta
 ABC123
 
-    3
+3
 RitaGamble
 ABC123
 
-    0
+0
 RobertCole
 ABC123
 
-   30
+30
 RobertFlores
 ABC123
 
-   99
+99
 RobertMortimer
 ABC123
 
-   35
+35
 RobinBranch
 ABC123
 
-   55
+55
 RoderickPerez
 ABC123
 
@@ -646,67 +646,67 @@ RGr
 RonaldGrammer
 ABC123
 
-   96
+96
 RoseJohnson
 ABC123
 
-    9
+9
 RoseRoberts
 ABC123
 
-   97
+97
 RuthJohnson
 ABC123
 
-  126
+126
 SamStanley
 ABC123
 
-   83
+83
 SarahMedcalf
 ABC123
 
-   25
+25
 SarahVaughan
 ABC123
 
-   28
+28
 ShirleyKhan
 ABC123
 
-  118
+118
 ShirleyPender
 ABC123
 
-  104
+104
 SteveStearns
 ABC123
 
-   14
+14
 StevenKenney
 ABC123
 
-  102
+102
 SusanYoder
 ABC123
 
-  114
+114
 TeresaWilliams
 ABC123
 
-  105
+105
 TerriGee
 ABC123
 
-   89
+89
 TerryThiele
 ABC123
 
-   86
+86
 ThelmaBell
 ABC123
 
-   40
+40
 TheodoreMelvin
 ABC123
 
@@ -714,31 +714,31 @@ TMa
 ThomasMarcus
 ABC123
 
-   10
+10
 TracyBoyd
 ABC123
 
-  119
+119
 TrishaLoffelbein
 ABC123
 
-  110
+110
 TroyPerez
 ABC123
 
-   11
+11
 VelmaMorris
 ABC123
 
-   58
+58
 VickiCole
 ABC123
 
-   45
+45
 VictoriaMerlette
 ABC123
 
-   44
+44
 ViolaLiebert
 ABC123
 
@@ -750,11 +750,11 @@ WDa
 WalterDavis
 ABC123
 
-   72
+72
 WarrenLindstrom
 ABC123
 
-    7
+7
 WendellHulslander
 ABC123
 

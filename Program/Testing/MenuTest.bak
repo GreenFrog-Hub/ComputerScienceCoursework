@@ -1,0 +1,33 @@
+PROGRAM MenuTest;
+  uses crt, sysutils, createMenu;
+  const length = 5;
+
+  type strArr = ARRAY[0..length] OF STRING;
+
+
+  var a,out, startMenuOpt : INTEGER;
+    menuOpt : strArr;
+    startPos : ARRAY[0..1] OF longint;
+  begin
+    for a := 0 to length do
+      Begin
+        write('Enter ',a+1,' Menu option: ');
+        readln(menuOpt[a]);
+      end;
+      writeln;
+      write('Enter start x: ');
+      readln(startPos[0]);
+      write('Enter start y: ');
+      readln(startPos[1]);
+      writeln;
+      write('Enter start menu option: ');
+      readln(startMenuOpt);
+      readln;
+      ClrScr;
+
+      out := createMenu.writeMenu(startPos, length+1, menuOpt, startMenuOpt);
+
+      write('Menu option selected is number', out, ' which is ', menuOpt[out]);
+      readln;
+
+  end.

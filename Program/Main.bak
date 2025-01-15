@@ -1,6 +1,6 @@
 PROGRAM Main;
   //declare all units to be used
-  USES opCrt, Sysutils, LogInScreen, loading, LogInProcedures,
+  USES Crt, Sysutils, LogInScreen, loading, LogInProcedures, opcrt,
   teacherProcedures, TeachersMenu, StudentsMenu, waitTime;
   var userType : STRING;
       intUserID : LONGINT;
@@ -34,7 +34,7 @@ PROGRAM Main;
         ClrScr;
         //login methods
         LogInScreen.startLogIn(userDetailsArray);
-        logIn.search(userDetailsArray,[1,2], userIndex);
+        logIn.search(userDetailsArray,[1,2], userIndex, false);
         loading.startLoading('L', percentDone);
         Delay(1000);
         loading.silentKillLoading;

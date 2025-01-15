@@ -21,7 +21,6 @@ unit studentProcedures;
                 dataTextFile : TextFile;
                 indexArray: ARRAY[0..139] OF LONGINT;
                 recordArray: ARRAY[0..139] OF StudentsRecord;
-                recordIdArray: ARRAY[0..139] OF STRING;
             public
                 data : StudentsRecord;
                 constructor Create;
@@ -34,7 +33,7 @@ unit studentProcedures;
                 procedure readHere;
                 procedure readFile(readFromPosition : LONGINT);
                 procedure sort;
-                procedure search(searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE; var returnArray: ARRAY OF LONGINT);
+                procedure search(searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE; var returnArray: ARRAY OF LONGINT; switchLowerCase: BOOLEAN);
 
         end;
 
@@ -60,7 +59,7 @@ unit studentProcedures;
             close(dataTextFile);
             inherited Destroy;
         end;
-    
+
     procedure StudentFile.SetData(StudentId : LONGINT;
                           FirstName : STRING;
                           SurName : STRING;
@@ -117,7 +116,7 @@ unit studentProcedures;
                         end;
                 end;
         end;
-    
+
     procedure StudentFile.extractToTextFile;
         begin
             reset(dataFile);
@@ -133,7 +132,7 @@ unit studentProcedures;
                     writeln(dataTextFile, data.Uname);
                     writeln(dataTextFile, data.PWord);
                     writeln(dataTextFile, '');
-                end; 
+                end;
         end;
 
     procedure StudentFile.writeToFile;
@@ -182,7 +181,7 @@ unit studentProcedures;
 
         end;
 
-        procedure StudentFile.search(searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE; var returnArray : ARRAY OF LONGINT);
+        procedure StudentFile.search(searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE; var returnArray : ARRAY OF LONGINT; switchLowerCase : BOOLEAN);
             var a, searchResult: LONGINT;
             begin
                 RESET(dataFile);
@@ -198,7 +197,7 @@ unit studentProcedures;
                         fileArray[6,a] := data.PWord;
                         returnArray[a] := -1;
                     end;
-                Files.search(139,7,searchValues, searchFields, returnArray);
+                Files.search(139,7,searchValues, searchFields, returnArray, switchLowerCase);
             end;
 
 

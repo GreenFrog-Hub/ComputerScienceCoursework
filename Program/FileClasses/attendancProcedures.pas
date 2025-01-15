@@ -20,7 +20,6 @@ unit attendancProcedures;
                 dataTextFile : TextFile;
                 indexArray: ARRAY[0..139] OF LONGINT;
                 recordArray: ARRAY[0..139] OF dataRecord;
-                recordIdArray: ARRAY[0..139] OF STRING;
             public
                 data : dataRecord;
                 constructor Create;
@@ -33,7 +32,7 @@ unit attendancProcedures;
                 procedure readHere;
                 procedure readFile(readFromPosition : LONGINT);
                 procedure sort;
-                procedure search(searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE; var returnArray: ARRAY OF LONGINT);
+                procedure search(searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE; var returnArray: ARRAY OF LONGINT; switchLowerCase: BOOLEAN);
 
         end;
 
@@ -52,7 +51,7 @@ unit attendancProcedures;
                 indexArray[a] := a;
               end;
         end;
-    
+
     destructor AttendanceFile.Destroy;
         begin
             close(dataFile);
@@ -109,7 +108,7 @@ unit attendancProcedures;
                         end;
                 end;
         end;
-    
+
     procedure AttendanceFile.extractToTextFile;
         begin
             reset(dataFile);
@@ -124,7 +123,7 @@ unit attendancProcedures;
                     writeln(dataTextFile, data.NumberLate);
                     writeln(dataTextFile, data.NumberAbsent);
                     writeln(dataTextFile, '');
-                end; 
+                end;
         end;
 
     procedure AttendanceFile.writeToFile;
@@ -172,7 +171,7 @@ unit attendancProcedures;
 
         end;
 
-        procedure AttendanceFile.search(searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE; var returnArray : ARRAY OF LONGINT);
+        procedure AttendanceFile.search(searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE; var returnArray : ARRAY OF LONGINT; switchLowerCase : BOOLEAN);
             var a, searchResult: LONGINT;
             begin
                 RESET(dataFile);
@@ -186,7 +185,7 @@ unit attendancProcedures;
                         Str(data.NumberLate, fileArray[4,a]);
                         Str(data.NumberAbsent, fileArray[5,a]);
                     end;
-                Files.search(139,6,searchValues, searchFields, returnArray);
+                Files.search(139,6,searchValues, searchFields, returnArray, switchLowerCase);
             end;
 
 

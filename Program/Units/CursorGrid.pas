@@ -13,6 +13,7 @@ UNIT CursorGrid;
   implementation
   procedure moveUp;
     begin
+      //if the cursor will stay in the boundaries set
       if WhereY - stepy >= minY THEN
         begin
           movePos := WhereY - stepy;
@@ -22,6 +23,7 @@ UNIT CursorGrid;
 
   procedure moveDown;
     begin
+      //if the cursor will stay in the boundaries set
       if WhereY + stepy <= maxY THEN
         begin
           movePos := WhereY + stepy;
@@ -31,6 +33,7 @@ UNIT CursorGrid;
 
   procedure moveLeft;
     begin
+      //if the cursor will stay in the boundaries set
       if WhereX - stepx >= minX THEN
         begin
           movePos := WhereX - stepx;
@@ -40,6 +43,7 @@ UNIT CursorGrid;
 
   procedure moveRight;
     begin
+      //if the cursor will stay in the boundaries set
       if WhereX + stepx <= maxX THEN
         begin
           movePos := WhereX + stepX;
@@ -57,11 +61,12 @@ UNIT CursorGrid;
       maxX := boundaries[2];
       maxY := boundaries[3];
       GoToXY(startX,startY);
+      //key checking key presses until enter is pressed
       repeat
         keyPress := readkey;
-        if keyPress = #0 then
+        if keyPress = #0 then //check if an extended key or function key
           begin
-            case readKey of
+            case readKey of //read its scan code to get which arrow key was pressed and call according procedure
               'H' : moveUp;
               'P' : moveDown;
               'K' : moveLeft;
@@ -69,13 +74,14 @@ UNIT CursorGrid;
             end;
           end;
       until keyPress = #13;
-      if stepX <> 0 THEN
-          x := Round((WhereX - startX) / stepX)
+      //corrects the return to a choice of menu option rather than spaces moved
+      if stepX <> 0 THEN//stops divide by 0 error
+          x := Round((WhereX - startX) / stepX) //round to change float to int
       ELSE
           x := startX;
 
-      if stepY <> 0 THEN
-        y := round((WhereY - startY) / stepY)
+      if stepY <> 0 THEN//stops divide by 0 error
+        y := round((WhereY - startY) / stepY) //round to change float to int
       ELSE
         y := startY;
     end;

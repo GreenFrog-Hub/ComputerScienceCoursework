@@ -17,7 +17,7 @@ unit FileProcedures;
               constructor Create;
               destructor Destroy; override;
               procedure sort(var indexArray : ARRAY OF LONGINT);
-              procedure search(max, fields : LONGINT; searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE; var returnArray : ARRAY OF LONGINT);
+              procedure search(max, fields : LONGINT; searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE; var returnArray : ARRAY OF LONGINT; switchLowerCase : BOOLEAN);
             end;
 
     IMPLEMENTATION
@@ -60,38 +60,67 @@ unit FileProcedures;
         end;
 
     //search algorithm
-    procedure Files.search(max, fields : LONGINT; searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE; var returnArray : ARRAY OF LONGINT);
+    procedure Files.search(max, fields : LONGINT; searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE; var returnArray : ARRAY OF LONGINT; switchLowerCase : BOOLEAN);
         var found : BOOLEAN;
             a, b, c, returnIndex : LONGINT;
             data : STRING;
         begin
             //linear search
+
+            if switchLowerCase then
+              begin
+                for c := 0 to fields do
+                    begin
+                        searchValues[c] := lowerCase(searchValues[c]);
+                    end;
+              end
+            else
+              begin
+                for c := 0 to fields do
+                    begin
+                        searchValues[c] := searchValues[c];
+                    end;
+              end;
             a := -1;
             returnIndex := 0;
             //check every value in the 2d array
             while a < max do
                 begin
                 a := a + 1;
-								//check each item in the record
+                //check each item in the record
                 for b := 0 TO (fields-1) DO
                     begin
-                      data := LowerCase(fileArray[b,a]);
-											//check if one piece of data matches
-                        if data = LowerCase(searchValues[0]) THEN
+                      if switchLowerCase then
+                        begin
+                          data := LowerCase(fileArray[b,a]);
+                        end
+                      else
+                        begin
+                          data := fileArray[b,a];
+                        end;
+                      //check if one piece of data matches
+                        if data = searchValues[0] THEN
                           begin
                             found := true;
-														//check each peice of data in record against data to search for
+                            //check each peice of data in record against data to search for
                             for c := 0 to (SizeOf(searchFields)-1) do
                                 begin
-                                    data := LowerCase(FileArray[searchFields[c],a]);
-																		//if not all data matches continue search and dont return result
-                                    if LowerCase(searchValues[c]) <> data THEN
+                                    if switchLowerCase then
+                                      begin
+                                        data := LowerCase(FileArray[searchFields[c],a]);
+                                      end
+                                    else
+                                      begin
+                                        data := FileArray[searchFields[c],a];
+                                      end;
+                                    //if not all data matches continue search and dont return result
+                                    if searchValues[c] <> data THEN
                                     begin
                                         found := false;
                                         break;
                                     end;
                                 end;
-														//if all data matches add index to the array of found matches
+                            //if all data matches add index to the array of found matches
                             if found = true THEN
                                 begin
                                     returnArray[returnIndex] := a;

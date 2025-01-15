@@ -18,10 +18,10 @@ unit classProcedures;
                 dataFile: File OF dataRecord;
                 indexArray: ARRAY[0..51] OF LONGINT;
                 recordArray: ARRAY[0..51] OF dataRecord;
-                recordIdArray: ARRAY[0..51] OF STRING;
             public
                 data : dataRecord;
                 constructor Create;
+                destructor Destroy; override;
                 procedure SetData(iClassID : STRING; iYear : LONGINT; isubjectID : STRING; iNoOfStudents : LONGINT);
                 procedure DisplayData;
                 procedure displayFile;
@@ -43,10 +43,18 @@ unit classProcedures;
             ASSIGN(dataFile,'C:\ComputerScienceCoursework\Program\files\classes.dta');
             ASSIGN(dataTextFile,'C:\ComputerScienceCoursework\Program\fileOuts\classesOut.txt');
             RESET(dataFile);
+            RESET(dataTextFile);
             for a := 0 TO 51 DO
               begin
                 indexArray[a] := a;
               end;
+        end;
+
+    destructor classFile.Destroy;
+        begin
+            close(dataFile);
+            close(dataTextFile);
+            inherited Destroy;
         end;
 
     procedure classFile.SetData(iClassID : STRING; iYear : LONGINT; isubjectID : STRING; iNoOfStudents : LONGINT);
@@ -103,7 +111,6 @@ unit classProcedures;
                     writeln(dataTextFile, data.Year);
                     writeln(dataTextFile, data.subjectID);
                     writeln(dataTextFile, data.NoOfStudents);
-                    writeln(dataTextFile, data.NumberLate);
                     writeln(dataTextFile, '');
                 end;
         end;
@@ -147,8 +154,8 @@ unit classProcedures;
         RESET(dataFile);
         for a := 0 TO 51 DO
             begin
-                data := recordArray[indexArray[a]];
                 WRITE(dataFile,recordArray[indexArray[a]]);
+                indexArray[a] := a;
             end;
 
         end;

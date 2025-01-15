@@ -34,7 +34,7 @@ PROGRAM Main;
         ClrScr;
         //login methods
         LogInScreen.startLogIn(userDetailsArray);
-        logIn.search(userDetailsArray,[1,2], userIndex);
+        logIn.search(userDetailsArray,[1,2], userIndex, false);
         loading.startLoading('L', percentDone);
         Delay(1000);
         loading.silentKillLoading;
