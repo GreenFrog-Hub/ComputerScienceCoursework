@@ -143,6 +143,10 @@ UNIT StudentsMenu;
   procedure LogOutMenu;
     begin
       writeln('Logging out');
+      Timetable.free;
+      studentClassC.free;
+      student.free;
+      attendance.free;
       Delay(1000);
     end;
 
@@ -185,10 +189,6 @@ UNIT StudentsMenu;
       //populate arrays with -1
       for a := 0 TO 1400 DO
         studentClassReturnArray[a] := -1;
-      for a := 0 to 320 DO
-        begin
-        timetableReturnArray[a] := -1;
-        end;
       //declare file objects for this unit
       timetable := TimeTableFile.create;
       studentClassC := studentClassFile.create;

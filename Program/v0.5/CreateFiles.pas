@@ -252,7 +252,7 @@ PROGRAM CreateFiles;
         begin
         read(formFile,form);
         timetable.classid := form.formID; {get form id into a timetable class id variable}
-          for a := 0 to 9 DO {add it to the file as lesson 0 for every morning in the 2 week timetabe}
+          for a := 1 to 10 DO {add it to the file as lesson 0 for every morning in the 2 week timetabe}
             begin
               timetable.LessonNo := 0;
               timetable.Day := a;
