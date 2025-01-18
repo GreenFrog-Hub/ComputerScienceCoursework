@@ -66,21 +66,15 @@ unit FileProcedures;
             data : STRING;
         begin
             //linear search
-
+            //check if the search is case sensitive
             if switchLowerCase then
               begin
-                for c := 0 to fields do
-                    begin
-                        searchValues[c] := lowerCase(searchValues[c]);
-                    end;
-              end
+                searchValues[0] := LowerCase(searchValues[0]);
+              end;
             else
               begin
-                for c := 0 to fields do
-                    begin
-                        searchValues[c] := searchValues[c];
-                    end;
-              end;
+                searchValues[0] := searchValues[0];
+              end; 
             a := -1;
             returnIndex := 0;
             //check every value in the 2d array

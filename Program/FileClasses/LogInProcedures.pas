@@ -32,7 +32,6 @@ unit LogInProcedures;
                 procedure readFile(readFromPosition : LONGINT);
                 procedure sort;
                 procedure search(searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE; var returnArray: ARRAY OF LONGINT; switchLowerCase: BOOLEAN);
-
         end;
 
     IMPLEMENTATION
