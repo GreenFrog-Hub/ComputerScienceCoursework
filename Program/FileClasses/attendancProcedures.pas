@@ -172,7 +172,7 @@ unit attendancProcedures;
         end;
 
         procedure AttendanceFile.search(searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE; var returnArray : ARRAY OF LONGINT; switchLowerCase : BOOLEAN);
-            var a, searchResult: LONGINT;
+            var a: LONGINT;
             begin
                 RESET(dataFile);
                 for a := 0 TO 139 DO

@@ -4,7 +4,7 @@ sorry its late it took longer than expected to copy everything into a single wor
 Sorry copying over took 30min
 
 Sorry it is not complete. 
-I am missing half of the evaluation, the data dictionary and labels in the iterative devlopment. I hope to get this all done by Sunday at the latest so i can park it to focus on revison
+Labels in the iterative devlopment. I hope to get this all done by Sunday at the latest so i can park it to focus on revison
 
 Parts i am proud of:
 I am mnost proud of my class structure and loading script.

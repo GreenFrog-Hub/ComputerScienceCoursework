@@ -159,7 +159,7 @@ unit timeTableProcedures;
         end;
 
         procedure TimeTableFile.search(searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE; var returnArray : ARRAY OF LONGINT; switchLowerCase : BOOLEAN);
-            var a, searchResult: LONGINT;
+            var a: LONGINT;
             begin
                 RESET(dataFile);
                 for a := 0 TO 319 DO

@@ -736,9 +736,6 @@ PROGRAM CreateFiles;
           '9C/Dt1', '9D/So1', '9D/Bs1', '9D/Mu1', '9D/Gm1');
           yTwelveClassArray : ARRAY[0..6] OF STRING = ('12A/Ph1','12A/Py1','12B/Ph1','12C/Cp1','12C/Py1','12D/Mu1','12D/Cp1');
     var returnArray : ARRAY[0..51] OF LONGINT;
-        yearArray : ARRAY[0..30] OF LONGINT;
-        stringArray : ARRAY[0..51] OF STRING;
-        aLevelBlockChoices : ARRAY[0..2] OF STRING;
         studentYear,a, d, i, startPoint, noOfAlevels, noTakingFourAlevels, randClassNo, randomSide, numberInASide, numberInBSide, randomChoiceClass : LONGINT;
         oldClass, newClass : STRING;
 
