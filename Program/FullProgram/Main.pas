@@ -1,0 +1,91 @@
+PROGRAM Main;
+  //declare all units to be used
+  USES Crt, Sysutils, LogInScreen, loading, LogInProcedures,
+  teacherProcedures, TeachersMenu, StudentsMenu, waitTime;
+  var userType : STRING;
+      intUserID : LONGINT;
+
+
+  //declare main program
+  function start:STRING;
+    var i, ErrCode, attempts, userIndex : LONGINT;
+      userId : STRING;
+      userDetailsArray : ARRAY[0..1] OF STRING;
+      logIn : logInFile;
+      teacher : TeacherFile;
+      percentDone : REAL;
+      logedIn : BOOLEAN;
+  begin
+    //declare login file
+    logIn := logInFile.create;
+    logIn.sort;
+    userIndex := -1;
+    //delete in write up (debug)
+    teacher := teacherFile.create;
+    teacher.readHere;
+    teacher.DisplayData;
+    readln;
+
+    attempts := 0;
+    //while loop to keep running log in attempts
+    logedIn := false;
+    while logedIn = false do
+      begin
+        ClrScr;
+        //login methods
+        LogInScreen.startLogIn(userDetailsArray);
+        logIn.search(userDetailsArray,[1,2], userIndex, false);
+        loading.startLoading('L', percentDone);
+        Delay(1000);
+        loading.silentKillLoading;
+        Delay(100);
+        //test username and password are valid
+        if userIndex = -1 THEN
+          begin
+            writeln('Username Or Password is incorrect.');
+            readkey;
+          end
+        else
+          begin
+            logedIn := true;
+            //get the user info
+            login.readFile(userIndex);
+            //test if the username and password belong to a teacher or student
+            userId := Trim(login.data.PersonID);
+            val(userid,intUserID,ErrCode);
+            if ErrCode <> 0 THEN
+              begin
+                start := 'T';
+              end
+            else
+              begin
+                start := 'S';
+              end;
+          end;
+        attempts := attempts + 1;
+        case attempts of
+          3 : waitTime.waitForTime('Too many attempts', 0);
+          5 : waitTime.waitForTime('Too many attempts', 1);
+          7 : waitTime.waitForTime('Too many attempts', 2);
+          9 : waitTime.waitForTime('Too many attempts', 3);
+          10 : waitTime.waitForTime('Too many attempts', 4);
+          11 : waitTime.waitForTime('Too many attempts', 5);
+          12 : start := '';
+        end;
+      end;
+      //delete login file object
+      logIn.free;
+  end;
+
+  begin
+    //start login
+    userType := start;
+    if userType = 'T' THEN
+      //teacher menu
+      TeachersMenu.startTeacher
+    else if userType = 'S' THEN
+      //student menu
+      StudentsMenu.startStudent(intUserID)
+    else
+      writeln('Too many incorrect attempts :(');
+  end.

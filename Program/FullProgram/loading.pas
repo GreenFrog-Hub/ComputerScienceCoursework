@@ -1,0 +1,123 @@
+unit loading;
+  interface
+
+  uses sysutils, vputils, crt, math;
+  //pointer to point to the value outside of this script
+  type rPtr = ^real;
+
+
+  //pre declaration of functions and procedures
+  function loadingText(p : pointer) : LONGINT;
+    var a : LONGINT;
+  function loadingBar(p : pointer) : LONGINT;
+    var percentComplete : REAL;
+      b,c,completeBars,uncompleteBars : LONGINT;
+  procedure StartLoading(loadingType : CHAR; var percentIn : real);
+  procedure EndLoading;
+  procedure silentKillLoading;
+
+  implementation
+  //the symbol for a spinning symbol
+  const LoadingSymbols : ARRAY[1..4] OF CHAR = ('/',#196,'\','|');
+
+  //local script variables
+  var loadingDone : BOOLEAN;
+    percentDone : real;
+    percentPtr : rptr;
+    startRunTime, endRunTime : TDateTime;
+
+  //the basic loading text with the spinning line
+  function loadingText(p : pointer) : LONGINT;
+    var a : LONGINT;
+    begin
+      HideCursor;
+      a := 1;
+      ClrScr;
+      while (not loadingDone) DO
+        Begin
+          //write loading and symbol from the array
+          WRITELN('Loading... ' + LoadingSymbols[a]);
+          //progress the loading symbol
+          a := a+1;
+          if a > 4 THEN
+            a := 1;
+          //every 0.1 secons update
+          Delay(100);
+          //rewrite the whole line
+          GoToXY(1,1);
+          DelLine;
+        end;
+
+      end;
+
+  function loadingBar(p : pointer) : LONGINT;
+    var percentComplete : REAL;
+      b,c,d,completeBars,uncompleteBars : LONGINT;
+    begin
+      HideCursor;
+      ClrScr;
+      //sets up the empty progress bar
+      Write('Progress ',#185);
+      for c:= 0 TO 19 DO
+        write(#176);
+      write(#204);
+      percentDone := 0.0*100;
+      completeBars := 0;
+      while not LoadingDone DO
+        begin
+          //write the new percentage in
+          gotoxy(32,1);
+          Write(percentDone:4:0,'%');
+          //gets the percent done from the main script by using a series of pointers
+          //to point to a value outside this script so the procedure does not have to be recalled
+          percentDone := (percentPtr^)*100;
+          //calculate number of bars to fill
+          completeBars := floor((percentPtr^)*20);
+          gotoxy(11,1);
+          //draw that number of bars
+          for d := 0 to completeBars-1 DO
+            begin
+              write(#219);
+            end;
+      end;
+  end;
+
+  procedure StartLoading(loadingType : CHAR; var percentIn : real);
+    begin
+      startRunTime := Time;
+      loadingDone := false;
+      //set a pointer to the memory address to the memory location of the percent
+      //memory location passed in at the start
+      percentPtr := @percentIn;
+
+      //choose a loading type and start a new thread so it runs in parallel
+      if loadingType = 'L' THEN
+        VPBeginThread(loadingText,1,nil)
+      else if loadingType = 'P' THEN
+        VPBeginThread(loadingBar,1,nil);
+    End;
+
+  procedure EndLoading;
+    begin
+      //kill th thread to stop it running
+      KillThread(1);
+      loadingDone := true;
+      //show end messages
+      WRITELN('Done!');
+      endRunTime := Time;
+      Delay(500);
+      ClrScr;
+      //state how long it took
+      writeln('Time elapsed: ',TimeToStr(endRunTime - startRunTime));
+      ShowCursor;
+      end;
+
+  procedure silentKillLoading;
+    begin
+      //stops the bar without displaying anything back to the user when done
+      KillThread(1);
+      loadingDone := true;
+      ClrScr;
+      ShowCursor;
+    end;
+  end.

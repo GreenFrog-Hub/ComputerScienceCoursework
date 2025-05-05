@@ -1,0 +1,182 @@
+unit classProcedures;
+  interface
+
+    USES crt, sysutils, FileProcedures;
+
+    TYPE
+        dataRecord = RECORD
+                          ClassID : STRING[8];
+                          Year : LONGINT;
+                          subjectID : STRING[3];
+                          NoOfStudents : LONGINT;
+                        end;
+
+    type
+        classFile = Class(Files)
+            private
+                dataTextFile : TextFile;
+                dataFile: File OF dataRecord;
+                indexArray: ARRAY[0..51] OF LONGINT;
+                recordArray: ARRAY[0..51] OF dataRecord;
+            public
+                data : dataRecord;
+                constructor Create;
+                destructor Destroy; override;
+                procedure SetData(iClassID : STRING; iYear : LONGINT; isubjectID : STRING; iNoOfStudents : LONGINT);
+                procedure DisplayData;
+                procedure displayFile;
+                procedure extractToTextFile;
+                procedure writeToFile;
+                procedure readHere;
+                procedure readFile(readFromPosition : LONGINT);
+                procedure sort;
+                procedure search(searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE; var returnArray: ARRAY OF LONGINT; switchLowerCase: BOOLEAN);
+
+        end;
+
+    IMPLEMENTATION
+
+    constructor classFile.Create;
+        var a : longint;
+        begin
+            inherited Create;
+            ASSIGN(dataFile,'C:\ComputerScienceCoursework\Program\files\classes.dta');
+            ASSIGN(dataTextFile,'C:\ComputerScienceCoursework\Program\fileOuts\classesOut.txt');
+            RESET(dataFile);
+            RESET(dataTextFile);
+            for a := 0 TO 51 DO
+              begin
+                indexArray[a] := a;
+              end;
+        end;
+
+    destructor classFile.Destroy;
+        begin
+            close(dataFile);
+            close(dataTextFile);
+            inherited Destroy;
+        end;
+
+    procedure classFile.SetData(iClassID : STRING; iYear : LONGINT; isubjectID : STRING; iNoOfStudents : LONGINT);
+        begin
+            with data do
+                begin
+                    ClassID := iClassID;
+                    Year := iYear;
+                    subjectID := isubjectID;
+                    NoOfStudents := iNoOfStudents;
+                end;
+        end;
+
+
+
+    procedure classFile.DisplayData;
+        begin
+        with data do
+            begin
+                writeln(ClassID);
+                writeln(Year);
+                writeln(subjectID);
+                writeln(NoOfStudents);
+                writeln('-------------------------------------------------------------------------');
+            end;
+        end;
+
+    procedure classFile.displayFile;
+        var a : LONGINT;
+        begin
+            reset(dataFile);
+            while not (eof(dataFile)) do
+                begin
+                    READ(dataFile,data);
+                    with data do
+                        begin
+                            writeln(ClassID);
+                            writeln(Year);
+                            writeln(subjectID);
+                            writeln(NoOfStudents);
+                            writeln('-------------------------------------------------------------------------');
+                        end;
+                end;
+        end;
+
+    procedure classFile.extractToTextFile;
+        begin
+            reset(dataFile);
+            rewrite(dataTextFile);
+            while not eof(dataFile) DO
+                begin
+                    read(dataFile, data);
+                    writeln(dataTextFile, data.ClassID);
+                    writeln(dataTextFile, data.Year);
+                    writeln(dataTextFile, data.subjectID);
+                    writeln(dataTextFile, data.NoOfStudents);
+                    writeln(dataTextFile, '');
+                end;
+        end;
+
+    procedure classFile.writeToFile;
+        begin
+            write(dataFile, data);
+        end;
+
+
+    procedure classFile.readHere;
+        begin
+            if FIlePos(dataFile) < FileSize(dataFile) then
+                begin
+                    read(dataFile,data);
+                end;
+        end;
+
+    procedure classFile.readFile(readFromPosition : LONGINT);
+        begin
+            if readFromPosition < FileSize(dataFile) then
+                begin
+                    SEEK(dataFile,readFromPosition);
+                    read(dataFile,data);
+                end;
+        end;
+
+    procedure classFile.sort;
+        var a,b : LONGINT;
+            maxStrLen : STRING;
+        begin
+          RESET(dataFile);
+          upper:= 51;
+          for a := 0 TO 51 DO
+            begin
+              READ(dataFile,data);
+              recordArray[a] := data;
+              dataArray[a] := Format('%'+'8'+'s',[(data.classID)]);
+            end;
+        Files.sort(indexArray);
+        RESET(dataFile);
+        for a := 0 TO 51 DO
+            begin
+                WRITE(dataFile,recordArray[indexArray[a]]);
+                indexArray[a] := a;
+            end;
+
+        end;
+    
+        procedure classFile.search(searchValues:ARRAY OF STRING; searchFields: ARRAY OF BYTE; var returnArray : ARRAY OF LONGINT; switchLowerCase : BOOLEAN);
+            var a: LONGINT;
+            begin
+                RESET(dataFile);
+                for a := 0 TO 51 DO
+                    begin
+                        read(dataFile, data);
+                        fileArray[0,a] := LowerCase(data.classID);
+                        Str(data.Year, fileArray[1,a]);
+                        fileArray[2,a] := LowerCase(data.subjectID);
+                        Str(data.NoOfStudents, fileArray[3,a]);
+                        returnArray[a] := -1;
+                    end;
+                Files.search(51,4,searchValues, searchFields, returnArray, switchLowerCase);
+            end;
+
+
+    END.
+
+
